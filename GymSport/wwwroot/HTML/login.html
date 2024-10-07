@@ -1,0 +1,88 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="../CSS/login.css">
+
+</head>
+<body>
+    <div class="left">
+        <div class="image-section">
+            <img src="https://cdn.develop.gymshark.com/auth-img.jpg" alt="Gym Image" class="background-img">
+            <div class="text-overlay">
+                <p>One account, across all Apps.</p>
+                <h1>FREE GYMSPORTS ACCESS</h1>
+                <p>Level up your training, with The Gymshark Training App</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="right">
+
+        <div class="logo">
+            <img class="logo_edit" src="/src/logo.png" alt="Logo">
+            <h2>MY GYMSPORTS</h2>
+        </div>
+
+        <div class="toggle-buttons">
+            <button id="login-btn" class="toggle-btn active">LOG IN</button>
+            <button id="signup-btn" class="toggle-btn">SIGN UP</button>
+        </div>
+
+        <div class="form-container">
+            <!-- Login Form -->
+
+
+
+            <form id="login-form" class="form-group active">
+
+               
+                <div>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter email address" required>
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <div class="FB" id="FP">
+                    <a class="FF" href="forgotpassword.html">Forgot password</a>
+                </div>
+                <button type="submit" class="login-btn">LOG IN</button>
+
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="signup-form" class="form-group">
+
+                <div>
+                    <label for="username">FirstName</label>
+                    <input type="text" id="username-signup" placeholder="Enter FirstName" required>
+                </div>
+                <div>
+                    <label for="lastname">LastName</label>
+                    <input type="text" id="lastname-signup" placeholder="Enter LastName" required>
+                </div>
+                <div>
+                    <label for="email-signup">Email Address</label>
+                    <input type="email" id="email-signup" placeholder="Enter email address" required>
+                </div>
+                <div>
+                    <label for="password-signup">Password</label>
+                    <input type="password" id="password-signup" placeholder="Enter password" required>
+                </div>
+                <div>
+                    <input type="checkbox" id="CB" name="CB" value="y">
+                    <label for="CB"> Tick here to receive emails about our products, apps, sales, exclusive content and more. View our Privacy Policy.</label><br>
+                </div>
+                <button type="submit" class="login-btn">SIGN UP</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/JS/login.js"></script>
+</body>
+</html>
