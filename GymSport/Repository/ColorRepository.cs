@@ -1,36 +1,34 @@
 ﻿using GymSport.Connection;
-
-using GymSport.DTOs.SizeDTOs;
+using GymSport.DTOs.ColorDTOs;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
 namespace GymSport.Repository
 {
-    public class SizeRepository
+    public class ColorRepository
     {
-
         //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
         private readonly SqlConnectionFactory _connectionFactory;
 
-        public SizeRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
+        public ColorRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
         {
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<CreateSizeResponseDTO> CreateSize(CreateSizeDTO request) //tao 1 ham tao productcategory
-                                                                                                                    //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
+        public async Task<CreateColorResponseDTO> CreateColor(CreateColorDTO request) //tao 1 ham tao productcategory
+               //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
         {
-            CreateSizeResponseDTO createProductCategoryResponseDTO = new CreateSizeResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
+            CreateColorResponseDTO createProductCategoryResponseDTO = new CreateColorResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
             using var connection = _connectionFactory.CreateConnection(); //goi de khoi tao 1 ham chua chuoi string ket noi toi db
-            var command = new SqlCommand("spCreateSizeType", connection) // tao 1 bien de lien ket toi procedure da code trong sql
+            var command = new SqlCommand("spCreateColorType", connection) // tao 1 bien de lien ket toi procedure da code trong sql
             {
                 CommandType = CommandType.StoredProcedure // type store procedure
             };
 
-            command.Parameters.AddWithValue("@SizeName", request.SizeName); //gan du lieu @tendulieu vao request.ten bien de luu xuong db
-           
+            command.Parameters.AddWithValue("@ColorName", request.ColorName); //gan du lieu @tendulieu vao request.ten bien de luu xuong db
 
-            var outputID = new SqlParameter("@SizeID", SqlDbType.Int)                //lay du lieu tu db len tren day de tham chieu goi toi
+
+            var outputID = new SqlParameter("@ColorID", SqlDbType.Int)                //lay du lieu tu db len tren day de tham chieu goi toi
             {
                 Direction = ParameterDirection.Output
             };
@@ -54,7 +52,7 @@ namespace GymSport.Repository
 
                 if ((int)outputStatusCode.Value == 0)
                 {
-                    createProductCategoryResponseDTO.SizeID = (int)outputID.Value;
+                    createProductCategoryResponseDTO.ColorID = (int)outputID.Value;
                     createProductCategoryResponseDTO.Message = outputMessage.Value.ToString();
                     createProductCategoryResponseDTO.isCreated = true;
                     return createProductCategoryResponseDTO;
@@ -82,21 +80,21 @@ namespace GymSport.Repository
 
         //update
 
-        public async Task<UpdateSizeResponseDTO> UpdateSize(UpdateSizeDTO user)
+        public async Task<UpdateColorResponseDTO> UpdateColor(UpdateColorDTO user)
         {
-            UpdateSizeResponseDTO updateUserResponseDTO = new UpdateSizeResponseDTO()
+            UpdateColorResponseDTO updateUserResponseDTO = new UpdateColorResponseDTO()
             {
-                SizeID = user.SizeID
+                ColorID = user.ColorID
             };
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spUpdateSizeType", connection)
+            using var command = new SqlCommand("spUpdateColorType", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.AddWithValue("@SizeID", user.SizeID);
-            command.Parameters.AddWithValue("@SizeName", user.SizeName);
+            command.Parameters.AddWithValue("@ColorID", user.ColorID);
+            command.Parameters.AddWithValue("@ColorName", user.ColorName);
 
 
 
@@ -117,7 +115,7 @@ namespace GymSport.Repository
             var message = errorMessageParam.Value?.ToString();
             if (string.IsNullOrEmpty(message))
             {
-                updateUserResponseDTO.Message = "Cap nhat size thanh cong";
+                updateUserResponseDTO.Message = "Cap nhat color thanh cong";
                 updateUserResponseDTO.isUpdated = true;
 
 
@@ -132,21 +130,21 @@ namespace GymSport.Repository
 
 
 
-        public async Task<DeleteSizeResponseDTO> DeleteSize(int productCategoryID)
+        public async Task<DeleteColorResponseDTO> DeleteColor(int productCategoryID)
         {
-            var deleteProductCategoryResponseDTO = new DeleteSizeResponseDTO();
+            var deleteProductCategoryResponseDTO = new DeleteColorResponseDTO();
 
             // Create the connection using the factory
             using var connection = _connectionFactory.CreateConnection();
 
             // Define the SQL command and stored procedure
-            using var command = new SqlCommand("spDeleteSizeType", connection)
+            using var command = new SqlCommand("spDeleteColorType", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
 
             // Adding input parameter
-            command.Parameters.AddWithValue("@SizeID", productCategoryID);
+            command.Parameters.AddWithValue("@ColorID", productCategoryID);
 
             // Adding output parameters for status and message
             var statusCodeParam = new SqlParameter("@StatusCode", SqlDbType.Int)
@@ -183,11 +181,11 @@ namespace GymSport.Repository
         }
 
 
-        public async Task<List<SizeDTO>> ListAllSize(bool? IsActive)
+        public async Task<List<ColorDTO>> ListAllColor(bool? IsActive)
         {
             using var connection = _connectionFactory.CreateConnection();
 
-            var command = new SqlCommand("spGetAllSizeTypes", connection)
+            var command = new SqlCommand("spGetAllColorTypes", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -196,15 +194,15 @@ namespace GymSport.Repository
             await connection.OpenAsync();
 
             using var reader = await command.ExecuteReaderAsync();
-            var productCategories = new List<SizeDTO>();
+            var productCategories = new List<ColorDTO>();
 
             while (reader.Read())
             {
-                productCategories.Add(new SizeDTO
+                productCategories.Add(new ColorDTO
                 {
-                    SizeID = reader.GetInt32(reader.GetOrdinal("SizeID")),
-                    SizeName = reader.GetString(reader.GetOrdinal("SizeName")),
-                 
+                    ColorID = reader.GetInt32(reader.GetOrdinal("ColorID")),
+                    ColorName = reader.GetString(reader.GetOrdinal("ColorName")),
+
                     isActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
                 });
             }
@@ -212,16 +210,16 @@ namespace GymSport.Repository
         }
 
 
-        public async Task<SizeDTO> GetSizeByIDAsync(int ProductCategoryID)
+        public async Task<ColorDTO> GetColorByIDAsync(int ProductCategoryID)
         {
             using var connection = _connectionFactory.CreateConnection();
 
-            var command = new SqlCommand("spGetSizeTypeById", connection)
+            var command = new SqlCommand("spGetColorTypeById", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.AddWithValue("@SizeID", ProductCategoryID);
+            command.Parameters.AddWithValue("@ColorID", ProductCategoryID);
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
 
@@ -230,11 +228,11 @@ namespace GymSport.Repository
                 return null;
             }
 
-            var productCategory = new SizeDTO
+            var productCategory = new ColorDTO
             {
 
-                SizeID = reader.GetInt32("SizeID"),
-                SizeName = reader.GetString("SizeName"),
+                ColorID = reader.GetInt32("ColorID"),
+                ColorName = reader.GetString("ColorName"),
                 isActive = reader.GetBoolean("IsActive")
 
             };
@@ -244,15 +242,15 @@ namespace GymSport.Repository
 
         }
 
-        public async Task<(bool Success, string Message)> ToggleSizeActiveAsync(int ProductCategoryID, bool isActive)
+        public async Task<(bool Success, string Message)> ToggleColorActiveAsync(int ProductCategoryID, bool isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleSizeTypeActive", connection)
+            using var command = new SqlCommand("spToggleColorTypeActive", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.AddWithValue("@SizeID", ProductCategoryID);
+            command.Parameters.AddWithValue("@ColorID", ProductCategoryID);
             command.Parameters.AddWithValue("@isActive", isActive);
 
             var statusCode = new SqlParameter("@StatusCode", SqlDbType.Int)
@@ -272,10 +270,8 @@ namespace GymSport.Repository
             var ResponseMessage = message.Value.ToString();
             var success = (int)statusCode.Value == 0;
             return (success, ResponseMessage);
+
+
         }
-
-
-
-
     }
-    }
+}

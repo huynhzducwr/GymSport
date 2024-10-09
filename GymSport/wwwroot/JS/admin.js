@@ -169,10 +169,6 @@ const pages = {
 </style>
 `
     },
-
-
-
-
     'don-hang': {
         title: 'Đơn hàng',
         content: `
@@ -296,8 +292,79 @@ const pages = {
                 table {
                     width: 100%;
                     border-collapse: collapse;
-    }
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+            </style>
+        `
 
+    },
+    'color': {
+        title: 'Color',
+        content: `
+        <!-- Nút Tạo Danh Mục Màu sắc -->
+<button id="create-color-btn">Tạo Color</button>
+
+<!-- Form nhập liệu ẩn (hiển thị khi bấm nút) -->
+<div id="create-color-form" style="display: none;">
+    <label for="new-color-name">Tên Color:</label>
+    <input type="text" id="new-color-name" placeholder="Nhập tên màu">
+    <br>
+    <button id="submit-new-color">Thêm màu</button>
+</div>
+
+            <h2>Quản lý Màu cho sản phẩm</h2>
+            <p>Đây là trang quản lý màu</p>
+
+            <!-- Form tìm kiếm -->
+            <div>
+                <input type="text" id="search-color-input" placeholder="Tìm kiếm màu..." />
+                <button id="search-color-btn">Tìm kiếm</button>
+            </div>
+
+            <!-- Lọc trạng thái -->
+            <div>
+                <button id="active-color-btn">Có sẵn</button>
+                <button id="unactive-color-btn">Không có sẵn</button>
+            </div>
+
+            <!-- Bảng dữ liệu sản phẩm -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ColorID</th>
+                        <th>ColorName</th>
+                        <th>isActive</th>                      
+                        <th>Update</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                 <tbody id="color-table-body">
+                    <!-- Dữ liệu sản phẩm sẽ được điền ở đây -->
+                </tbody>
+            </table>
+
+            <style>
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+            </style>
+        `
     },
 
 
@@ -351,12 +418,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-
 function getCategoryIdByName(categoryName) {
     const category = categories.find(cat => cat.productCategoryName.toLowerCase() === categoryName.toLowerCase());
     return category ? category.productCategoryID : null; // Trả về ID nếu tìm thấy, ngược lại trả về null
 }
-
 
 async function fetchProductCategories() {
     const url = '/api/ProductCategory/GetAllProductCategory';
@@ -381,9 +446,6 @@ async function fetchProductCategories() {
         console.error("Error fetching product categories:", error);
     }
 }
-
-
-
 async function addProduct(productName, productCategoryID, description, price, status) {
     try {
         const response = await fetch('/api/Product/Create', {
@@ -412,57 +474,6 @@ async function addProduct(productName, productCategoryID, description, price, st
     }
 }
 
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const createProductBtn = document.getElementById('create-product-btn');
-    const submitProductBtn = document.getElementById('submit-new-product');
-    const categoryInput = document.getElementById('new-product-category');
-    const selectedCategoryIdInput = document.getElementById('selected-category-id'); // Khai báo ở đây
-
-    // Gọi hàm để lấy danh mục sản phẩm sau khi DOM đã được tải đầy đủ
-    fetchProductCategories();
-
-    // Toggle form thêm sản phẩm khi nhấn nút tạo sản phẩm mới
-    if (createProductBtn) {
-        createProductBtn.addEventListener('click', () => {
-            const form = document.getElementById('create-product-form');
-            form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Chuyển đổi hiển thị form
-        });
-    }
-    if (categoryInput) {
-        categoryInput.addEventListener('input', () => {
-            const categoryName = categoryInput.value;
-            const categoryId = getCategoryIdByName(categoryName);
-            selectedCategoryIdInput.value = categoryId; // Cập nhật ID danh mục
-        });
-    }
-
-   
-    // Xử lý việc submit form để thêm sản phẩm
-    if (submitProductBtn) {
-        submitProductBtn.addEventListener('click', () => {
-            const productName = document.getElementById('new-product-name').value;
-            const description = document.getElementById('new-product-description').value;
-            const price = document.getElementById('new-product-price').value;
-            const productCategoryID = selectedCategoryIdInput.value; // Lấy ID danh mục đã chọn
-            const status = document.getElementById('new-product-status').value; // Lấy trạng thái sản phẩm
-
-            if (productName && description && price && productCategoryID) {
-                addProduct(productName, productCategoryID, description, parseFloat(price), status);
-            } else {
-                alert('Vui lòng nhập đầy đủ thông tin sản phẩm.');
-            }
-        });
-    }
-
-
-});
-
-
-
-
-
 async function fetchProducts(isActive = null) {
     let url = '/api/Product/All';
     if (isActive !== null) {
@@ -482,19 +493,6 @@ async function fetchProducts(isActive = null) {
         console.error("Network error:", error);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function renderProducts(products) {
     const productTableBody = document.getElementById('product-table-body');
@@ -541,23 +539,13 @@ function renderProducts(products) {
     document.querySelectorAll('.update-product-status-btn').forEach(button => {
         button.addEventListener('click', (e) => {
             const productID = e.target.getAttribute('data-productID');
-            
-         
+
+
             toggleProductActive(productID);
             fetchProducts(); // Refresh the product list
         });
     });
 }
-
-
-
-
-
-
-
-
-
-
 
 async function updateProduct(userId) {
     const productName = prompt('Nhập tên mới cho sản phẩm:');
@@ -657,7 +645,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Hàm gọi API để thêm danh mục sản phẩm mới
 async function addProductCategory(categoryName, description) {
     try {
         const response = await fetch('/api/ProductCategory/AddProductCategory', {
@@ -683,6 +670,8 @@ async function addProductCategory(categoryName, description) {
     }
 }
 
+async function fetchProductCategory(isActive = null) {
+    let url = '/api/ProductCategory/GetAllProductCategory';
     if (isActive !== null) {
         url += `?isActive=${isActive}`;
     }
@@ -691,6 +680,8 @@ async function addProductCategory(categoryName, description) {
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json(); // Chuyển dữ liệu JSON từ API thành object
+            console.log(data);
+            renderProductCategory(data.data); // Gọi hàm hiển thị dữ liệu lên bảng
         } else {
             console.error("Error fetching users:", response.statusText);
         }
@@ -698,34 +689,65 @@ async function addProductCategory(categoryName, description) {
         console.error("Network error:", error);
     }
 }
-function renderUsers(users) {
-    const userTableBody = document.getElementById('user-table-body');
-    userTableBody.innerHTML = ''; // Xóa nội dung hiện tại
 
 async function updateProductCategory(userId) {
 
-    });
+    const productCategoryName = prompt('Nhập tên mới cho danh mục:');
+    const description = prompt('Nhập mô tả mới cho danh mục:');
+    try {
+        const response = await fetch('/api/ProductCategory/Update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productCategoryID: userId,
+                productCategoryName: productCategoryName,
+                description: description,
+            })
+        });
+        console.log(response);
 
-}
+        if (!response.ok) {
+            console.error("Error: " + response.status);
+            alert("Cập nhật không thành công");
+            return;
+        }
 
+        const result = await response.json();
+        if (result.isAssign) {
+            alert(result.message); // Hiển thị thông báo cập nhật thành công
+            fetchProductCategory(); // Reload lại danh sách người dùng
+            console.log(result);
         } else {
+            alert(result.message);
         }
     } catch (error) {
+        console.error("Error updating user role:", error);
     }
 }
 
-    }
+async function toggleProductCategoryActive(userId, isActive) {
+    console.log('ProductCategoryID:', userId, 'isActive:', isActive); // Log userID and isActive
+    try {
+        const response = await fetch(`/api/ProductCategory/ToggleActive?userId=${userId}&isActive=${isActive}`, {
+            method: 'POST', // Keep POST if that's how your API is designed
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Hiển thị thông báo thay đổi trạng thái thành công
+            fetchProductCategory(); // Reload lại danh sách người dùng
         } else {
+            alert("Update trang thai thanh cong");
         }
     } catch (error) {
+        console.error("Error toggling user active status:", error);
     }
 }
-
-// Hàm để hiển thị danh sách người dùng lên bảng
-
-//Hàm hiển thị danh sách productecategort
 function renderProductCategory(productCategories) {
     const productCategoryTableBody = document.getElementById('product-category-table-body');
     productCategoryTableBody.innerHTML = ''; // Clear existing rows
@@ -789,10 +811,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const createCategoryBtn = document.getElementById('create-size-btn');
     const submitCategoryBtn = document.getElementById('submit-new-size');
 
-
-                });
+    // Ensure the buttons exist before adding event listeners
+    if (createCategoryBtn) {
+        // Xử lý logic khi click nút "Tạo Danh Mục Sản Phẩm"
+        createCategoryBtn.addEventListener('click', () => {
+            const form = document.getElementById('create-size-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Ẩn/hiện form
+        });
     }
-            });
+
+    if (submitCategoryBtn) {
+        // Xử lý sự kiện khi click nút "Thêm danh mục"
+        submitCategoryBtn.addEventListener('click', () => {
+            const categoryName = document.getElementById('new-size-name').value;
+
+
+            if (categoryName) {
+                addSize(categoryName); // Gọi hàm để thêm danh mục
+            } else {
+                alert('Vui lòng nhập đầy đủ thông tin danh mục.');
+            }
+        });
+    }
+});
 
 async function addSize(categoryName) {
     try {
@@ -803,7 +844,7 @@ async function addSize(categoryName) {
             },
             body: JSON.stringify({
                 SizeName: categoryName
-          
+
             })
         });
 
@@ -812,11 +853,15 @@ async function addSize(categoryName) {
             alert(result.message); // Thông báo thành công
             fetchProductCategory(); // Tải lại danh sách danh mục sản phẩm
         } else {
+            alert(result.message); // Thông báo lỗi nếu có
         }
     } catch (error) {
+        console.error('Error adding Size:', error);
     }
 }
 
+async function fetchSize(isActive = null) {
+    let url = '/api/Size/GetAllSize';
     if (isActive !== null) {
         url += `?isActive=${isActive}`;
     }
@@ -824,8 +869,11 @@ async function addSize(categoryName) {
     try {
         const response = await fetch(url);
         if (response.ok) {
+            const data = await response.json(); // Chuyển dữ liệu JSON từ API thành object
             console.log(data);
+            renderSize(data.data); // Gọi hàm hiển thị dữ liệu lên bảng
         } else {
+            console.error("Error fetching size:", response.statusText);
         }
     } catch (error) {
         console.error("Network error:", error);
@@ -848,6 +896,11 @@ async function updateSize(sizeId) {
         });
         console.log(response);
 
+        if (!response.ok) {
+            console.error("Error: " + response.status);
+            alert("Cập nhật không thành công");
+            return;
+        }
 
         const result = await response.json();
         if (result.isAssign) {
@@ -888,34 +941,250 @@ function renderSize(productCategories) {
     const productCategoryTableBody = document.getElementById('size-table-body');
     productCategoryTableBody.innerHTML = ''; // Clear existing rows
 
+    productCategories.forEach(productCategories => {
 
-    products.forEach(product => {
         const row = `
             <tr>
+
+                <td>${productCategories.sizeID}</td>
+                <td>${productCategories.sizeName}</td>
+                <td>${productCategories.isActive ? 'Yes' : 'No'}</td>
+                
                 <td>
+                    <!-- Add your button or update logic here -->
+                    <button class="update-size-info-btn" data-sizeID="${productCategories.sizeID}">
                         Cập nhật Thông tin
                     </button>
                 </td>
                 <td>
+                    <select class="status-select" data-sizeID="${productCategories.sizeID}">
+                        <option value="true" ${productCategories.isActive ? 'selected' : ''}>Kích hoạt</option>
+                        <option value="false" ${!productCategories.isActive ? 'selected' : ''}>Không kích hoạt</option>
                     </select>
+                    <button class="update-size-status-btn" data-sizeID="${productCategories.sizeID}">
                         Cập nhật Trạng thái
                     </button>
                 </td>
             </tr>
         `;
 
+        productCategoryTableBody.insertAdjacentHTML('beforeend', row);
     });
+    document.querySelectorAll('.update-size-info-btn').forEach(button => {
         button.addEventListener('click', (e) => {
+            const productCategoryID = e.target.getAttribute('data-sizeID');
+            updateSize(productCategoryID);
+            fetchSize();
         });
     });
 
+    document.querySelectorAll('.update-size-status-btn').forEach(button => {
         button.addEventListener('click', (e) => {
+            const productCategoryID = e.target.getAttribute('data-sizeID');
+            const statusSelect = document.querySelector(`.status-select[data-sizeID="${productCategoryID}"]`);
             const isActive = statusSelect.value == 'true';
+            console.log('Updating SizeID:', productCategoryID, 'to isActive', isActive);
+            toggleSizeActive(productCategoryID, isActive);
+            fetchSize();
         });
     });
 
 }
 
+
+//Color
+document.addEventListener('DOMContentLoaded', function () {
+    const createCategoryBtn = document.getElementById('create-color-btn');
+    const submitCategoryBtn = document.getElementById('submit-new-color');
+
+    // Ensure the buttons exist before adding event listeners
+    if (createCategoryBtn) {
+        // Xử lý logic khi click nút "Tạo Danh Mục Sản Phẩm"
+        createCategoryBtn.addEventListener('click', () => {
+            const form = document.getElementById('create-color-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Ẩn/hiện form
+        });
+    }
+
+    if (submitCategoryBtn) {
+        // Xử lý sự kiện khi click nút "Thêm danh mục"
+        submitCategoryBtn.addEventListener('click', () => {
+            const categoryName = document.getElementById('new-color-name').value;
+
+
+            if (categoryName) {
+                addColor(categoryName); // Gọi hàm để thêm danh mục
+            } else {
+                alert('Vui lòng nhập đầy đủ thông tin danh mục.');
+            }
+        });
+    }
+});
+
+async function addColor(categoryName) {
+    try {
+        const response = await fetch('/api/Color/AddColor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                colorName: categoryName
+
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Thông báo thành công
+            fetchColor(); // Tải lại danh sách danh mục sản phẩm
+        } else {
+            alert(result.message); // Thông báo lỗi nếu có
+        }
+    } catch (error) {
+        console.error('Error adding Size:', error);
+    }
+}
+
+async function fetchColor(isActive = null) {
+    let url = '/api/Color/GetAllColor';
+    if (isActive !== null) {
+        url += `?isActive=${isActive}`;
+    }
+
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json(); // Chuyển dữ liệu JSON từ API thành object
+            console.log(data);
+            renderColor(data.data); // Gọi hàm hiển thị dữ liệu lên bảng
+        } else {
+            console.error("Error fetching size:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+
+async function updateColor(sizeId) {
+    const ColorName = prompt('Nhập tên mới cho Màu:');
+
+    try {
+        const response = await fetch('/api/Color/Update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                colorId: sizeId,  // Sửa lại từ productCategoryID thành sizeId
+                ColorName: ColorName,
+            })
+        });
+        console.log(response);
+
+        if (!response.ok) {
+            console.error("Error: " + response.status);
+            alert("Cập nhật không thành công");
+            return;
+        }
+
+        const result = await response.json();
+        if (result.isAssign) {
+            alert(result.message); // Hiển thị thông báo cập nhật thành công
+            fetchColor(); // Reload lại danh sách kích thước
+            console.log(result);
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Error updating size type:", error);
+    }
+}
+
+
+async function toggleColorActive(userId, isActive) {
+    console.log('ColorID:', userId, 'isActive:', isActive); // Log userID and isActive
+    try {
+        const response = await fetch(`/api/Color/ToggleActive?userId=${userId}&isActive=${isActive}`, {
+            method: 'POST', // Keep POST if that's how your API is designed
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Hiển thị thông báo thay đổi trạng thái thành công
+            fetchColor(); // Reload lại danh sách người dùng
+        } else {
+            alert("Update trang thai thanh cong");
+        }
+    } catch (error) {
+        console.error("Error toggling size active status:", error);
+    }
+}
+function renderColor(productCategories) {
+    const productCategoryTableBody = document.getElementById('color-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    productCategories.forEach(productCategories => {
+
+        const row = `
+            <tr>
+
+                <td>${productCategories.colorID}</td>
+                <td>${productCategories.colorName}</td>
+                <td>${productCategories.isActive ? 'Yes' : 'No'}</td>
+                
+                <td>
+                    <!-- Add your button or update logic here -->
+                    <button class="update-color-info-btn" data-colorID="${productCategories.colorID}">
+                        Cập nhật Thông tin
+                    </button>
+                </td>
+                <td>
+                    <select class="status-select" data-colorID="${productCategories.colorID}">
+                        <option value="true" ${productCategories.isActive ? 'selected' : ''}>Kích hoạt</option>
+                        <option value="false" ${!productCategories.isActive ? 'selected' : ''}>Không kích hoạt</option>
+                    </select>
+                    <button class="update-color-status-btn" data-colorID="${productCategories.colorID}">
+                        Cập nhật Trạng thái
+                    </button>
+                </td>
+            </tr>
+        `;
+
+        productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+    });
+    document.querySelectorAll('.update-color-info-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const productCategoryID = e.target.getAttribute('data-colorID');
+            updateColor(productCategoryID);
+            fetchColor();
+        });
+    });
+
+    document.querySelectorAll('.update-color-status-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const productCategoryID = e.target.getAttribute('data-colorID');
+            const statusSelect = document.querySelector(`.status-select[data-colorID="${productCategoryID}"]`);
+            const isActive = statusSelect.value == 'true';
+            console.log('Updating ColorID:', productCategoryID, 'to isActive', isActive);
+            toggleColorActive(productCategoryID, isActive);
+            fetchColor();
+        });
+    });
+
+}
+
+
+
+//User
+async function fetchUsers(isActive = null) {
+    let url = '/api/User/AllUsers';
+    if (isActive !== null) {
+        url += `?isActive=${isActive}`;
+    }
 
     try {
         const response = await fetch(url);
@@ -947,7 +1216,7 @@ function renderUsers(users) {
                     <td>${new Date(user.createdAt).toLocaleDateString()}</td>
                     <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Chưa đăng nhập'}</td>
                     <td>${user.isActive ? 'Yes' : 'No'}</td>
-
+     
     <td>
         <select class="role-select" data-userid="${user.userID}">
             <!-- Các options sẽ được điền bằng fetchUserRoles() -->
@@ -978,45 +1247,48 @@ function renderUsers(users) {
     });
 
 
+    // Gọi hàm để lấy danh sách Role
+    fetchUserRoles();
+    // Thêm sự kiện cho nút thay đổi trạng thái hoạt động
+    document.querySelectorAll('.update-status-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const userId = e.target.getAttribute('data-userid'); // Lấy userID từ thuộc tính data
+            const statusSelect = document.querySelector(`.status-select[data-userid="${userId}"]`); // Lấy dropdown tương ứng
+            const isActive = statusSelect.value === 'true'; // Lấy giá trị true/false từ dropdown và chuyển thành boolean
 
+            // In ra giá trị để kiểm tra
+            console.log('Updating UserID:', userId, 'to isActive:', isActive); // In ra để kiểm tra dữ liệu
 
+            // Gọi API để thay đổi trạng thái người dùng
+            toggleUserActive(userId, isActive);
         });
+    });
 
-        console.log(response);
 
-        if (!response.ok) {
-            console.error("Error: " + response.status);
-            alert("Cập nhật không thành công");
-            return;
-        }
 
-        const result = await response.json();
-        alert(result.message); // Show success message
-        fetchProducts(); // Refresh the product list after a successful update
-    } catch (error) {
-        console.error("Error updating product:", error);
-        alert("Đã xảy ra lỗi trong quá trình cập nhật sản phẩm.");
-    }
 }
 
+async function fetchUserRoles() {
     try {
-        });
-        console.log(response);
+        const response = await fetch('/api/User/GetRoles'); // Gọi API để lấy danh sách role
+        if (response.ok) {
+            const roles = await response.json();
+            document.querySelectorAll('.role-select').forEach(select => {
+                // Xóa các tùy chọn hiện tại nếu có
+                select.innerHTML = '';
 
-        if (!response.ok) {
-            console.error("Error: " + response.status);
-            alert("Cập nhật không thành công");
-            return;
-        }
-
-        const result = await response.json();
-        if (result.isAssign) {
-            alert(result.message); // Hiển thị thông báo cập nhật thành công
-            fetchProductCategory(); // Reload lại danh sách người dùng
-            console.log(result);
+                roles.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.roleID; // Đặt value là roleID
+                    option.textContent = role.roleName; // Đặt text là roleName
+                    select.appendChild(option);
+                });
+            });
         } else {
+            console.error("Error fetching roles:", response.statusText);
         }
     } catch (error) {
+        console.error("Network error:", error);
     }
 }
 
@@ -1047,18 +1319,12 @@ async function updateUserRole(userId) {
             alert(result.message); // Hiển thị thông báo cập nhật thành công
             fetchUsers(); // Reload lại danh sách người dùng
         } else {
-            alert( result.message);
+            alert(result.message);
         }
     } catch (error) {
         console.error("Error updating user role:", error);
     }
 }
-
-
-
-
-
-// Gọi API để thay đổi trạng thái hoạt động của người dùng
 
 async function toggleUserActive(userId, isActive) {
     console.log('UserID:', userId, 'isActive:', isActive); // Log userID and isActive
@@ -1076,51 +1342,7 @@ async function toggleUserActive(userId, isActive) {
             fetchUsers(); // Reload lại danh sách người dùng
         } else {
             alert("Update trang thai thanh cong");
-            
-        }
-    } catch (error) {
-        console.error("Error toggling user active status:", error);
-    }
-}
 
-async function toggleProductCategoryActive(userId, isActive) {
-    console.log('ProductCategoryID:', userId, 'isActive:', isActive); // Log userID and isActive
-    try {
-        const response = await fetch(`/api/ProductCategory/ToggleActive?userId=${userId}&isActive=${isActive}`, {
-            method: 'POST', // Keep POST if that's how your API is designed
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            alert(result.message); // Hiển thị thông báo thay đổi trạng thái thành công
-            fetchProductCategory(); // Reload lại danh sách người dùng
-        } else {
-            alert("Update trang thai thanh cong");
-        }
-    } catch (error) {
-        console.error("Error toggling user active status:", error);
-    }
-}
-
-async function toggleProductActive(userId, isActive) {
-    console.log('ProductID:', userId, 'isActive:', isActive); // Log userID and isActive
-    try {
-        const response = await fetch(`/api/Product/ToggleActive?userId=${userId}&isActive=${isActive}`, {
-            method: 'POST', // Keep POST if that's how your API is designed
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            alert(result.message); // Hiển thị thông báo thay đổi trạng thái thành công
-            fetchProducts(); // Reload lại danh sách người dùng
-        } else {
-            alert("Update trang thai thanh cong");
         }
     } catch (error) {
         console.error("Error toggling user active status:", error);
@@ -1181,6 +1403,7 @@ menuItems.forEach(item => {
             setTimeout(() => {
                 const searchProductBtn = document.getElementById('search-product-btn');
                 const activeProductBtn = document.getElementById('active-product-btn');
+                const inactiveProductBtn = document.getElementById('unactive-product-btn');
                 const productCategoryTableBody = document.getElementById('product-category-table-body');
 
                 // Kiểm tra nếu các phần tử cần thiết tồn tại trước khi thao tác
@@ -1188,47 +1411,61 @@ menuItems.forEach(item => {
 
                     // Sự kiện tìm kiếm danh mục sản phẩm theo tên
                     if (searchProductBtn) {
-                searchProductBtn.addEventListener('click', () => {
-                    const query = document.getElementById('search-product-input').value.toLowerCase();
-                    const rows = productCategoryTableBody.querySelectorAll('tr');
-                    rows.forEach(row => {
-                        const categoryName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                        row.style.display = categoryName.includes(query) ? '' : 'none';
-                    });
-                });
+                        searchProductBtn.addEventListener('click', () => {
+                            const query = document.getElementById('search-product-input').value.toLowerCase();
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const categoryName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                                row.style.display = categoryName.includes(query) ? '' : 'none';
+                            });
+                        });
                     }
 
-                if (activeProductBtn) {
-                    activeProductBtn.addEventListener('click', () => {
-                        rows.forEach(row => {
+                    // Sự kiện cho nút hiển thị danh mục sản phẩm Active
+                    if (activeProductBtn) {
+                        activeProductBtn.addEventListener('click', () => {
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const isActive = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
+                                row.style.display = (isActive === 'yes' || isActive === 'active') ? '' : 'none';
+                            });
                         });
-                    });
-                }
+                    }
 
-                if (inactiveProductBtn) {
-                    inactiveProductBtn.addEventListener('click', () => {
-                        rows.forEach(row => {
+                    // Sự kiện cho nút hiển thị danh mục sản phẩm Inactive
+                    if (inactiveProductBtn) {
+                        inactiveProductBtn.addEventListener('click', () => {
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const isActive = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
+                                row.style.display = (isActive === 'no' || isActive === 'inactive') ? '' : 'none';
+                            });
                         });
-                    });
-                }
+                    }
                 }
 
                 // Thêm sự kiện cho nút Tạo Danh Mục Sản Phẩm
-                    const form = document.getElementById('create-product-category-form');
-                    form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Ẩn/hiện form
-                });
+                const createCategoryBtn = document.getElementById('create-product-category-btn');
+                if (createCategoryBtn) {
+                    createCategoryBtn.addEventListener('click', () => {
+                        const form = document.getElementById('create-product-category-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Ẩn/hiện form
+                    });
                 }
 
                 // Thêm danh mục sản phẩm mới
-                    const categoryName = document.getElementById('new-category-name').value;
-                    const description = document.getElementById('new-category-description').value;
+                const submitCategoryBtn = document.getElementById('submit-new-category');
+                if (submitCategoryBtn) {
+                    submitCategoryBtn.addEventListener('click', () => {
+                        const categoryName = document.getElementById('new-category-name').value;
+                        const description = document.getElementById('new-category-description').value;
 
-                    if (categoryName && description) {
-                        addProductCategory(categoryName, description); // Gọi hàm để thêm danh mục
-                    } else {
-                        alert('Vui lòng nhập đầy đủ thông tin danh mục.');
-                    }
-                });
+                        if (categoryName && description) {
+                            addProductCategory(categoryName, description); // Gọi hàm để thêm danh mục
+                        } else {
+                            alert('Vui lòng nhập đầy đủ thông tin danh mục.');
+                        }
+                    });
                 }
             }, 0); // Đảm bảo các phần tử đã tồn tại trước khi gắn sự kiện
         }
@@ -1344,18 +1581,18 @@ menuItems.forEach(item => {
                         activeProductBtn.addEventListener('click', () => {
                             const rows = productCategoryTableBody.querySelectorAll('tr');
                             rows.forEach(row => {
-                                const isActive = row.querySelector('td:nth-child(4)').textContent.trim().toLowerCase();
+                                const isActive = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
                                 row.style.display = (isActive === 'yes' || isActive === 'active') ? '' : 'none';
                             });
-                });
-            }
+                        });
+                    }
 
                     // Sự kiện cho nút hiển thị danh mục sản phẩm Inactive
                     if (inactiveProductBtn) {
                         inactiveProductBtn.addEventListener('click', () => {
                             const rows = productCategoryTableBody.querySelectorAll('tr');
                             rows.forEach(row => {
-                                const isActive = row.querySelector('td:nth-child(4)').textContent.trim().toLowerCase();
+                                const isActive = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
                                 row.style.display = (isActive === 'no' || isActive === 'inactive') ? '' : 'none';
                             });
                         });
@@ -1369,17 +1606,90 @@ menuItems.forEach(item => {
                         const form = document.getElementById('create-size-form');
                         form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Ẩn/hiện form
                     });
-        }
+                }
 
                 // Thêm danh mục sản phẩm mới
                 const submitCategoryBtn = document.getElementById('submit-new-size');
                 if (submitCategoryBtn) {
                     submitCategoryBtn.addEventListener('click', () => {
                         const categoryName = document.getElementById('new-size-name').value;
-                      
+
 
                         if (categoryName) {
                             addSize(categoryName); // Gọi hàm để thêm danh mục
+                        } else {
+                            alert('Vui lòng nhập đầy đủ thông tin danh mục.');
+                        }
+                    });
+                }
+            }, 0); // Đảm bảo các phần tử đã tồn tại trước khi gắn sự kiện
+        }
+
+        if (page === 'color') {
+            fetchColor(); // Gọi hàm để load danh sách danh mục sản phẩm
+
+            setTimeout(() => {
+                const searchProductBtn = document.getElementById('search-color-btn');
+                const activeProductBtn = document.getElementById('active-color-btn');
+                const inactiveProductBtn = document.getElementById('unactive-color-btn');
+                const productCategoryTableBody = document.getElementById('color-table-body');
+
+                // Kiểm tra nếu các phần tử cần thiết tồn tại trước khi thao tác
+                if (productCategoryTableBody) {
+
+                    // Sự kiện tìm kiếm danh mục sản phẩm theo tên
+                    if (searchProductBtn) {
+                        searchProductBtn.addEventListener('click', () => {
+                            const query = document.getElementById('search-color-input').value.toLowerCase();
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const categoryName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                                row.style.display = categoryName.includes(query) ? '' : 'none';
+                            });
+                        });
+                    }
+
+                    // Sự kiện cho nút hiển thị danh mục sản phẩm Active
+                    if (activeProductBtn) {
+                        activeProductBtn.addEventListener('click', () => {
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const isActive = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
+                                row.style.display = (isActive === 'yes' || isActive === 'active') ? '' : 'none';
+                            });
+                        });
+                    }
+
+                    // Sự kiện cho nút hiển thị danh mục sản phẩm Inactive
+                    if (inactiveProductBtn) {
+                        inactiveProductBtn.addEventListener('click', () => {
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const isActive = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
+                                row.style.display = (isActive === 'no' || isActive === 'inactive') ? '' : 'none';
+                            });
+                        });
+                    }
+                }
+
+                // Thêm sự kiện cho nút Tạo Danh Mục Sản Phẩm
+                const createCategoryBtn = document.getElementById('create-color-btn');
+                if (createCategoryBtn) {
+                    createCategoryBtn.addEventListener('click', () => {
+                        const form = document.getElementById('create-color-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Ẩn/hiện form
+                    });
+                }
+
+                // Thêm danh mục sản phẩm mới
+                const submitCategoryBtn = document.getElementById('submit-new-color');
+                if (submitCategoryBtn) {
+                    submitCategoryBtn.addEventListener('click', () => {
+                        const categoryName = document.getElementById('new-color-name').value;
+
+
+                        if (categoryName) {
+                            addColor(categoryName); // Gọi hàm để thêm danh mục
                         } else {
                             alert('Vui lòng nhập đầy đủ thông tin danh mục.');
                         }
