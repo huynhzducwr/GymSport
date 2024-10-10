@@ -1,4 +1,4 @@
-﻿// Lấy danh sách các mục <li> từ HTML
+﻿    // Lấy danh sách các mục <li> từ HTML
 const menuItems = document.querySelectorAll('#menu-list li');
 
 // Lấy phần tử main-content
@@ -16,58 +16,63 @@ const pages = {
     'nguoi-dung': {
         title: 'Người dùng',
         content: `
-            <h2>Quản lý Người dùng</h2>
-            <p>Đây là trang quản lý người dùng.</p>
+               <h2 id="user-title">Quản lý Người dùng</h2>
+        <p>Đây là trang quản lý người dùng.</p>
 
-            <!-- Form tìm kiếm -->
-            <div>
-                <input type="text" id="search-input" placeholder="Tìm kiếm người dùng..." />
-                <button id="search-btn">Tìm kiếm</button>
-            </div>
+        <!-- Form tìm kiếm -->
+        <div>
+            <input type="text" id="search-input" placeholder="Tìm kiếm người dùng..." />
+            <button id="search-btn">Tìm kiếm</button>
+        </div>
 
-            <!-- Lọc trạng thái -->
-            <div>
-                <button id="active-btn">Đang hoạt động</button>
-                <button id="inactive-btn">Vô hiệu hóa</button>
-            </div>
+        <!-- Lọc trạng thái -->
+        <div>
+            <button id="active-btn">Đang hoạt động</button>
+            <button id="inactive-btn">Vô hiệu hóa</button>
+        </div>
 
-            <!-- Bảng dữ liệu người dùng -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>UserID</th>
-                        <th>RoleName</th>
-                        <th>Email</th>
-                        <th>FirstName</th>
-                        <th>LastName</th>
-                        <th>PasswordHash</th>
-                        <th>CreatedAt</th>
-                        <th>LastLogin</th>
-                        <th>IsActive</th>
-                        <th>Update</th> 
-                        <th>Active </th>
-                    </tr>
-                </thead>
-                <tbody id="user-table-body">
-                    <!-- Dữ liệu người dùng sẽ được điền ở đây -->
-                </tbody>
-            </table>
+        <!-- Bảng dữ liệu người dùng -->
+        <table>
+            <thead>
+                <tr>
+                    <th>UserID</th>
+                    <th>RoleName</th>
+                    <th>Email</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>PasswordHash</th>
+                    <th>CreatedAt</th>
+                    <th>LastLogin</th>
+                    <th>IsActive</th>
+                    <th>Update</th> 
+                    <th>Active </th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                <!-- Dữ liệu người dùng sẽ được điền ở đây -->
+            </tbody>
+        </table>
 
-            <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid black;
-                    padding: 8px;
-                    text-align: left;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-            </style>
-        `
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+           #user-title:hover {
+                color: #007bff; /* Change color on hover */
+                cursor: pointer; /* Change cursor to pointer on hover */
+                text-decoration: underline; /* Underline on hover */
+            }
+        </style>
+    `
     },
     'san-pham': {
         title: 'Sản phẩm',
@@ -366,7 +371,273 @@ const pages = {
             </style>
         `
     },
+    'product-size': {
+        title: 'Kích cỡ sản phẩm',
+        content: `
+ 
+<div id="product-size">
+    <h2>Quản lý kích cỡ sản phẩm</h2>
+    <p>Đây là trang quản lý kích cỡ sản phẩm</p>
 
+    <!-- Search Form -->
+    <div>
+        <input type="text" id="search-productsize-input" placeholder="Tìm kiếm sản phẩm..." />
+        <button id="search-productsize-btn">Tìm kiếm</button>
+    </div>
+
+    <!-- Add ProductSize Form -->
+    <button id="add-productsize-btn">Tạo ProductSize</button>
+    <div id="add-productsize-form" style="display: none;">
+        <label for="add-productID">ProductID:</label>
+        <input type="number" id="add-productID" placeholder="Nhập ProductID">
+        <label for="add-productName">ProductName:</label>
+        <input type="text" id="add-productName" placeholder="Nhập ProductName">
+        <label for="add-sizeID">SizeID:</label>
+        <input type="number" id="add-sizeID" placeholder="Nhập SizeID">
+        <label for="add-sizeName">SizeName:</label>
+        <input type="text" id="add-sizeName" placeholder="Nhập SizeName">
+        <br>
+        <button id="submit-add-productsize">Thêm ProductSize</button>
+    </div>
+
+    <!-- Delete ProductSize Form -->
+  <button id="delete-productsize-btn">Xóa ProductSize</button>
+    <div id="delete-productsize-form" style="display: none;">
+        <label for="delete-productID">ProductID:</label>
+        <input type="number" id="delete-productID" placeholder="Nhập ProductID">
+        <label for="delete-productName">ProductName:</label>
+        <input type="text" id="delete-productName" placeholder="Nhập ProductName">
+        <label for="delete-sizeID">SizeID:</label>
+        <input type="number" id="delete-sizeID" placeholder="Nhập SizeID">
+        <label for="delete-sizeName">SizeName:</label>
+        <input type="text" id="delete-sizeName" placeholder="Nhập SizeName">
+        <br>
+        <button id="submit-delete-productsize">Xóa ProductSize</button>
+    </div>
+
+    <!-- Bulk Insert ProductSize Form -->
+    <button id="bulk-insert-productsize-btn">Thêm ProductSize hàng loạt</button>
+    <div id="bulk-insert-productsize-form" style="display: none;">
+        <label for="bulk-insert-productID">ProductID:</label>
+        <input type="number" id="bulk-insert-productID" placeholder="Nhập ProductID">
+        <label for="bulk-insert-sizeIDs">SizeIDs (nhập cách nhau bằng dấu phẩy):</label>
+        <input type="text" id="bulk-insert-sizeIDs" placeholder="Nhập SizeIDs">
+        <br>
+        <button id="submit-bulk-insert-productsize">Thêm hàng loạt</button>
+    </div>
+
+    <!-- Bulk Update ProductSize Form -->
+    <button id="bulk-update-productsize-btn">Cập nhật ProductSize hàng loạt</button>
+    <div id="bulk-update-productsize-form" style="display: none;">
+        <label for="bulk-update-productID">ProductID:</label>
+        <input type="number" id="bulk-update-productID" placeholder="Nhập ProductID">
+        <label for="bulk-update-sizeIDs">SizeIDs (nhập cách nhau bằng dấu phẩy):</label>
+        <input type="text" id="bulk-update-sizeIDs" placeholder="Nhập SizeIDs">
+        <br>
+        <button id="submit-bulk-update-productsize">Cập nhật hàng loạt</button>
+    </div>
+
+    <!-- Table for displaying product sizes -->
+    <table>
+        <thead>
+            <tr>
+                <th>ProductID</th>
+                <th>ProductName</th>
+                <th>SizeID</th>
+                <th>SizeName</th>
+            </tr>
+        </thead>
+        <tbody id="productsize-table-body">
+            <!-- Product size data will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #add-productsize-form, #delete-productsize-form, #bulk-insert-productsize-form, #bulk-update-productsize-form {
+            margin-bottom: 20px;
+        }
+    </style>
+        `
+
+    },
+
+
+    'product-color': {
+        title: 'Màu sắc sản phẩm',
+        content: `
+ 
+<div id="product-size">
+    <h2>Quản lý màu sắc sản phẩm</h2>
+    <p>Đây là trang quản lý kích cỡ sản phẩm</p>
+
+    <!-- Search Form -->
+    <div>
+        <input type="text" id="search-productcolor-input" placeholder="Tìm kiếm sản phẩm..." />
+        <button id="search-productcolor-btn">Tìm kiếm</button>
+    </div>
+
+    <!-- Add ProductSize Form -->
+    <button id="add-productcolor-btn">Tạo ProductColor</button>
+    <div id="add-productcolor-form" style="display: none;">
+        <label for="add-productID">ProductID:</label>
+        <input type="number" id="add-productID" placeholder="Nhập ProductID">
+        <label for="add-productName">ProductName:</label>
+        <input type="text" id="add-productName" placeholder="Nhập ProductName">
+        <label for="add-colorID">ColorID:</label>
+        <input type="number" id="add-colorID" placeholder="Nhập ColorID">
+        <label for="add-colorName">ColorName:</label>
+        <input type="text" id="add-colorName" placeholder="Nhập ColorName">
+        <br>
+        <button id="submit-add-productcolor">Thêm ProductColor</button>
+    </div>
+
+    <!-- Delete ProductSize Form -->
+  <button id="delete-productcolor-btn">Xóa ProductColor</button>
+    <div id="delete-productcolor-form" style="display: none;">
+        <label for="delete-productID">ProductID:</label>
+        <input type="number" id="delete-productID" placeholder="Nhập ProductID">
+        <label for="delete-productName">ProductName:</label>
+        <input type="text" id="delete-productName" placeholder="Nhập ProductName">
+        <label for="delete-colorID">ColorID:</label>
+        <input type="number" id="delete-colorID" placeholder="Nhập ColorID">
+        <label for="delete-colorName">ColorName:</label>
+        <input type="text" id="delete-colorName" placeholder="Nhập ColorName">
+        <br>
+        <button id="submit-delete-productcolor">Xóa ProductColor</button>
+    </div>
+
+    <!-- Bulk Insert ProductSize Form -->
+    <button id="bulk-insert-productcolor-btn">Thêm ProductColor hàng loạt</button>
+    <div id="bulk-insert-productcolor-form" style="display: none;">
+        <label for="bulk-insert-productID">ProductID:</label>
+        <input type="number" id="bulk-insert-productID" placeholder="Nhập ProductID">
+        <label for="bulk-insert-colorIDs">ColorIDs (nhập cách nhau bằng dấu phẩy):</label>
+        <input type="text" id="bulk-insert-colorIDs" placeholder="Nhập ColorIDs">
+        <br>
+        <button id="submit-bulk-insert-productcolor">Thêm hàng loạt</button>
+    </div>
+
+    <!-- Bulk Update ProductSize Form -->
+    <button id="bulk-update-productcolor-btn">Cập nhật ProductColor hàng loạt</button>
+    <div id="bulk-update-productcolor-form" style="display: none;">
+        <label for="bulk-update-productID">ProductID:</label>
+        <input type="number" id="bulk-update-productID" placeholder="Nhập ProductID">
+        <label for="bulk-update-colorIDs">ColorIDs (nhập cách nhau bằng dấu phẩy):</label>
+        <input type="text" id="bulk-update-colorIDs" placeholder="Nhập ColorIDs">
+        <br>
+        <button id="submit-bulk-update-productcolor">Cập nhật hàng loạt</button>
+    </div>
+
+    <!-- Table for displaying product sizes -->
+    <table>
+        <thead>
+            <tr>
+                <th>ProductID</th>
+                <th>ProductName</th>
+                <th>ColorID</th>
+                <th>ColorName</th>
+            </tr>
+        </thead>
+        <tbody id="productcolor-table-body">
+            <!-- Product size data will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #add-productcolor-form, #delete-productcolor-form, #bulk-insert-productcolor-form, #bulk-update-productcolor-form {
+            margin-bottom: 20px;
+        }
+    </style>
+        `
+
+    },
+    'product-image': {
+        title: 'Hình ảnh sản phẩm',
+        content: `
+        <!-- Search Form -->
+        <div>
+            <input type="text" id="search-image-input" placeholder="Tìm kiếm hinh anh..." />
+            <button id="search-image-btn">Tìm kiếm</button>
+        </div>
+
+        <!-- Button to Show Image Creation Form -->
+        <button id="create-image-btn">Tạo Hình Ảnh</button>
+
+        <!-- Hidden Form for Adding New Image -->
+        <div id="create-image-form" style="display: none;">
+            <label for="product-id">Product ID:</label>
+            <input type="text" id="product-id" placeholder="Nhập Product ID">
+            <label for="image-file">Chọn Hình Ảnh:</label>
+            <input type="file" id="image-file">
+            <br>
+            <button id="submit-new-image">Thêm Hình Ảnh</button>
+        </div>
+
+        <!-- Button to Show Image Deletion Form -->
+        <button id="delete-productimage-btn">Xóa ProductImage</button>
+        <div id="delete-productimage-form" style="display: none;">
+            <label for="delete-productID">ProductID:</label>
+            <input type="number" id="delete-imageID" placeholder="Nhập ImageID">
+            <br>
+            <button id="submit-delete-productimage">Xóa ProductImage</button>
+        </div>
+
+        <!-- Product Image Management Table -->
+        <h2>Quản lý Hình Ảnh cho sản phẩm</h2>
+        <p>Đây là trang quản lý hình ảnh</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ImageID</th>
+                    <th>ProductID</th>
+                    <th>ImageURL</th>
+                </tr>
+            </thead>
+            <tbody id="productimage-table-body">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `
+    },
 
 
 };
@@ -1179,6 +1450,389 @@ function renderColor(productCategories) {
 
 
 
+
+//ProductSize
+
+
+
+function renderProductSize(productCategories) {
+    const productCategoryTableBody = document.getElementById('productsize-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    productCategories.forEach(productCategories => {
+
+        const row = `
+            <tr>
+
+                <td>${productCategories.productID}</td>
+                <td>${productCategories.productName}</td>
+                 <td>${productCategories.sizeID}</td>
+                <td>${productCategories.sizeName}</td>
+            </tr>
+        `;
+
+        productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+    });
+ 
+}
+async function fetchProductSize() {
+    let url = '/api/ProductSize/GetAllProductSize';
+
+
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json(); // Chuyển dữ liệu JSON từ API thành object
+            console.log(data);
+            renderProductSize(data.data); // Gọi hàm hiển thị dữ liệu lên bảng
+        } else {
+            console.error("Error fetching size:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+async function addProductSize(productID, sizeID, productName = '', sizeName = '') {
+    try {
+        const response = await fetch('/api/ProductSize/AddProductSize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                sizeID: sizeID,
+                productName: productName, // Optional
+                sizeName: sizeName       // Optional
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Notify success
+            fetchProductSize(); // Reload the product size list
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error adding productSize:', error);
+    }
+}
+
+async function deleteProductSize(productID, sizeID, productName = '', sizeName = '') {
+    try {
+        const response = await fetch('/api/ProductSize/DeleteProductSize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                sizeID: sizeID,
+                productName: productName, // Optional
+                sizeName: sizeName       // Optional
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Notify success
+            fetchProductSize(); // Reload the product size list
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error adding productSize:', error);
+    }
+}
+async function addBulkProductSize(productID, sizeIDs) {
+    try {
+        const response = await fetch('/api/ProductSize/BulkInsertProductSize', { // Update the API endpoint if needed
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                sizeIDs: sizeIDs
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Display success message
+            fetchProductSize(); // Reload the product sizes (implement this function as needed)
+        } else {
+            alert(result.message); // Display error message
+        }
+    } catch (error) {
+        console.error('Error adding productSize:', error);
+    }
+}
+
+
+async function addBulkUpdateProductSize(productID, sizeIDs) {
+    try {
+        const response = await fetch('/api/ProductSize/BulkUpdateProductSize', { // Update the API endpoint if needed
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                sizeIDs: sizeIDs
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Display success message
+            fetchProductSize(); // Reload the product sizes (implement this function as needed)
+        } else {
+            alert(result.message); // Display error message
+        }
+    } catch (error) {
+        console.error('Error adding productSize:', error);
+    }
+}
+
+
+
+
+//ProductColor
+
+function renderProductColor(productCategories) {
+    const productCategoryTableBody = document.getElementById('productcolor-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    productCategories.forEach(productCategories => {
+
+        const row = `
+            <tr>
+
+                <td>${productCategories.productID}</td>
+                <td>${productCategories.productName}</td>
+                 <td>${productCategories.colorID}</td>
+                <td>${productCategories.colorName}</td>
+            </tr>
+        `;
+
+        productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+    });
+
+}
+async function fetchProductColor() {
+    let url = '/api/ProductColor/GetAllProductColor';
+
+
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json(); // Chuyển dữ liệu JSON từ API thành object
+            console.log(data);
+            renderProductColor(data.data); // Gọi hàm hiển thị dữ liệu lên bảng
+        } else {
+            console.error("Error fetching size:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+
+
+async function addProductColor(productID, colorID, productName = '', colorName = '') {
+    try {
+        const response = await fetch('/api/ProductColor/AddProductColor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                colorID: colorID,
+                productName: productName, // Optional
+                colorName: colorName       // Optional
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Notify success
+            fetchProductColor(); // Reload the product size list
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error adding productColor:', error);
+    }
+}
+
+async function deleteProductColor(productID, colorID, productName = '', colorName = '') {
+    try {
+        const response = await fetch('/api/ProductColor/DeleteProductColor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                colorID: colorID,
+                productName: productName, // Optional
+                colorName: colorName       // Optional
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Notify success
+            fetchProductColor(); // Reload the product size list
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error adding productColor:', error);
+    }
+}
+async function addBulkProductColor(productID, colorIDs) {
+    try {
+        const response = await fetch('/api/ProductColor/BulkInsertProductColor', { // Update the API endpoint if needed
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                colorIDs: colorIDs
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Display success message
+            fetchProductColor(); // Reload the product sizes (implement this function as needed)
+        } else {
+            alert(result.message); // Display error message
+        }
+    } catch (error) {
+        console.error('Error adding productSize:', error);
+    }
+}
+
+
+async function addBulkUpdateProductColor(productID, colorIDs) {
+    try {
+        const response = await fetch('/api/ProductColor/BulkUpdateProductColor', { // Update the API endpoint if needed
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productID: productID,
+                colorIDs: colorIDs
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message); // Display success message
+            fetchProductColor(); // Reload the product sizes (implement this function as needed)
+        } else {
+            alert(result.message); // Display error message
+        }
+    } catch (error) {
+        console.error('Error adding productColor:', error);
+    }
+}
+
+
+
+//Image
+
+async function fetchImage() {
+ 
+
+    try {
+        const response = await fetch('/api/Image/all'); // Adjust your API URL if needed
+        const productImages = await response.json();
+
+        if (Array.isArray(productImages)) {
+            renderProductImages(productImages); // Call render only when data is ready
+        } else {
+            console.error('Fetched data is not an array:', productImages);
+        }
+    } catch (error) {
+        console.error('Error fetching product images:', error);
+    }
+}
+function renderProductImages(productCategories) {
+    const productCategoryTableBody = document.getElementById('productimage-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    if (Array.isArray(productCategories)) {
+        productCategories.forEach(productCategory => { // Rename for clarity
+            const row = `
+                <tr>
+                    <td>${productCategory.imageID}</td>    
+                    <td>${productCategory.productID}</td>
+                    <td>${productCategory.imageURL}</td>
+                </tr>
+            `;
+            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        console.error('Data passed to renderProductImages is not an array:', productCategories);
+    }
+}
+
+
+
+async function addProductImages(productID, imageFile) {
+    try {
+        // Prepare form data to include the product ID and the image file
+        const formData = new FormData();
+        formData.append('ProductID', productID);  // Adding ProductID to the form
+        formData.append('ImageFile', imageFile);  // Adding Image file to the form
+
+        const response = await fetch('/api/Image/upload', {
+            method: 'POST',
+            body: formData // FormData object used directly in the request body
+        });
+
+        const result = await response.json();
+        if (result.isSuccess) {
+            alert(result.message); // Notify success
+            fetchImage();  // Reload the product images list
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error uploading product image:', error);
+    }
+}
+
+// Function to delete a product image
+async function deleteProductImage(imageID) {
+    try {
+        const response = await fetch(`/api/Image/${imageID}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json(); // Parse the JSON response
+
+        if (result.isSuccess) {
+            alert(result.message); // Notify success
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error deleting product image:', error);
+    }
+}
+
+
+
+
+
 //User
 async function fetchUsers(isActive = null) {
     let url = '/api/User/AllUsers';
@@ -1348,6 +2002,9 @@ async function toggleUserActive(userId, isActive) {
         console.error("Error toggling user active status:", error);
     }
 }
+
+
+
 
 // Thêm sự kiện click cho mỗi mục <li>
 // Thêm sự kiện click cho mỗi mục <li>
@@ -1696,6 +2353,327 @@ menuItems.forEach(item => {
                     });
                 }
             }, 0); // Đảm bảo các phần tử đã tồn tại trước khi gắn sự kiện
+
+            
+                    
+            
         }
+        if (page === 'product-size') {
+            fetchProductSize(); // Load the list of product sizes
+
+            setTimeout(() => {
+                const searchProductBtn = document.getElementById('search-productsize-btn'); // Correct the ID for search button
+                const productCategoryTableBody = document.getElementById('productsize-table-body');
+
+                // Check if necessary elements exist before proceeding
+                if (productCategoryTableBody) {
+                    // Event listener for searching product sizes by name
+                    if (searchProductBtn) {
+                        searchProductBtn.addEventListener('click', () => {
+                            const query = document.getElementById('search-productsize-input').value.toLowerCase(); // Correct the search input ID
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                                row.style.display = productName.includes(query) ? '' : 'none';
+                            });
+                        });
+                    }
+                }
+
+
+                // Event listener for the "Create Product Size" button
+                const createProductSizeBtn = document.getElementById('add-productsize-btn');
+                if (createProductSizeBtn) {
+                    createProductSizeBtn.addEventListener('click', () => {
+                        const form = document.getElementById('add-productsize-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle form visibility
+                    });
+                }
+
+                // Event listener for submitting a new product size
+                const submitProductSizeBtn = document.getElementById('submit-add-productsize');
+                if (submitProductSizeBtn) {
+                    submitProductSizeBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('add-productID').value;
+                        const sizeID = document.getElementById('add-sizeID').value;
+                        const productName = document.getElementById('add-productName').value; // Optional ProductName
+                        const sizeName = document.getElementById('add-sizeName').value;       // Optional SizeName
+
+                        if (productID && sizeID) {
+                            addProductSize(productID, sizeID, productName, sizeName); // Call function with optional parameters
+                        } else {
+                            alert('Vui lòng nhập đầy đủ thông tin kích cỡ sản phẩm.');
+                        }
+                    });
+                }
+
+                const deleteProductSizeBtn = document.getElementById('delete-productsize-btn');
+                if (deleteProductSizeBtn) {
+                    deleteProductSizeBtn.addEventListener('click', () => {
+                        const form = document.getElementById('delete-productsize-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle form visibility
+                    });
+                }
+
+                // Event listener for submitting a Product Size deletion
+                const submitDeleteProductSizeBtn = document.getElementById('submit-delete-productsize');
+                if (submitDeleteProductSizeBtn) {
+                    submitDeleteProductSizeBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('delete-productID').value;
+                        const sizeID = document.getElementById('delete-sizeID').value;
+                        const productName = document.getElementById('delete-productName').value; // Optional ProductName
+                        const sizeName = document.getElementById('delete-sizeName').value;       // Optional SizeName
+
+                        if (productID && sizeID) {
+                            deleteProductSize(productID, sizeID, productName, sizeName); // Call function with optional parameters
+                        } else {
+                            alert('Vui lòng nhập đầy đủ thông tin kích cỡ sản phẩm.');
+                        }
+                    });
+                }
+
+                // Event listener for Bulk Insert Product Size
+                const bulkInsertBtn = document.getElementById('bulk-insert-productsize-btn'); // Bulk insert button
+                if (bulkInsertBtn) {
+                    bulkInsertBtn.addEventListener('click', () => {
+                        const form = document.getElementById('bulk-insert-productsize-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle bulk insert form visibility
+                    });
+                }
+
+                // Event listener for submitting bulk insert
+                const submitBulkInsertBtn = document.getElementById('submit-bulk-insert-productsize');
+                if (submitBulkInsertBtn) {
+                    submitBulkInsertBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('bulk-insert-productID').value;
+                        const sizeIDsString = document.getElementById('bulk-insert-sizeIDs').value;
+                        const sizeIDs = sizeIDsString.split(',').map(id => parseInt(id.trim()));
+
+                        if (productID && sizeIDs.length > 0) {
+                            addBulkProductSize(productID, sizeIDs); // Call function to add bulk product sizes
+                        } else {
+                            alert('Vui lòng nhập ProductID và ít nhất một SizeID.');
+                        }
+                    });
+                }
+
+
+                const bulkUpdateBtn = document.getElementById('bulk-update-productsize-btn'); // Bulk insert button
+                if (bulkUpdateBtn) {
+                    bulkUpdateBtn.addEventListener('click', () => {
+                        const form = document.getElementById('bulk-update-productsize-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle bulk insert form visibility
+                    });
+                }
+
+                // Event listener for submitting bulk insert
+                const submitBulkUpdateBtn = document.getElementById('submit-bulk-update-productsize');
+                if (submitBulkUpdateBtn) {
+                    submitBulkUpdateBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('bulk-update-productID').value;
+                        const sizeIDsString = document.getElementById('bulk-update-sizeIDs').value;
+                        const sizeIDs = sizeIDsString.split(',').map(id => parseInt(id.trim()));
+
+                        if (productID && sizeIDs.length > 0) {
+                            addBulkUpdateProductSize(productID, sizeIDs); // Call function to add bulk product sizes
+                        } else {
+                            alert('Vui lòng nhập ProductID và ít nhất một SizeID.');
+                        }
+                    });
+                }
+
+            }, 0); // Ensure elements exist before attaching events
+        }
+
+        if (page === 'product-color') {
+            fetchProductColor(); // Load the list of product sizes
+
+            setTimeout(() => {  
+                const searchProductBtn = document.getElementById('search-productcolor-btn'); // Correct the ID for search button
+                const productCategoryTableBody = document.getElementById('productcolor-table-body');
+
+                // Check if necessary elements exist before proceeding
+                if (productCategoryTableBody) {
+                    // Event listener for searching product sizes by name
+                    if (searchProductBtn) {
+                        searchProductBtn.addEventListener('click', () => {
+                            const query = document.getElementById('search-productcolor-input').value.toLowerCase(); // Correct the search input ID
+                            const rows = productCategoryTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                                row.style.display = productName.includes(query) ? '' : 'none';
+                            });
+                        });
+                    }
+                }
+
+
+                // Event listener for the "Create Product Size" button
+                const createProductSizeBtn = document.getElementById('add-productcolor-btn');
+                if (createProductSizeBtn) {
+                    createProductSizeBtn.addEventListener('click', () => {
+                        const form = document.getElementById('add-productcolor-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle form visibility
+                    });
+                }
+
+                // Event listener for submitting a new product size
+                const submitProductSizeBtn = document.getElementById('submit-add-productcolor');
+                if (submitProductSizeBtn) {
+                    submitProductSizeBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('add-productID').value;
+                        const sizeID = document.getElementById('add-colorID').value;
+                        const productName = document.getElementById('add-productName').value; // Optional ProductName
+                        const sizeName = document.getElementById('add-colorName').value;       // Optional SizeName
+
+                        if (productID && sizeID) {
+                            addProductColor(productID, sizeID, productName, sizeName); // Call function with optional parameters
+                        } else {
+                            alert('Vui lòng nhập đầy đủ thông tin kích cỡ sản phẩm.');
+                        }
+                    });
+                }
+
+                const deleteProductSizeBtn = document.getElementById('delete-productcolor-btn');
+                if (deleteProductSizeBtn) {
+                    deleteProductSizeBtn.addEventListener('click', () => {
+                        const form = document.getElementById('delete-productcolor-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle form visibility
+                    });
+                }
+
+                // Event listener for submitting a Product Size deletion
+                const submitDeleteProductSizeBtn = document.getElementById('submit-delete-productcolor');
+                if (submitDeleteProductSizeBtn) {
+                    submitDeleteProductSizeBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('delete-productID').value;
+                        const sizeID = document.getElementById('delete-colorID').value;
+                        const productName = document.getElementById('delete-productName').value; // Optional ProductName
+                        const sizeName = document.getElementById('delete-colorName').value;       // Optional SizeName
+
+                        if (productID && sizeID) {
+                            deleteProductColor(productID, sizeID, productName, sizeName); // Call function with optional parameters
+                        } else {
+                            alert('Vui lòng nhập đầy đủ thông tin màu sắc sản phẩm.');
+                        }
+                    });
+                }
+
+                // Event listener for Bulk Insert Product Size
+                const bulkInsertBtn = document.getElementById('bulk-insert-productcolor-btn'); // Bulk insert button
+                if (bulkInsertBtn) {
+                    bulkInsertBtn.addEventListener('click', () => {
+                        const form = document.getElementById('bulk-insert-productcolor-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle bulk insert form visibility
+                    });
+                }
+
+                // Event listener for submitting bulk insert
+                const submitBulkInsertBtn = document.getElementById('submit-bulk-insert-productcolor');
+                if (submitBulkInsertBtn) {
+                    submitBulkInsertBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('bulk-insert-productID').value;
+                        const sizeIDsString = document.getElementById('bulk-insert-colorIDs').value;
+                        const sizeIDs = sizeIDsString.split(',').map(id => parseInt(id.trim()));
+
+                        if (productID && sizeIDs.length > 0) {
+                            addBulkProductColor(productID, sizeIDs); // Call function to add bulk product sizes
+                        } else {
+                            alert('Vui lòng nhập ProductID và ít nhất một SizeID.');
+                        }
+                    });
+                }
+
+
+                const bulkUpdateBtn = document.getElementById('bulk-update-productcolor-btn'); // Bulk insert button
+                if (bulkUpdateBtn) {
+                    bulkUpdateBtn.addEventListener('click', () => {
+                        const form = document.getElementById('bulk-update-productcolor-form');
+                        form.style.display = form.style.display === 'none' ? 'block' : 'none'; // Toggle bulk insert form visibility
+                    });
+                }
+
+                // Event listener for submitting bulk insert
+                const submitBulkUpdateBtn = document.getElementById('submit-bulk-update-productcolor');
+                if (submitBulkUpdateBtn) {
+                    submitBulkUpdateBtn.addEventListener('click', () => {
+                        const productID = document.getElementById('bulk-update-productID').value;
+                        const sizeIDsString = document.getElementById('bulk-update-colorIDs').value;
+                        const sizeIDs = sizeIDsString.split(',').map(id => parseInt(id.trim()));
+
+                        if (productID && sizeIDs.length > 0) {
+                            addBulkUpdateProductColor(productID, sizeIDs); // Call function to add bulk product sizes
+                        } else {
+                            alert('Vui lòng nhập ProductID và ít nhất một ColorID.');
+                        }
+                    });
+                }
+
+            }, 0); // Ensure elements exist before attaching events
+        }
+
+        if (page == 'product-image') {
+            // Fetch and display the product images
+            fetchImage(); // Load the list of product images
+
+            // Event listener for searching images by product ID
+            const searchProductBtn = document.getElementById('search-image-btn');
+            const productCategoryTableBody = document.getElementById('productimage-table-body');
+
+            if (searchProductBtn && productCategoryTableBody) {
+                searchProductBtn.addEventListener('click', () => {
+                    const query = document.getElementById('search-image-input').value.toLowerCase();
+                    const rows = productCategoryTableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                        row.style.display = productID.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+
+            // Show form to add a new image
+            const createImageBtn = document.getElementById('create-image-btn');
+            const createImageForm = document.getElementById('create-image-form');
+
+            createImageBtn.addEventListener('click', () => {
+                createImageForm.style.display = createImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for adding a new image
+            const submitNewImageBtn = document.getElementById('submit-new-image');
+            submitNewImageBtn.addEventListener('click', async () => {
+                const productID = document.getElementById('product-id').value;
+                const imageFile = document.getElementById('image-file').files[0];
+
+                if (productID && imageFile) {
+                    await addProductImages(productID, imageFile);
+                } else {
+                    alert('Vui lòng nhập đầy đủ thông tin Product ID và chọn Hình ảnh');
+                }
+            });
+
+            // Show form to delete an image
+            const deleteImageBtn = document.getElementById('delete-productimage-btn');
+            const deleteImageForm = document.getElementById('delete-productimage-form');
+
+            deleteImageBtn.addEventListener('click', () => {
+                deleteImageForm.style.display = deleteImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for deleting an image
+            const submitDeleteImageBtn = document.getElementById('submit-delete-productimage');
+            submitDeleteImageBtn.addEventListener('click', async () => {
+                const productID = document.getElementById('delete-imageID').value;
+
+                if (productID) {
+                    await deleteProductImage(productID);
+                } else {
+                    alert('Vui lòng nhập imageID.');
+                }
+            });
+        }
+
+        
+
     });
 });

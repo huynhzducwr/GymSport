@@ -45,6 +45,7 @@ body {
             padding: 10px;
             border-radius: 4px;
             transition: background-color 0.3s;
+            cursor:pointer;
         }
 
             .sidebar ul li:hover {

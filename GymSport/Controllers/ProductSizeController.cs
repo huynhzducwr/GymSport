@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using GymSport.Repository;
 using GymSport.DTOs.ProductSizeDTOs;
+using GymSport.DTOs.ColorDTOs;
 namespace GymSport.Controllers
 {
     [Route("api/[controller]")]
@@ -18,12 +19,12 @@ namespace GymSport.Controllers
             _logger = logger;
         }
       
-        [HttpGet("FetchProductBySizeId/{amenityId}")]
-        public async Task<APIResponse<List<FetchProductSizesResponseDTO>>> FetchRoomTypesByAmenityId(int amenityId)
+        [HttpGet("FetchProductBySizeId/{sizeID}")]
+        public async Task<APIResponse<List<FetchProductSizesResponseDTO>>> FetchProductBySizeId(int sizeID)
         {
             try
             {
-                var roomTypes = await _productSizeRepository.FetchProductSizeBySizeIdAsync(amenityId);
+                var roomTypes = await _productSizeRepository.FetchProductSizeBySizeIdAsync(sizeID);
                 if (roomTypes != null && roomTypes.Count > 0)
                 {
                     return new APIResponse<List<FetchProductSizesResponseDTO>>(roomTypes, "Fetch Product By SizeId Successfully.");
@@ -37,7 +38,7 @@ namespace GymSport.Controllers
             }
         }
         [HttpPost("AddProductSize")]
-        public async Task<APIResponse<ProductSizeResponseDTO>> AddRoomAmenity([FromBody] ProductSizeDTO input)
+        public async Task<APIResponse<ProductSizeResponseDTO>> AddProductSize([FromBody] ProductSizeDTO input)
         {
             try
             {
@@ -80,8 +81,8 @@ namespace GymSport.Controllers
                 return new APIResponse<ProductSizeResponseDTO>(HttpStatusCode.InternalServerError, "Error deleting productSize", ex.Message);
             }
         }
-        [HttpPost("BulkInsertRoomAmenities")]
-        public async Task<APIResponse<ProductSizeResponseDTO>> BulkInsertRoomAmenities([FromBody] ProductSizeBulkInsertUpdateDTO input)
+        [HttpPost("BulkInsertProductSize")]
+        public async Task<APIResponse<ProductSizeResponseDTO>> BulkInsertProductSize([FromBody] ProductSizeBulkInsertUpdateDTO input)
         {
             try
             {
@@ -102,8 +103,8 @@ namespace GymSport.Controllers
                 return new APIResponse<ProductSizeResponseDTO>(HttpStatusCode.InternalServerError, "Error performing bulk insert of productSize", ex.Message);
             }
         }
-        [HttpPost("BulkUpdateRoomAmenities")]
-        public async Task<APIResponse<ProductSizeResponseDTO>> BulkUpdateRoomAmenities([FromBody] ProductSizeBulkInsertUpdateDTO input)
+        [HttpPost("BulkUpdateProductSize")]
+        public async Task<APIResponse<ProductSizeResponseDTO>> BulkUpdateProductSize([FromBody] ProductSizeBulkInsertUpdateDTO input)
         {
             try
             {
@@ -138,6 +139,24 @@ namespace GymSport.Controllers
                 return new APIResponse<ProductSizeResponseDTO>(HttpStatusCode.InternalServerError, "Error deleting all room amenities by room type ID", ex.Message);
             }
         }
-      
+
+        [HttpGet("GetAllProductSize")]
+        public async Task<APIResponse<List<ProductSizeDTO>>> GetAllProductSize()
+        {
+            _logger.LogInformation($"Request recevied to all productSize");
+            try
+            {
+                var productCategory = await _productSizeRepository.ListAllProductSize();
+                return new APIResponse<List<ProductSizeDTO>>(productCategory, "Lay tat ca danh sach thanh cong");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error lay danh sach khong thanh cong");
+                return new APIResponse<List<ProductSizeDTO>>(HttpStatusCode.InternalServerError, "Loi: " + ex.Message);
+            }
+
+        }
+
+
     }
 }

@@ -1,35 +1,35 @@
 ﻿using GymSport.Connection;
+using GymSport.DTOs.ProductColorDTOs;
 using System.Data;
-using GymSport.DTOs.ProductSizeDTOs;
 using Microsoft.Data.SqlClient;
-using GymSport.DTOs.ColorDTOs;
 
 namespace GymSport.Repository
 {
-    public class ProductSizesRepository
+    public class ProductColorsRepository
     {
+
         private readonly SqlConnectionFactory _connectionFactory;
-        public ProductSizesRepository(SqlConnectionFactory connectionFactory)
+        public ProductColorsRepository(SqlConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
         }
-    
-        
+
+
         //Fetch All Room Types Based on the AmenityID
-        public async Task<List<FetchProductSizesResponseDTO>> FetchProductSizeBySizeIdAsync(int sizeId)
+        public async Task<List<FetchProductColorsResponseDTO>> FetchProductColorByColorIdAsync(int sizeId)
         {
-            var response = new List<FetchProductSizesResponseDTO>();
+            var response = new List<FetchProductColorsResponseDTO>();
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spFetchProductSizeBySizeID", connection)
+            using var command = new SqlCommand("spFetchProductColorByColorID", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
-            command.Parameters.AddWithValue("@SizeID", sizeId);
+            command.Parameters.AddWithValue("@ColorID", sizeId);
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                response.Add(new FetchProductSizesResponseDTO
+                response.Add(new FetchProductColorsResponseDTO
                 {
                     ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
                     ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
@@ -42,98 +42,98 @@ namespace GymSport.Repository
             return response;
         }
         //Add the Combination of Size Id and Product Id
-        public async Task<ProductSizeResponseDTO> AddProductSizeAsync(ProductSizeDTO input)
+        public async Task<ProductColorResponseDTO> AddProductColorAsync(ProductColorDTO input)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spAddProductSizes", connection)
+            using var command = new SqlCommand("spAddProductColors", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@ProductID", input.ProductID);
-            command.Parameters.AddWithValue("@SizeID", input.SizeID);
+            command.Parameters.AddWithValue("@ColorID", input.ColorID);
             var statusParam = new SqlParameter("@Status", SqlDbType.Bit) { Direction = ParameterDirection.Output };
             var messageParam = new SqlParameter("@Message", SqlDbType.NVarChar, 255) { Direction = ParameterDirection.Output };
             command.Parameters.Add(statusParam);
             command.Parameters.Add(messageParam);
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-            return new ProductSizeResponseDTO
+            return new ProductColorResponseDTO
             {
                 IsSuccess = (bool)statusParam.Value,
                 Message = (string)messageParam.Value
             };
         }
         //Delete the Combination of Amenity Id and Room Type Id
-        public async Task<ProductSizeResponseDTO> DeleteProductSizeAsync(ProductSizeDTO input)
+        public async Task<ProductColorResponseDTO> DeleteProductColorAsync(ProductColorDTO input)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spDeleteSingleProductSize", connection)
+            using var command = new SqlCommand("spDeleteSingleProductColor", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@PRoductID", input.ProductID);
-            command.Parameters.AddWithValue("@SizeID", input.SizeID);
+            command.Parameters.AddWithValue("@ColorID", input.ColorID);
             var statusParam = new SqlParameter("@Status", SqlDbType.Bit) { Direction = ParameterDirection.Output };
             var messageParam = new SqlParameter("@Message", SqlDbType.NVarChar, 255) { Direction = ParameterDirection.Output };
             command.Parameters.Add(statusParam);
             command.Parameters.Add(messageParam);
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-            return new ProductSizeResponseDTO
+            return new ProductColorResponseDTO
             {
                 IsSuccess = (bool)statusParam.Value,
                 Message = (string)messageParam.Value
             };
         }
         //This will Perform Bulk Insert, i.e. one RoomTypeID with many AmenityIDs
-        public async Task<ProductSizeResponseDTO> BulkInsertProductSizeAsync(ProductSizeBulkInsertUpdateDTO input)
+        public async Task<ProductColorResponseDTO> BulkInsertProductColorAsync(ProductColorBulkInsertUpdateDTO input)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spBulkInsertProductSize", connection)
+            using var command = new SqlCommand("spBulkInsertProductColor", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@ProductID", input.ProductID);
-            command.Parameters.Add(CreateSizeIDTableParameter(input.SizeIDs));
+            command.Parameters.Add(CreateColorIDTableParameter(input.ColorIDs));
             var statusParam = new SqlParameter("@Status", SqlDbType.Bit) { Direction = ParameterDirection.Output };
             var messageParam = new SqlParameter("@Message", SqlDbType.NVarChar, 255) { Direction = ParameterDirection.Output };
             command.Parameters.Add(statusParam);
             command.Parameters.Add(messageParam);
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-            return new ProductSizeResponseDTO
+            return new ProductColorResponseDTO
             {
                 IsSuccess = (bool)statusParam.Value,
                 Message = (string)messageParam.Value
             };
         }
         //This will Perform Bulk Update, i.e. one RoomTypeID with many AmenityIDs
-        public async Task<ProductSizeResponseDTO> BulkUpdateProductSizeAsync(ProductSizeBulkInsertUpdateDTO input)
+        public async Task<ProductColorResponseDTO> BulkUpdateProductColorAsync(ProductColorBulkInsertUpdateDTO input)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spBulkUpdateProductSizes", connection)
+            using var command = new SqlCommand("spBulkUpdateProductColors", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@ProductID", input.ProductID);
-            command.Parameters.Add(CreateSizeIDTableParameter(input.SizeIDs));
+            command.Parameters.Add(CreateColorIDTableParameter(input.ColorIDs));
             var statusParam = new SqlParameter("@Status", SqlDbType.Bit) { Direction = ParameterDirection.Output };
             var messageParam = new SqlParameter("@Message", SqlDbType.NVarChar, 255) { Direction = ParameterDirection.Output };
             command.Parameters.Add(statusParam);
             command.Parameters.Add(messageParam);
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-            return new ProductSizeResponseDTO
+            return new ProductColorResponseDTO
             {
                 IsSuccess = (bool)statusParam.Value,
                 Message = (string)messageParam.Value
             };
         }
         //Delete All Room Amenities By Room Type ID
-        public async Task<ProductSizeResponseDTO> DeleteAllProductSizeByProductIDAsync(int roomTypeId)
+        public async Task<ProductColorResponseDTO> DeleteAllProductColorByProductIDAsync(int roomTypeId)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spDeleteAllProductSizeByProductID", connection)
+            using var command = new SqlCommand("spDeleteAllProductColorByProductID", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -144,16 +144,16 @@ namespace GymSport.Repository
             command.Parameters.Add(messageParam);
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-            return new ProductSizeResponseDTO
+            return new ProductColorResponseDTO
             {
                 IsSuccess = (bool)statusParam.Value,
                 Message = (string)messageParam.Value
             };
         }
-        //Delete All RoomAmenities By Amenity ID
-     
+
+
         // Helper method to create a SQL parameter for table-valued parameters
-        private SqlParameter CreateSizeIDTableParameter(IEnumerable<int> amenityIds)
+        private SqlParameter CreateColorIDTableParameter(IEnumerable<int> amenityIds)
         {
             var table = new DataTable();
             table.Columns.Add("SizeID", typeof(int));
@@ -163,37 +163,37 @@ namespace GymSport.Repository
             }
             var param = new SqlParameter
             {
-                ParameterName = "@SizeIDs",
+                ParameterName = "@ColorIDs",
                 SqlDbType = SqlDbType.Structured,
                 Value = table,
-                TypeName = "SizeIDTableType"
+                TypeName = "ColorIDTableType"
             };
             return param;
         }
 
-        public async Task<List<ProductSizeDTO>> ListAllProductSize()
+        public async Task<List<ProductColorDTO>> ListAllProductColor()
         {
             using var connection = _connectionFactory.CreateConnection();
 
-            var command = new SqlCommand("spGetAllProductSize", connection)
+            var command = new SqlCommand("spGetAllProductColor", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
 
-         
+
             await connection.OpenAsync();
 
             using var reader = await command.ExecuteReaderAsync();
-            var productCategories = new List<ProductSizeDTO>();
+            var productCategories = new List<ProductColorDTO>();
 
             while (reader.Read())
             {
-                productCategories.Add(new ProductSizeDTO 
+                productCategories.Add(new ProductColorDTO
                 {
                     ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
-                    SizeID = reader.GetInt32(reader.GetOrdinal("SizeID")),
-                    ProductName= reader.GetString(reader.GetOrdinal("ProductName")),
-                    SizeName = reader.GetString(reader.GetOrdinal("SizeName"))
+                    ColorID = reader.GetInt32(reader.GetOrdinal("ColorID")),
+                    ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
+                    ColorName = reader.GetString(reader.GetOrdinal("ColorName"))
                 });
             }
             return productCategories;
