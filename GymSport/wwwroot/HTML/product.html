@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/CSS/style.css">
+    <link rel="stylesheet" href="/CSS/style_product.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
 
     <title>GymSport</title>
@@ -71,7 +72,6 @@
                 <div class="section_1">
                     <h3 class="legging">PRODUCTS</h3>
                     <ul class="list">
-                        <li class="spc"> <a class="kegg" href="product.html">All Products</a></li>
                         <li class="spc"> <a class="kegg" href="#">Gym Leggings</a></li>
                         <li class="spc"><a class="kegg" href="#">Legging With Pockets</a></li>
                         <li class="spc"><a class="kegg" href="#">High Waisted Leggings</a></li>
@@ -114,7 +114,7 @@
                 <div class="section_1">
                     <h3 class="legging">Product</h3>
                     <ul class="list">
-                        <li class="spc"> <a class="kegg" href="product.html">All Product</a></li>
+                        <li class="spc"> <a class="kegg" href="#">All Product</a></li>
                         <li class="spc"><a class="kegg" href="#">Shorts</a></li>
                         <li class="spc"><a class="kegg" href="#">T-Shirts & Tops</a></li>
                         <li class="spc"><a class="kegg" href="#">Jogger & Sweatpants</a></li>
@@ -204,14 +204,15 @@
 
             </div>
             <div class="menu_select_order">
-                <a class="link_order1" href="#"><i class="fa-regular fa-heart"></i></a>
-                <a class="link_order" href="/login"><i class="fa-regular fa-user"></i></a>
-                <a class="link_order3" href="#"><i class="fa-solid fa-shop"></i></a>
+                <a class="link_order" href="#"><i class="fa-regular fa-heart"></i></a>
+                <a class="link_order" href="login.html"><i class="fa-regular fa-user"></i></a>
+                <a class="link_order" href="#"><i class="fa-solid fa-shop"></i></a>
 
 
             </div>
         </div>
     </div>
+
 
 
     <div class="overlay"> </div>
@@ -273,6 +274,7 @@
 
         <button class="checkout">CHECKOUT SECURELY</button>
     </div>
+
     <!--thanh menu thu 3-->
     <!-- Thanh menu thu 3 -->
     <div class="container_discount">
@@ -281,222 +283,224 @@
         <a href="#" class="text_discount">FREE STANDARD SHIPPING OVER $75</a>
     </div>
 
-    <div class="video-container">
-        <video autoplay muted loop>
-            <source src="/src/1111.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="overlay">
-            <h1 style="font-weight: 600; font-size: 45px;">DADDY'S HOME</h1>
-            <br>
-            <h1 style="font-size: 15px;">He's back, baby.Chris Bumstead is a Gymshark Athlete.</h1>
+
+    <div class="title_product">
+        <h4 style="font-weight: 300;">Womens</h4>
+        <h1 style="font-weight: 500;">ALL PRODUCTS</h1>
+        <h5 style="margin-bottom: 30px;">Stock up on your workout fave's or test a fresh 'fit. Shop all women's Gymshark products here.</h5>
+
+        <div class="container_product11">
+
+            <div class="nav_category">
+                <div class="title_filter">
+                    <h3 style="font-weight: 500; font-size: 15px;">FILTER & SORT</h3>
+                    <div class="sort_by">
+                        <h3 class="sort_list">SORT BY <i class="fa-solid fa-arrow-up arrow_up" style="padding-left: 126px;"></i></h3>
+                        <ul class="listt">
+                            <li class="list_">
+                                <input id="sortLowToHigh" class="edt_radio" type="radio" name="sortPrice" value="low"> Price: Low to High
+                            </li>
+                            <li class="list_">
+                                <input id="sortHighToLow" class="edt_radio" type="radio" name="sortPrice" value="high"> Price: High to Low
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sort_by">
+                        <h3 class="product_list">PRODUCT TYPE<i class="fa-solid fa-arrow-up arrow_upp" style="padding-left: 80px;"></i></h3>
+                        <ul class="listt_product">
+                            <li class="type_box" data-category="Leggings">Leggings</li>
+                            <li class="type_box" data-category="Crop Tops">Crop Tops</li>
+                            <li class="type_box" data-category="Hoddies">Hoddies</li>
+                            <li class="type_box" data-category="Shorts">Shorts</li>
+                            <li class="type_box" data-category="Sports Bras">Sports Bras</li>
+                            <li class="type_box" data-category="T-Shirt">T-Shirts & Tops</li>
+                            <li class="type_box" data-category="Bodysuits">Bodysuits</li>
+                            <li class="type_box" data-category="Underwear & Basics">Underwear & Basics</li>
+                            <li class="type_box" data-category="Tank Tops">Tank Tops</li>
+                        </ul>
+                    </div>
+
+                    <div class="sort_by">
+                        <h3 class="size_list">SIZE<i class="fa-solid fa-arrow-up arrow_uppp" style="padding-left: 160px;"></i></h3>
+                        <ul class="listt_size">
+                            <li class="type_box">XXS</li>
+                            <li class="type_box">XS</li>
+                            <li class="type_box">S</li>
+                            <li class="type_box">M</li>
+                            <li class="type_box">L</li>
+                            <li class="type_box">XL</li>
+                            <li class="type_box">XXL</li>
+
+                        </ul>
+                    </div>
+                    <div class="sort_by">
+                        <h3 class="feature_list">FEATURES<i class="fa-solid fa-arrow-up arrow_up_feature" style="padding-left: 120px;"></i></h3>
+                        <ul class="listt_feature">
+                            <li class="type_box" data-category="Leggings">Sweat Wicking</li>
+                            <li class="type_box" data-category="Crop Tops">Breathable</li>
+                            <li class="type_box" data-category="Hoddies">Pockets</li>
+                            <li class="type_box" data-category="Shorts">Lightweight</li>
+                            <li class="type_box" data-category="Sports Bras">Adjustable Waistbands</li>
+                            <li class="type_box" data-category="T-Shirt">Bum Scrunch</li>
+                            <li class="type_box" data-category="Bodysuits">Reflective Branding</li>
+                            <li class="type_box" data-category="Underwear & Basics">Zip Pockets</li>
+                            <li class="type_box" data-category="Tank Tops">Seamless</li>
+
+                        </ul>
+                    </div>
+                    <div class="sort_by">
+                        <h3 class="fit_list">FIT<i class="fa-solid fa-arrow-up arrow_up_fit" style="padding-left: 170px;"></i></h3>
+                        <ul class="listt_fit">
+                            <li class="type_box" data-category="Leggings">Slim Fit</li>
+                            <li class="type_box" data-category="Crop Tops">Oversized Fit</li>
+                            <li class="type_box" data-category="Hoddies">Regular Fit</li>
+                            <li class="type_box" data-category="Shorts">Extreme Oversized Fit</li>
+                            <li class="type_box" data-category="Sports Bras">Compression Fit</li>
+                            <li class="type_box" data-category="T-Shirt">Muscle Fit</li>
+                            <li class="type_box" data-category="Bodysuits">Regular</li>
+                            <li class="type_box" data-category="Underwear & Basics">Oversized</li>
+                            <li class="type_box" data-category="Tank Tops">Final Sale -Non Returnable</li>
+
+                        </ul>
+                    </div>
+                    <div class="sort_by">
+                        <h3 class="activity_list">ACTIVITY<i class="fa-solid fa-arrow-up arrow_up_activity" style="padding-left: 120px;"></i></h3>
+                        <ul class="listt_activity">
+                            <li class="type_box" data-category="Leggings">Conditioning</li>
+                            <li class="type_box" data-category="Crop Tops">Rest Day</li>
+                            <li class="type_box" data-category="Hoddies">Lifting</li>
+                            <li class="type_box" data-category="Shorts">Pilates</li>
+                            <li class="type_box" data-category="Sports Bras">Hiit</li>
+                            <li class="type_box" data-category="T-Shirt">Running</li>
+                            <li class="type_box" data-category="Bodysuits">Hybrid</li>
+                            <li class="type_box" data-category="Underwear & Basics">Yoga</li>
+
+                        </ul>
+                    </div>
+                    <div class="sort_by">
+                        <h3 class="collection_list">COLLECTION<i class="fa-solid fa-arrow-up arrow_up_collection" style="padding-left: 95px;"></i></h3>
+                        <ul class="listt_collection">
+                            <li class="type_box" data-category="Leggings">Key Items</li>
+                            <li class="type_box" data-category="Crop Tops">Essentials</li>
+                            <li class="type_box" data-category="Hoddies">Everyday</li>
+                            <li class="type_box" data-category="Shorts">Vital</li>
+                            <li class="type_box" data-category="Sports Bras">Fundamental Sports Bras</li>
+                            <li class="type_box" data-category="T-Shirt">Legacy</li>
+                            <li class="type_box" data-category="Bodysuits">Rest Day</li>
+                            <li class="type_box" data-category="Underwear & Basics">Lifting Goods</li>
+
+                        </ul>
+                    </div>
+                    <div class="sort_by">
+                        <h3 class="color_list">COLOR<i class="fa-solid fa-arrow-up arrow_up_color" style="padding-left: 140px;"></i></h3>
+                        <ul class="listt_color">
+                            <li class="type_box">Black</li>
+                            <li class="type_box">Blue</li>
+                            <li class="type_box">Brown</li>
+                            <li class="type_box">Green</li>
+                            <li class="type_box">Grey</li>
+                            <li class="type_box">Orange</li>
+                            <li class="type_box">Pink</li>
+                            <li class="type_box">Purple</li>
+                            <li class="type_box">Red</li>
+                            <li class="type_box">Yellow</li>
+                            <li class="type_box">White</li>
+
+                        </ul>
+                    </div>
+
+
+
+
+                    <div class="sort_by">
+                        <h3 class="discount_list">DISCOUNT<i class="fa-solid fa-arrow-up arrow_up_discount" style="padding-left: 110px;"></i></h3>
+                        <ul class="listt_discount">
+                            <li class="type_box">XXS</li>
+                            <li class="type_box">XS</li>
+                            <li class="type_box">S</li>
+                            <li class="type_box">M</li>
+                            <li class="type_box">L</li>
+
+                        </ul>
+                    </div>
+
+
+
+
+                    <script src="/JS/script.js"></script>
+                    <script src="/JS/script2.js"></script>
+                    <script src="/JS/hover_menu.js"></script>
+                    <script src="/JS/hover_menu2.js"></script>
+                    <script src="/JS/hover_menu3.js"></script>
+                    <script src="/JS/arrow_up.js"></script>
+                    <script src="/JS/arrow_upp.js"></script>
+                    <script src="/JS/arrow_upsize.js"></script>
+                    <script src="/JS/arrow_upfeature.js"></script>
+                    <script src="/JS/arrow_upfit.js"></script>
+                    <script src="/JS/arrowup_activity.js"></script>
+                    <script src="/JS/arrow_up_collection.js"></script>
+                    <script src="/JS/arrow_up_color.js"></script>
+                    <script src="/JS/arrow_up_discount.js"></script>
+                    <script src="/JS/arrow_up_price.js"></script>
+                </div>
+            </div>
+
+
+
+            <div class="container_product1">
+                <div class="product1">
+                    <a class="container_img" href="/HTML/productdetail.html/1"><img class="edt_product1" src="../src/productt.png"></a>
+                    <p class="name_pro1">Property Of Stringer</p>
+                    <p class="name_cate1">Slim Fit</p>
+                    <p class="name_color1">Reps Red</p>
+                    <p class="price1">$30</p>
+                </div>
+                <div class="product1">
+                    <img class="edt_product1" src="../src/productt.png">
+                    <p class="name_pro1">Property Of Stringer</p>
+                    <p class="name_cate1">Slim Fit</p>
+                    <p class="name_color1">Reps Red</p>
+                    <p class="price1">$30</p>
+                </div>
+                <div class="product1">
+                    <img class="edt_product1" src="../src/productt.png">
+                    <p class="name_pro1">Property Of Stringer</p>
+                    <p class="name_cate1">Slim Fit</p>
+                    <p class="name_color1">Reps Red</p>
+                    <p class="price1">$30</p>
+                </div>
+                <div class="product1">
+                    <img class="edt_product1" src="../src/productt.png">
+                    <p class="name_pro1">Property Of Stringer</p>
+                    <p class="name_cate1">Slim Fit</p>
+                    <p class="name_color1">Reps Red</p>
+                    <p class="price1">$30</p>
+                </div>
+
+                <div class="product1">
+                    <img class="edt_product1" src="../src/productt.png">
+                    <p class="name_pro1">Property Of Stringer</p>
+                    <p class="name_cate1">Slim Fit</p>
+                    <p class="name_color1">Reps Red</p>
+                    <p class="price1">$30</p>
+                </div>
+
+
+            </div>
         </div>
     </div>
+
+
+
+
+
 
     <div class="shopping">
-        <h4 class="title_MENS">MENS</h4>
-        <h2 class="title_after">SHOP CBUM'S TOP PICKS</h2>
-
-        <div class="container_product" id="top-pick">
-            <div class="product">
-                <a class="container_img" href="/HTML/productdetail.html/1"><img class="edt_product1" src="../src/productt.png"></a>
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
+        <h1 class="title_foot" style="font-size: 15px;">WOMEN'S WORKOUT CLOTHING</h1>
+        <p class="textt">Don't know where to start? Explore all women's Gymshark clothing using the filters above. Discover all our women's clothing - from sleek leggings to supportive sports bras, lightweight running jackets and cozy hoodies, there's something for everyone. Experience incredible support and a fit like no other from our range of women's workout wear, designed to help you achieve your best in and out of the gym.</p>
 
 
-        </div>
-    </div>
-
-    <div class="shopping">
-
-        <h2 class="title_after">POPULAR RIGHT NOW</h2>
-
-        <div class="container_product" id="popular-pick">
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-            <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
-                <p class="name_pro">Property Of Stringer</p>
-                <p class="name_cate">Slim Fit</p>
-                <p class="name_color">Reps Red</p>
-                <p class="price">$30</p>
-            </div>
-
-
-
-        </div>
-    </div>
-
-
-    <div class="video-container">
-        <video autoplay muted loop>
-            <source src="/src/1111.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="overlay">
-            <h1 style="font-weight: 600; font-size: 45px;">OUR BEST FOR YOUR BEST</h1>
-            <br>
-            <h1 style="font-size: 15px;">There's one thing we do... and we do it well. Whatever you do in the gym, give it your best in our bestsellers.</h1>
-        </div>
-    </div>
-
-
-
-    <div class="shopping">
-
-        <h2 class="title_after">HOW DO YOU TRAIN?</h2>
-
-        <div class="container_product">
-            <div class="product1">
-                <video class="edt_product1" autoplay loop muted>
-                    <source src="/src/LEGGINGS_PLP_-_LIFTING_CARD_4x5.mp4">
-                </video>
-                <h2 class="overlay-text">LIFTING</h2>
-                <button class="shop_now">SHOP NOW</button>
-
-
-            </div>
-            <div class="product1">
-                <video class="edt_product1" autoplay loop muted>
-                    <source src="/src/MENS_SHORTS_SPEED_15-_4X5.mp4">
-
-                </video>
-                <h2 class="overlay-text">RUNNING</h2>
-                <button class="shop_now">SHOP NOW</button>
-
-
-            </div>
-            <div class="product1">
-                <video class="edt_product1" autoplay loop muted>
-                    <source src="/src/LEGGINGS_PLP_-_CLASSES_CARD_4x5.mp4">
-                </video>
-                <h2 class="overlay-text">YOGA</h2>
-                <button class="shop_now">SHOP NOW</button>
-
-            </div>
-
-
-        </div>
-    </div>
-
-    <div class="shopping1">
-        <div class="section_1">
-            <h3 class="legging">WOMENT'S LEGGINGS</h3>
-            <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Legging With Pockets</a></li>
-                <li class="spc"><a class="kegg" href="#">High Waisted Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Scrunch Bum Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Black Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Petties Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Seamless Leggings</a></li>
-            </ul>
-
-        </div>
-
-        <div class="section_1">
-            <h3 class="legging">WOMEN'S GYMWEAR</h3>
-            <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Legging With Pockets</a></li>
-                <li class="spc"><a class="kegg" href="#">High Waisted Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Scrunch Bum Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Black Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Petties Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Seamless Leggings</a></li>
-            </ul>
-
-        </div>
-
-        <div class="section_1">
-            <h3 class="legging">MEN'S GYMWEAR</h3>
-            <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Legging With Pockets</a></li>
-                <li class="spc"><a class="kegg" href="#">High Waisted Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Scrunch Bum Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Black Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Petties Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Seamless Leggings</a></li>
-            </ul>
-
-        </div>
-
-        <div class="section_1">
-            <h3 class="legging">ACCESSORIES</h3>
-            <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Legging With Pockets</a></li>
-                <li class="spc"><a class="kegg" href="#">High Waisted Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Scrunch Bum Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Black Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Petties Gym Leggings</a></li>
-                <li class="spc"><a class="kegg" href="#">Seamless Leggings</a></li>
-            </ul>
-
-        </div>
-
-    </div>
-
-    <div class="shopping">
-        <h1 class="title_foot">Workout Clothes & Gym Clothes</h1>
-        <p class="textt">Workout Clothes designed to help you become your personal best. Because when it comes to performing at your max, there should be no obstacles – least of all your workout clothes.</p>
-        <p class="textt">Functional and comfortable, we create workout clothing you'll sweat in. Since 2012, we've designed and created the workout clothes we want to wear, because training and its people are what we know best. </p>
-
-        <h1 class="title_foot">GYM CLOTHES BUILT IN THE WEIGHT ROOM</h1>
-        <p class="textt">Our legacy was built in the weight room. Gymshark was founded with a love for training and that passion continues into all our gym clothes today. You'll find the latest innovation in gym clothing and accessories to help you perform at your best and recover in style.</p>
-        <p class="textt">Our Men's Workout Clothes feature sweat wicking workout shirts and tank tops, gym shorts, sweatpants and more. Whilst our Women's Workout Clothes are designed for a range of movements and feature sophisticated seamless technology, clever contouring and durable, quick-dry sweat wicking fabrics on leggings, sports bras and more. </p>
-
-        <h1 class="title_foot">ACTIVEWEAR & ATHLEISURE</h1>
-        <p class="textt">Workout Clothes designed to help you become your personal best. Because when it comes to performing at your max, there should be no obstacles – least of all your workout clothes.</p>
-        <p class="textt">Functional and comfortable, we create workout clothing you'll sweat in. Since 2012, we've designed and created the workout clothes we want to wear, because training and its people are what we know best. </p>
-
-        <h1 class="title_foot">MORE THAN YOUR BEST WORKOUT CLOTHING</h1>
-        <p class="textt">Workout Clothes designed to help you become your personal best. Because when it comes to performing at your max, there should be no obstacles – least of all your workout clothes.</p>
-        <p class="textt">Functional and comfortable, we create workout clothing you'll sweat in. Since 2012, we've designed and created the workout clothes we want to wear, because training and its people are what we know best. </p>
     </div>
 
 
@@ -519,7 +523,7 @@
             <ul class="list">
                 <li class="spc"> <a class="kegg" href="#">Login</a></li>
                 <li class="spc"><a class="kegg" href="#">Register</a></li>
-            </ul>
+
 
         </div>
         <div class="section_11">
@@ -544,18 +548,12 @@
     </div>
 
 
+    <script src="/JS/allProduct.js"></script>
+    <script src="/JS/bagg.js"></script>
 
 
 
 
-    <script src="/JS/script.js"></script>
-    <script src="/JS/script2.js"></script>
-    <script src="/JS/hover_menu.js"></script>
-    <script src="/JS/hover_menu2.js"></script>
-    <script src="/JS/hover_menu3.js"></script>
-    <script src="/JS/changelinklogin.js"></script>
-    <script src="/JS/viewproduct.js"></script>
-  <script src="/JS/bagg.js"></script>
 
 
 </body>

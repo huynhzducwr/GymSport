@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../CSS/viewproduct.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+ 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   
+    <title>Chi tiết sản phẩm</title>
+</head>
+
+
+<body>
+
+    <!--Thanh menu đầu -->
+    <div class="container_menu_top">
+        <div class="menu_icon" onclick="toggleMenu()">&#9776;</div>
+        <ul class="menu_top">
+            <li class="menu_top_edit"><a class="link_menu" href="#">Account |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Accessibility Statement |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Help |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Email Sign Up |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Blog |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">US ^</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">English ^</a></li>
+        </ul>
+
+    </div>
+
+    <!--Thanh menu thứ 2-->
+    <div class="container_menu_2">
+        <div class="logo">
+            <a href="/home" style="text-decoration: none; color: inherit; font-weight:bold">GYMSPORT</a>
+        </div>
+
+        <div class="menu_select_product">
+            <a class="link_cate" id="hoverWomens" href="#">WOMEN'S</a>
+            <a class="link_cate" href="#">MEN'S</a>
+            <a class="link_cate" href="#">ACCESSORIES</a>
+        </div>
+
+        <div class="search_order">
+            <div class="search_bar">
+                <input type="search" placeholder="Bạn đang tìm kiếm điều gì..">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </div>
+            <div class="menu_select_order">
+                <a class="link_order" href="#"><i class="fa-regular fa-heart"></i></a>
+                <a class="link_order" href="#"><i class="fa-regular fa-user"></i></a>
+                <a class="link_order" href="#"><i class="fa-solid fa-shop"></i></a>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="overlay"> </div>
+
+    <div class="Bag_order">
+
+        <h3 class="Your_bag">YOUR BAG <i class="fa-solid fa-xmark"></i></h3>
+
+
+
+
+        <img class="img_bag" src="/src/bag_logo.png">
+        <h3 class="bag_empty">YOUR BAG IS EMPTY</h3>
+        <h6 class="texxt1">There are no products in your bag</h6>
+        <button class="Shop_btn">SHOP</button>
+    </div>
+    <script src="/JS/close_bag.js"></script>
+
+
+    <div class="Bag_order_item">
+        <h3 class="Your_bag">YOUR BAG <i class="fa-solid fa-xmark"></i></h3>
+
+        <div class="bag_itemm">
+            <div class="scrollable-content">
+                <!-- New wrapper for scrollable content -->
+                <div class="order_item ">
+                    <div class="img">
+                        <a class="container_img" href="/HTML/productdetail.html/1"><img class="edt_product1" src="../src/productt.png"></a>
+                    </div>
+                    <div class="description_product">
+                        <p class="boldz" id="bagProductName">Property Of Stringer</p>
+                        <p id="bagProductCategory">Slim Fit</p>
+                        <p id="bagProductSize">Size: M</p>
+                        <p id="bagProductPrice" class="boldz">$30</p>
+                        <p id="bagProductColor">Black</p>
+                        <div class="heart_delete">
+                            <div class="heartt">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="bin">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </div>
+                            <div class="qtyy">
+                                <p> Qty: 1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for other order_item entries -->
+            </div>
+        </div>
+
+        <div class="pricee">
+            <p style="font-weight: bold;"> Total </p>
+            <div class="css-price">
+                <p id="totalPrice">US$85.50</p>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="form-group">
+                <label for="shipping-address">Shipping Address</label>
+                <input type="text" id="shipping-address" placeholder="Enter Shipping Address" required>
+            </div>
+            <div class="form-group">
+                <label for="phone-number">PhoneNumber</label>
+                <input type="text" id="phone-number" placeholder="Enter PhoneNumber" required>
+            </div>
+            <!-- Dropdown phương thức thanh toán -->
+            <div class="form-group dropdown">
+                <button class="dropbtn">Select Payment Method</button>
+                <div class="dropdown-content" id="payment-method-dropdown">
+                    <!-- Phương thức thanh toán sẽ được tạo động bởi fetchPaymentMethod -->
+                </div>
+            </div>
+        </div>
+        <button class="checkout" onclick="handleCheckout()">CHECKOUT SECURELY</button>
+        <p id="login-warning" style="display:none; color:red;">You must be logged in to checkout!</p>
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="content">
+        <div class="scroll">
+            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2274.png">
+            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2296.png">
+            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2286.png">
+            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2261.png">
+            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2303.png">
+            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2306.png">
+        </div>
+
+        <div class="right">
+            <div class="product-container">
+                <div class="product-header">
+                    <span class="new-label">NEW</span>
+                    <h1 id="productName">PROPERTY OF STRINGER</h1>
+                    <h4 id="productCategory">Slim Fit</h4>
+                    <h4 style="font-weight:bold" id="productPrice">$30</h4>
+                </div>
+
+                <div class="product-details">
+                    <div class="rating">
+                        <span>★ 3.7</span>
+                        <span>&hearts;</span>
+                        <span>&#x21E7;</span>
+                    </div>
+                    <div class="product-images">
+
+                        <div class="small-images">
+                            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2261.png" alt="Image 2">
+                            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2261.png" alt="Image 3">
+                            <img src="../src/Sport5ShortBlack-A2A8K-BBBB-2261.png" alt="Image 4">
+                        </div>
+                        <p>Reps Red</p>
+                    </div>
+                    <div class="size-selector">
+                        <p>Select a size</p>
+                        <div class="sizes">
+                            <span class="size-option" data-size="XS">XS</span>
+                            <span class="size-option" data-size="S">S</span>
+                            <span class="size-option" data-size="M">M</span>
+                            <span class="size-option" data-size="L">L</span>
+                            <span class="size-option" data-size="XL">XL</span>
+                            <span class="size-option" data-size="XXL">XXL</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-to-bag">ADD TO BAG</button>
+                <h5 style="margin-right: 300px; padding: 10px;">GET THE LOOK</h5>
+
+
+                <div class="sp">
+                    <span style="font-weight:bold; padding-bottom:10px;" id="productName1">PROPERTY OF STRINGER</span><br />
+                    <span id="productCategory1" style="padding-bottom: 10px;">Slim Fit</span><br />
+                    <span style="font-weight: bold; padding-bottom: 10px;" id="productPrice1">$30</span> <br />
+                    <span id="productDescription" style="cursor: pointer; font-weight: bold; padding-bottom: 10px;">Description ></span>
+                    <span id="description" style=" display: none">đâ</span>
+
+                </div>
+                <script>
+
+                    document.getElementById('productDescription').addEventListener('click', function () {
+                        const productDescription = document.getElementById('description');
+
+                        if (productDescription.style.display === 'none' || productDescription.style.display === '') {
+                            productDescription.style.display = 'block'; // Show the description
+                        } else {
+                            productDescription.style.display = 'none';  // Hide the description
+                        }
+                    });
+                </script>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="container">
+        <h1>WHAT OUR COMMUNITY SAYS</h1>
+        <div class="summary">
+            <span>⭐ 3.7</span>
+            <span>3 Reviews</span>
+            <p>All reviews are verified purchasers</p>
+        </div>
+        <div class="rated">
+            <div class="criteria">
+                <h3>Sizing</h3>
+                <div class="bar">
+                    <div class="fill" style="width: 60%;"></div>
+                </div>
+                <div class="labels">
+                    <span>Tight</span>
+                    <span>Loose</span>
+                </div>
+            </div>
+            <div class="criteria">
+                <h3>Length</h3>
+                <div class="bar">
+                    <div class="fill" style="width: 70%;"></div>
+                </div>
+                <div class="labels">
+                    <span>Short</span>
+                    <span>Long</span>
+                </div>
+            </div>
+            <div class="criteria">
+                <h3>Value</h3>
+                <div class="bar">
+                    <div class="fill" style="width: 80%;"></div>
+                </div>
+                <div class="labels">
+                    <span>Poor</span>
+                    <span>Excellent</span>
+                </div>
+            </div>
+            <div class="criteria">
+                <h3>Comfort</h3>
+                <div class="bar">
+                    <div class="fill" style="width: 75%;"></div>
+                </div>
+                <div class="labels">
+                    <span>Uncomfortable</span>
+                    <span>Comfortable</span>
+                </div>
+            </div>
+            <div class="criteria">
+                <h3>Quality</h3>
+                <div class="bar">
+                    <div class="fill" style="width: 85%;"></div>
+                </div>
+                <div class="labels">
+                    <span>1 Star</span>
+                    <span>5 Star</span>
+                </div>
+            </div>
+        </div>
+        <button href="#">SEE MORE REVIEWS</button>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="foott">
+        <div class="section_11">
+            <h3 class="legging">HELP</h3>
+            <ul class="list">
+                <li class="spc"> <a class="kegg" href="#">FAQ</a></li>
+                <li class="spc"><a class="kegg" href="#">Delivery Information</a></li>
+                <li class="spc"><a class="kegg" href="#">Returns Policy</a></li>
+                <li class="spc"><a class="kegg" href="#">Make A Return</a></li>
+                <li class="spc"><a class="kegg" href="#">Orders</a></li>
+                <li class="spc"><a class="kegg" href="#">Submit a Fake</a></li>
+
+            </ul>
+
+        </div>
+        <div class="section_11">
+            <h3 class="legging">MY ACCOUNT</h3>
+            <ul class="list">
+                <li class="spc"> <a class="kegg" href="#">Login</a></li>
+                <li class="spc"><a class="kegg" href="#">Register</a></li>
+                </ul>
+
+        </div>
+        <div class="section_11">
+            <h3 class="legging">PAGES</h3>
+            <ul class="list">
+                <li class="spc"> <a class="kegg" href="#">Refer aFriend</a></li>
+                <li class="spc"><a class="kegg" href="#">GymSportCentral</a></li>
+                <li class="spc"><a class="kegg" href="#">About Us</a></li>
+                <li class="spc"><a class="kegg" href="#">Careers</a></li>
+                <li class="spc"><a class="kegg" href="#">Student Discount</a></li>
+                <li class="spc"><a class="kegg" href="#">Military Discount</a></li>
+                <li class="spc"><a class="kegg" href="#">Accessibility Statement</a></li>
+
+            </ul>
+
+        </div>
+    </div>
+    <div class="foot_2">
+        <p class="z20241">© 2024 | Gymshark Limited | All Rights Reserved. | We Do Gym.</p>
+        <p class="z20242">
+            Terms & Conditions | Terms of Use | Privacy Notice | Cookie Policy | Modern Slavery | US | English
+        </p>
+    </div>
+    <script src="/JS/script.js"></script>
+    <script src="/JS/script2.js"></script>
+    <script src=/JS/viewproductdetail.js></script>
+
+</body>
+
+</html>

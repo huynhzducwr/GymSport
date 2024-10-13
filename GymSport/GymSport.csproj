@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\JS\allProduct.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\HTML\home.html" />
+    <_ContentIncludedByDefault Remove="wwwroot\JS\allProduct.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\JS\allProduct.js" />
   </ItemGroup>
 
   <ItemGroup>

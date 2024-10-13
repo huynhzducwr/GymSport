@@ -638,6 +638,70 @@ const pages = {
         </style>
     `
     },
+    'product-inventory': {
+        title: 'Kho hàng',
+        content: `
+        <!-- Search Form -->
+        <div>
+            <input type="text" id="search-inventory-input" placeholder="Tìm kiếm hinh anh..." />
+            <button id="search-inventory-btn">Tìm kiếm</button>
+        </div>
+
+        <!-- Button to Show Image Creation Form -->
+        <button id="create-inventory-btn">Tạo Hình Ảnh</button>
+
+        <!-- Hidden Form for Adding New Image -->
+        <div id="create-inventory-form" style="display: none;">
+            <label for="product-id">Product ID:</label>
+            <input type="text" id="product-id" placeholder="Nhập Product ID">
+             <label for="stock-quantity">Stock Quantity:</label>
+            <input type="text" id="stock-quantity" placeholder="Nhập Stock Quantity">
+            <br>
+            <button id="submit-new-inventory">Thêm Inventory</button>
+        </div>
+
+        <!-- Button to Show Image Deletion Form -->
+        <button id="delete-productinventory-btn">Xóa ProductInventort</button>
+        <div id="delete-productinventory-form" style="display: none;">
+            <label for="delete-inventoryID">InventoryID:</label>
+            <input type="number" id="delete-inventoryID" placeholder="Nhập InventoryID">
+            <br>
+            <button id="submit-delete-productinventory">Xóa ProductInventory</button>
+        </div>
+
+        <!-- Product Image Management Table -->
+        <h2>Quản lý Hình Ảnh cho Kho</h2>
+        <p>Đây là trang quản lý kho</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>InventoryID</th>
+                    <th>ProductID</th>
+                    <th>Stock Quantity</th>
+                    <th>Product Name </th>
+                </tr>
+            </thead>
+            <tbody id="productinventory-table-body">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `
+    },
 
 
 };
@@ -1831,6 +1895,92 @@ async function deleteProductImage(imageID) {
 
 
 
+//Inventory
+async function fetchInventory() {
+
+
+    try {
+        const response = await fetch('/api/Inventory/all'); // Adjust your API URL if needed
+        const productImages = await response.json();
+
+        if (Array.isArray(productImages)) {
+            renderProductInventory(productImages); // Call render only when data is ready
+        } else {
+            console.error('Fetched data is not an array:', productImages);
+        }
+    } catch (error) {
+        console.error('Error fetching product images:', error);
+    }
+}
+function renderProductInventory(productCategories) {
+    const productCategoryTableBody = document.getElementById('productinventory-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    if (Array.isArray(productCategories)) {
+        productCategories.forEach(productCategory => { // Rename for clarity
+            const row = `
+                <tr>
+                    <td>${productCategory.inventoryID}</td>    
+                    <td>${productCategory.productID}</td>
+                    <td>${productCategory.stockQuantity}</td>
+                    <td>${productCategory.productName}</td>
+                </tr>
+            `;
+            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        console.error('Data passed to renderProductImages is not an array:', productCategories);
+    }
+}
+
+
+
+async function addProductInventory(productID, quantity) {
+    try {
+      
+        const response = await fetch('/api/Image/upload', {
+            method: 'POST',
+            body: JSON.stringify({
+                productID: productID,
+                stockQuantity: quantity
+
+
+            })
+        });
+
+        const result = await response.json();
+        if (result.isSuccess) {
+            alert(result.message); // Notify success
+            fetchInventory();  // Reload the product images list
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error uploading product image:', error);
+    }
+}
+
+// Function to delete a product image
+async function deleteProductInventory(imageID) {
+    try {
+        const response = await fetch(`/api/Inventory/${imageID}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json(); // Parse the JSON response
+
+        if (result.isSuccess) {
+            alert(result.message); // Notify success
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error deleting product image:', error);
+    }
+}
+
+
+
 
 
 //User
@@ -2669,6 +2819,66 @@ menuItems.forEach(item => {
                     await deleteProductImage(productID);
                 } else {
                     alert('Vui lòng nhập imageID.');
+                }
+            });
+        }
+        if (page == 'product-inventory') {
+            // Fetch and display the product images
+            fetchInventory(); // Load the list of product images
+
+            // Event listener for searching images by product ID
+            const searchProductBtn = document.getElementById('search-inventory-btn');
+            const productCategoryTableBody = document.getElementById('productinventory-table-body');
+
+            if (searchProductBtn && productCategoryTableBody) {
+                searchProductBtn.addEventListener('click', () => {
+                    const query = document.getElementById('search-inventory-input').value.toLowerCase();
+                    const rows = productCategoryTableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                        row.style.display = productID.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+
+            // Show form to add a new image
+            const createImageBtn = document.getElementById('create-inventory-btn');
+            const createImageForm = document.getElementById('create-inventory-form');
+
+            createImageBtn.addEventListener('click', () => {
+                createImageForm.style.display = createImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for adding a new image
+            const submitNewImageBtn = document.getElementById('submit-new-inventory');
+            submitNewImageBtn.addEventListener('click', async () => {
+                const productID = document.getElementById('product-id').value;
+                const imageFile = document.getElementById('stock-quantity').value;
+
+                if (productID && imageFile) {
+                    await addProductInventory(productID, imageFile);
+                } else {
+                    alert('Vui lòng nhập đầy đủ thông tin Product ID và chọn Hình ảnh');
+                }
+            });
+
+            // Show form to delete an image
+            const deleteImageBtn = document.getElementById('delete-productinventory-btn');
+            const deleteImageForm = document.getElementById('delete-productinventory-form');
+
+            deleteImageBtn.addEventListener('click', () => {
+                deleteImageForm.style.display = deleteImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for deleting an image
+            const submitDeleteImageBtn = document.getElementById('submit-delete-productinventory');
+            submitDeleteImageBtn.addEventListener('click', async () => {
+                const productID = document.getElementById('delete-inventoryID').value;
+
+                if (productID) {
+                    await deleteProductInventory(productID);
+                } else {
+                    alert('Vui lòng nhập inventoryID.');
                 }
             });
         }

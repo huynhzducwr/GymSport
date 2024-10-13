@@ -28,7 +28,10 @@ namespace GymSport
             builder.Services.AddScoped<ProductSizesRepository>();
             builder.Services.AddScoped<ProductColorsRepository>();
             builder.Services.AddScoped<ImageRepository>();
-
+            builder.Services.AddScoped<InventoryRepository>();
+            builder.Services.AddScoped<OrderRepository>();
+            builder.Services.AddScoped<PaymentMethodRepository>();
+            builder.Services.AddScoped<PaymentRepository>();
 
             
 

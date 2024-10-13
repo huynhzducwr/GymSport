@@ -88,7 +88,9 @@ function renderProducts(products, productImages, productColors) {
         // Tạo mã HTML cho sản phẩm
         const productHTML = `
             <div class="product">
-                <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${product.productName}">
+                  <a class="container_img" href="/productdetail/${product.productID}"> <!-- Thêm liên kết tới trang chi tiết -->
+                    <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${product.productName}">
+                </a>
                 <p class="name_pro">${product.productName}</p>
                 <p class="name_cate">${product.productCategoryName || 'Thể loại'}</p>
                 <p class="name_color">${colorData ? colorData.colorName : 'Màu sắc không xác định'}</p>

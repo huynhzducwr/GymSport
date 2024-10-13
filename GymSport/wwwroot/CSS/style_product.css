@@ -136,18 +136,7 @@
     font-size: 23px;
     padding-left: 10px;
 }
-.link_order1 {
-    text-decoration: none;
-    color: black;
-    font-size: 23px;
-    padding-left: 10px;
-}
-.link_order3 {
-    text-decoration: none;
-    color: black;
-    font-size: 23px;
-    padding-left: 10px;
-}
+
 .container_discount {
     background-color: #ebebeb;
     width: 100%;
@@ -264,15 +253,6 @@
 .container_product {
     display: flex;
 }
-
-
-
-
-
-
-
-
-
 
 .product1 {
     position: relative; /* Đặt thẻ cha ở vị trí tương đối để thẻ con có thể định vị theo nó */
@@ -491,7 +471,267 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.type_box {
+    padding: 10px;
+    cursor: pointer; /* Change the cursor to a pointer when hovering */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
 
+    .type_box:hover {
+        background-color: rgba(0, 0, 0, 0.1); /* Change background color on hover */
+        color: black; /* Change text color on hover */
+    }
+
+
+
+.color_list:hover{
+    cursor:pointer;
+}
+
+.title_product {
+    padding-top: 15px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+}
+
+
+.container_product1 {
+    display: flex;
+    width: 80%;
+    margin-left:70px;
+    flex-wrap: wrap;
+}
+
+.nav_category {
+    position: sticky;
+    top: 0; /* Giữ cố định khi cuộn từ vị trí đỉnh của trang */
+    align-self: flex-start; /* Đảm bảo nó luôn dính vào đầu khi cuộn */
+    height: 100vh; /* Chiều cao toàn màn hình */
+    overflow-y: auto; /* Cuộn nếu nội dung quá dài */
+    
+}
+
+
+.product1 {
+    width: 25%; /* Đảm bảo 4 sản phẩm trong 1 hàng, mỗi cái chiếm khoảng 23% không gian */
+    margin-bottom: 20px; /* Khoảng cách dưới giữa các hàng */
+    box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi kích thước phần tử */
+    text-align: center; /* Canh giữa nội dung bên trong sản phẩm */
+}
+
+
+
+.edt_product1 {
+    width: 105%;
+    height: auto;
+    display: block;
+}
+
+.name_pro1 {
+    font-size: 15px;
+}
+
+.name_cate1 {
+    color: #686666;
+    font-size: 14px;
+}
+
+.name_color1 {
+    color: #686666;
+    font-size: 14px;
+}
+
+.price1 {
+    font-weight: 400;
+}
+
+.sort_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.product_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.size_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.feature_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+.feature_list:hover{
+    cursor:pointer;
+}
+
+.fit_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+    .fit_list:hover {
+        cursor: pointer;
+    }
+
+.activity_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+.activity_list {
+    cursor: pointer;
+}
+
+.collection_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+.collection_list{
+    cursor:pointer;
+}
+
+.discount_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.color_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.price_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.listt_product {
+    list-style: none;
+    display: none;
+}
+
+.listt_size {
+    list-style: none;
+    display: none;
+}
+
+.listt_feature {
+    list-style: none;
+    display: none;
+}
+
+.listt_fit {
+    list-style: none;
+    display: none;
+}
+
+.listt_activity {
+    list-style: none;
+    display: none;
+}
+
+.listt_collection {
+    list-style: none;
+    display: none;
+}
+
+.listt_color {
+    list-style: none;
+    display: none;
+}
+
+.listt_discount {
+    list-style: none;
+    display: none;
+}
+
+.listt_price {
+    list-style: none;
+    display: none;
+}
+
+.listt {
+    list-style: none;
+    display: none;
+}
+
+.container_product11 {
+    display: flex;
+    margin-top: 30px;
+  
+}
+
+.edt_radio {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.list_ {
+    padding-bottom: 10px;
+    padding-top: 15px;
+}
+
+.sort_list:hover {
+    cursor: pointer;
+}
+
+.product_list {
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.size_list {
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+
+.type_box {
+    margin-bottom: 10px;
+    text-align: center;
+    border: 1px solid #BCBCBC;
+    padding: 7px;
+    color: #686666;
+    font-size: 14px;
+    font-weight: 350;
+}
 
 
 .Bag_order {
