@@ -243,6 +243,96 @@ const pages = {
         </style>
     `
     },
+    'payment': {
+        title: 'thanh toán',
+        content: `
+        <!-- Search Form -->
+        <div>
+            <input type="text" id="search-payment-input" placeholder="Tìm kiếm hóa đơn" />
+            <button id="search-payment-btn">Tìm kiếm</button>
+        </div>
+
+        <!-- Product Image Management Table -->
+        <h2>Quản lý Hình Ảnh cho Kho</h2>
+        <p>Đây là trang quản lý kho</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>PaymentID</th>
+                    <th>OrderID</th>
+                    <th>TotalAmount $</th>
+                    <th>PaymentDate</th>
+                    <th>PaymentMethodID</th>
+                    <th>PaymentStatus</th>
+              
+                </tr>
+            </thead>
+            <tbody id="payment-table-body">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `
+    },
+    'paymentdetail': {
+        title: 'Chi tiết Hóa đơn',
+        content: `
+        <!-- Search Form -->
+        <div>
+            <input type="text" id="search-paymentdetail-input" placeholder="Tìm kiếm hóa đơn" />
+            <button id="search-paymentdetail-btn">Tìm kiếm</button>
+        </div>
+
+
+        <!-- Product Image Management Table -->
+        <h2>Quản lý Hình Ảnh cho Kho</h2>
+        <p>Đây là trang quản lý kho</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>PaymentDetailID</th>
+                    <th>PaymentID</th>
+                    <th>ProductID</th>
+                    <th>Quantity</th>
+                    <th>Price $</th>
+                </tr>
+            </thead>
+            <tbody id="paymentdetail-table-body">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `
+    },
+
 
     'danhmuc-sanpham': {
         title: 'Danh mục sản phẩm',
@@ -768,8 +858,69 @@ const pages = {
         </style>
     `
     },
+    'order-detail': {
+        title: 'Chi tiết đơn hàng',
+        content: `
+        <!-- Search Form -->
+        <div>
+            <input type="text" id="search-order-detail-input" placeholder="Tìm kiếm đơn hàng" />
+            <button id="search-orderdetail-btn">Tìm kiếm</button>
+        </div>
 
+        
 
+    
+
+        <!-- Button to Show Image Deletion Form -->
+        <button id="delete-orderdetail-btn">Xóa đơn</button>
+        <div id="delete-orderdetail-form" style="display: none;">
+
+            <label for="delete-orderdetailID">orderdetailID:</label>
+            <input type="number" id="delete-orderdetailID" placeholder="Nhập orderID">
+            <br>
+
+            <button id="submit-delete-orderdetailID">Xóa chi tiết đơn hàng</button>
+        </div>
+
+        <!-- Product Image Management Table -->
+        <h2>Quản lý Hình Ảnh cho Kho</h2>
+        <p>Đây là trang quản lý kho</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>OrderDetailID</th>
+                    <th>OrderID</th>
+                    <th>ProductID</th>
+                    <th>ProductName</th>
+                    <th>Quantity</th>
+                    <th>UnitPrice</th>
+                    <th>OrderDate</th>
+                    <th>TotalAmount</th>
+                    <th>OrderStatus</th>
+                </tr>
+            </thead>
+            <tbody id="orderdetail-table-body">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `
+    },
+    
 };
 
 //Product
@@ -1917,7 +2068,146 @@ function renderProductOrder(productCategories) {
         console.error('Data passed to renderProductImages is not an array:', productCategories);
     }
 }
+//order detail
+async function fetchorderdetail() {
+    try {
+        const response = await fetch('/api/OrderDetails/all'); // Adjust your API URL if needed
+        const orderDetails = await response.json();
+        console.log(orderDetails);
+        if (Array.isArray(orderDetails)) {
+            renderorderdetail(orderDetails); // Call render with correct function name
+        } else {
+            console.error('Fetched data is not an array:', orderDetails);
+        }
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+    }
+}
+function renderorderdetail(productCategory) {
+    const productCategoryTableBody = document.getElementById('orderdetail-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
 
+    if (Array.isArray(productCategory)) {
+        productCategory.forEach(productCategory => { // Rename for clarity
+            const row = `
+                <tr>
+                    <td>${productCategory.orderDetailID}</td>    
+                    <td>${productCategory.orderID}</td>   
+                    <td>${productCategory.productID}</td>
+                    <td>${productCategory.productName}</td>    
+                    <td>${productCategory.quantity}</td>
+                    <td>${productCategory.unitPrice}</td>
+                    <td>${productCategory.orderDate}</td>
+                    <td>${productCategory.totalAmount}</td>
+                    <td>${productCategory.orderStatus}</td>    
+                </tr>
+            
+            `;
+            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        console.error('Data passed to OrderDetails is not an array:', productCategories);
+    }
+}
+async function deleteOrderDetails(OrderDetails) {
+    try {
+        const response = await fetch(`/api/OrderDetails/${OrderDetailID}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json(); // Parse the JSON response
+
+        if (result.isSuccess) {
+            alert(result.message); // Notify success
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error deleting product image:', error);
+    }
+}
+//payment
+
+async function fetchpayment() {
+
+
+    try {
+        const response = await fetch('/api/payment/all'); // Adjust your API URL if needed
+        const productImages = await response.json();
+        console.log(productImages);
+        if (Array.isArray(productImages)) {
+            renderpayment(productImages); // Call render only when data is ready
+
+        } else {
+            console.error('Fetched data is not an array:', productImages);
+        }
+    } catch (error) {
+        console.error('Error fetching product images:', error);
+    }
+}
+function renderpayment(productCategories) {
+    const productCategoryTableBody = document.getElementById('payment-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    if (Array.isArray(productCategories)) {
+        productCategories.forEach(productCategory => { // Rename for clarity
+            const row = `
+                <tr>
+                    <td>${productCategory.paymentID}</td>    
+                    <td>${productCategory.orderID}</td>
+                
+                    <td>${productCategory.amount}</td>
+                    <td>${productCategory.paymentDate}</td>
+                     <td>${productCategory.paymentMethodID}</td>    
+                    <td>${productCategory.paymentStatus}</td>
+               
+                </tr>
+            `;
+            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        console.error('Data passed to renderpayment is not an array:', productCategories);
+    }
+}
+//paymentdetail
+async function fetchpaymentdetail() {
+
+
+    try {
+        const response = await fetch('/api/paymentdetail/all'); // Adjust your API URL if needed
+        const productImages = await response.json();
+        console.log(productImages);
+        if (Array.isArray(productImages)) {
+            renderpaymentdetail(productImages); // Call render only when data is ready
+
+        } else {
+            console.error('Fetched data is not an array:', productImages);
+        }
+    } catch (error) {
+        console.error('Error fetching paymentdetail:', error);
+    }
+}
+function renderpaymentdetail(productCategories) {
+    const productCategoryTableBody = document.getElementById('paymentdetail-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    if (Array.isArray(productCategories)) {
+        productCategories.forEach(productCategory => { // Rename for clarity 
+            const row = `
+                <tr>
+                    <td>${productCategory.paymentPaymentDetailID}</td>    
+                    <td>${productCategory.paymentID}</td>
+                    <td>${productCategory.productID}</td>
+                    <td>${productCategory.quantity}</td>
+                    <td>${productCategory.price}</td>
+                </tr>
+            `;
+            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        console.error('Data passed to renderpaymentdetail is not an array:', productCategories);
+    }
+}
 //Image
 
 async function fetchImage() {
@@ -2049,28 +2339,31 @@ function renderProductInventory(productCategories) {
 
 async function addProductInventory(productID, quantity) {
     try {
-
-        const response = await fetch('/api/Image/upload', {
+        const response = await fetch('/api/Inventory/upload', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Thêm header để chỉ định JSON
+            },
             body: JSON.stringify({
                 productID: productID,
                 stockQuantity: quantity
-
-
             })
         });
 
         const result = await response.json();
+        console.log(result);
+
         if (result.isSuccess) {
             alert(result.message); // Notify success
-            fetchInventory();  // Reload the product images list
+            fetchInventory();  // Reload the inventory list
         } else {
             alert(result.message); // Notify error
         }
     } catch (error) {
-        console.error('Error uploading product image:', error);
+        console.error('Error uploading product inventory:', error);
     }
 }
+
 
 // Function to delete a product image
 async function deleteProductInventory(imageID) {
@@ -3071,6 +3364,90 @@ menuItems.forEach(item => {
                 }
             });
         }
+        if (page == 'order-detail') {
+            // Fetch and display the product images
+            fetchorderdetail(); // Load the list of product images
+
+            // Event listener for searching images by product ID
+            const searchProductBtn = document.getElementById('search-orderdetail-btn');
+            const productCategoryTableBody = document.getElementById('orderdetail-table-body');
+
+            if (searchProductBtn && productCategoryTableBody) {
+                searchProductBtn.addEventListener('click', () => {
+                    const query = document.getElementById('search-orderdetail-input').value.toLowerCase();
+                    const rows = productCategoryTableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                        row.style.display = productID.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+
+
+            // Show form to delete an image
+            const deleteImageBtn = document.getElementById('delete-orderdetail-btn');
+            const deleteImageForm = document.getElementById('delete-orderdetail-form');
+
+            deleteImageBtn.addEventListener('click', () => {
+                deleteImageForm.style.display = deleteImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for deleting an image
+            const submitDeleteImageBtn = document.getElementById('submit-delete-orderdetailID');
+            submitDeleteImageBtn.addEventListener('click', async () => {
+                const OrderDetailID = document.getElementById('delete-orderdetailID').value;
+
+                if (OrderDetailID) {
+                    await deleteProductOrder(OrderDetailID);
+                } else {
+                    alert('Vui lòng nhập orderdetailID.');
+                }
+            });
+        }
+
+
+        if (page == 'payment') {
+            // Fetch and display the product images
+            fetchpayment(); // Load the list of product images
+
+            // Event listener for searching images by product ID
+            const searchProductBtn = document.getElementById('search-payment-btn');
+            const productCategoryTableBody = document.getElementById('payment-table-body');
+
+            if (searchProductBtn && productCategoryTableBody) {
+                searchProductBtn.addEventListener('click', () => {
+                    const query = document.getElementById('search-payment-input').value.toLowerCase();
+                    const rows = productCategoryTableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                        row.style.display = productID.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+        }
+
+
+        if (page == 'paymentdetail') {
+            // Fetch and display the product images
+            fetchpaymentdetail(); // Load the list of product images
+
+            // Event listener for searching images by product ID
+            const searchProductBtn = document.getElementById('search-paymentdetail-btn');
+            const productCategoryTableBody = document.getElementById('paymentdetail-table-body');
+
+            if (searchProductBtn && productCategoryTableBody) {
+                searchProductBtn.addEventListener('click', () => {
+                    const query = document.getElementById('search-paymentdetail-input').value.toLowerCase();
+                    const rows = productCategoryTableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                        row.style.display = productID.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+        }
+
+
 
     });
 });

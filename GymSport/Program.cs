@@ -35,8 +35,8 @@ namespace GymSport
             builder.Services.AddScoped<PaymentMethodRepository>();
             builder.Services.AddScoped<PaymentRepository>();
             builder.Services.AddTransient<ISenderEmail, EmailSender>();
-
-
+            builder.Services.AddScoped<OrderDetailsRepository>();
+            builder.Services.AddScoped<PaymentdetailRepository>();
 
             // Cấu hình CORS
             builder.Services.AddCors(options =>

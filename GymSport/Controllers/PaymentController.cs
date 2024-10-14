@@ -36,5 +36,21 @@ namespace GymSport.Controllers
                 return BadRequest(response.Message); // Return 400 Bad Request with the error message
             }
         }
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllpayment()
+        {
+            try
+            {
+                // Gọi phương thức để lấy tất cả hình ảnh
+                var images = await _paymentRepository.GetAllpayment();
+                // Trả về kết quả
+                return Ok(images);
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi nếu có
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using GymSport.Connection;
+using GymSport.DTOs.OrderDTOs;
 using GymSport.DTOs.PaymentDTOs;
+using GymSport.Extensions;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;
@@ -70,6 +72,36 @@ namespace GymSport.Repository
             }
 
             return responseDTO; // Trả về kết quả
+        }
+        public async Task<IEnumerable<PaymentDTO>> GetAllpayment()
+        {
+            var images = new List<PaymentDTO>();
+
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = new SqlCommand("spGetAllpayment", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                images.Add(new PaymentDTO
+                {
+                    PaymentID = reader.GetInt32(0),
+                    OrderID = reader.GetInt32(1),
+                    Amount = reader.GetDecimal(2),
+                 
+                    PaymentDate = reader.GetDateTime(3),
+                    PaymentMethodID = reader.GetInt32(4), // Using the generic method here
+                    PaymentStatus = reader.GetString(5),
+                    
+                });
+            }
+
+            return images;
         }
     }
 }
