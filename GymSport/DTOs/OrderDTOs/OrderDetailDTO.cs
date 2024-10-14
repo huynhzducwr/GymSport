@@ -4,6 +4,7 @@ namespace GymSport.DTOs.OrderDTOs
 {
     public class OrderDetailDTO
     {
+
         [Required]
         public int ProductID { get; set; }
 

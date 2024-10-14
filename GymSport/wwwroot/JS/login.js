@@ -53,6 +53,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
             localStorage.setItem('isLoggedIn', true);
             localStorage.setItem('userInfo', JSON.stringify(data.data));
+            
 
             alert('Đăng nhập thành công: ' + data.message);
             window.location.href = '/home';

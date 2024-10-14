@@ -30,6 +30,12 @@ namespace GymSport.Models
                 Error = error;
 
             }
+        public APIResponse(HttpStatusCode statusCode, T data, string message = null)
+        {
+            StatusCode = statusCode;
+            Data = data;
+            Message = message;
         }
+    }
    
 }

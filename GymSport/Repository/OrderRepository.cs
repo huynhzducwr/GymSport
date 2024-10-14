@@ -3,6 +3,8 @@
 using Microsoft.Data.SqlClient;
 using GymSport.DTOs.OrderDTOs;
 using System.Data;
+using GymSport.DTOs.InventoryDTOs;
+using GymSport.Extensions;
 
 namespace GymSport.Repository
 {
@@ -79,6 +81,40 @@ namespace GymSport.Repository
 
             return responseDTO;
         }
+
+        public async Task<IEnumerable<OrderDTO>> GetAllOrders()
+        {
+            var images = new List<OrderDTO>();
+
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = new SqlCommand("spGetAllOrders", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                images.Add(new OrderDTO
+                {
+                    OrderID = reader.GetInt32(0),
+                    UserID = reader.GetInt32(1),
+                    firstname = reader.GetValueByColumn<string>("firstname"),
+                    lastname = reader.GetValueByColumn<string>("lastname"),
+                    OrderDate = reader.GetValueByColumn<DateTime?>("OrderDate"), // Using the generic method here
+                    OrderStatus = reader.GetValueByColumn<string>("OrderStatus"),
+                    ShippingAddress = reader.GetValueByColumn<string>("ShippingAddress"),
+                    PhoneNumber = reader.GetValueByColumn<string>("PhoneNumber"),
+                    TotalAmount = reader.GetDecimal(8),
+                });
+            }
+
+            return images;
+        }
+
+
 
 
 

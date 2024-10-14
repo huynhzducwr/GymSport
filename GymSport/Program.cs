@@ -3,6 +3,8 @@ using GymSport.Connection;
 using Serilog;
 using GymSport.Repository;
 using Microsoft.AspNetCore.Http.Features;
+using GymSport.Models;
+
 namespace GymSport
 {
     public class Program
@@ -32,8 +34,9 @@ namespace GymSport
             builder.Services.AddScoped<OrderRepository>();
             builder.Services.AddScoped<PaymentMethodRepository>();
             builder.Services.AddScoped<PaymentRepository>();
+            builder.Services.AddTransient<ISenderEmail, EmailSender>();
 
-            
+
 
             // Cấu hình CORS
             builder.Services.AddCors(options =>
@@ -44,6 +47,8 @@ namespace GymSport
                         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                     });
             });
+
+
 
             // Thiết lập Serilog
             builder.Host.UseSerilog((context, services, configuration) => configuration
@@ -76,6 +81,7 @@ namespace GymSport
                 options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // Giới hạn 10MB
             });
         }
+
 
 
 
