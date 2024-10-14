@@ -153,7 +153,7 @@ namespace GymSport.Repository
                 lastname = reader.GetString("lastname"),
                 IsActive = reader.GetBoolean("IsActive"),
                 roleName = reader.GetString("RoleName"),
-                LastLogin = reader.GetValueByColumn<DateTime?>("LastLogin"),
+                LastLogin = reader.GetValueByColumn<DateTime?>("LastLogin"),    
 
             };
             return user;

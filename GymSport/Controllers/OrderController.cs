@@ -47,6 +47,22 @@ namespace GymSport.Controllers
                 return StatusCode(500, "An unexpected error occurred while processing your request."); // Return 500 status with a message
             }
         }
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            try
+            {
+                // Gọi phương thức để lấy tất cả hình ảnh
+                var images = await _orderRepository.GetAllOrders();
+                // Trả về kết quả
+                return Ok(images);
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi nếu có
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
     }
 }
