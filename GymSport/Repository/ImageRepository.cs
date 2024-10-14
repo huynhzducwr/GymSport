@@ -45,7 +45,7 @@ public class ImageRepository
 
             command.Parameters.AddWithValue("@ProductID", uploadImageDTO.ProductID);
             command.Parameters.AddWithValue("@ImageURL", imageUrl);
-
+            command.Parameters.AddWithValue("@ProductName", uploadImageDTO.ProductName);
             await connection.OpenAsync();
             var result = await command.ExecuteScalarAsync();
 
@@ -88,7 +88,8 @@ public class ImageRepository
             {
                 ImageID = reader.GetInt32(0), // ID của hình ảnh
                 ProductID = reader.GetInt32(1), // ID của sản phẩm liên quan
-                ImageURL = reader.GetString(2)
+                ImageURL = reader.GetString(2),
+                ProductName = reader.GetString(3)
             });
         }
 

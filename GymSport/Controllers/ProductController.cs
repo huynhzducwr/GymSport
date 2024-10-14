@@ -151,7 +151,7 @@ namespace GymSport.Controllers
         public async Task<IActionResult> ToggleProductActiveAsync([FromQuery] int userId, [FromQuery] bool isActive)
         {
             var result = await _productRepository.ToggleProductActiveAsync(userId, isActive);
-        if (!result.Success)
+            if (!result.Success)
             {
                 return BadRequest(new { message = result.Message });
             }
@@ -159,7 +159,7 @@ namespace GymSport.Controllers
         }
 
     }
-    
+
 
 }
 

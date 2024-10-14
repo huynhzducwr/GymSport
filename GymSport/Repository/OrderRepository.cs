@@ -115,6 +115,35 @@ namespace GymSport.Repository
         }
 
 
+        public async Task<DeleteOrderResponseDTO> DeleteOrder(int orderID)
+        {
+            DeleteOrderResponseDTO responseDTO = new DeleteOrderResponseDTO();
+
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = new SqlCommand("spDeleteorder", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.AddWithValue("@OrderID", orderID);
+
+            await connection.OpenAsync();
+            var result = await command.ExecuteScalarAsync(); // Sử dụng ExecuteScalar để lấy thông điệp kết quả
+
+            if (result != null)
+            {
+                responseDTO.Message = result.ToString();
+                responseDTO.IsDeleted = true;
+            }
+            else
+            {
+                responseDTO.Message = "order không tồn tại.";
+                responseDTO.IsDeleted = false;
+            }
+
+            return responseDTO;
+        }
+
 
 
 

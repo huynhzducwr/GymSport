@@ -24,6 +24,6 @@ namespace GymSport.DTOs.ProductDTOs
         [RegularExpression("(Available|Sold Out)", ErrorMessage = "Status must be 'Available' or 'Sold Out'.")]
         public string Status { get; set; }
 
-        
+
     }
 }

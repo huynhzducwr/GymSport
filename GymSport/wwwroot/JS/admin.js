@@ -1,4 +1,4 @@
-﻿    // Lấy danh sách các mục <li> từ HTML
+﻿// Lấy danh sách các mục <li> từ HTML
 const menuItems = document.querySelectorAll('#menu-list li');
 
 // Lấy phần tử main-content
@@ -175,12 +175,75 @@ const pages = {
 `
     },
     'don-hang': {
-        title: 'Đơn hàng',
+        title: 'Don hàng',
         content: `
-            <h2>Quản lý Đơn hàng</h2>
-            <p>Đây là trang quản lý đơn hàng.</p>
-        `
+        <!-- Search Form -->
+        <div>
+            <input type="text" id="search-order-input" placeholder="Tìm kiếm hinh anh..." />
+            <button id="search-order-btn">Tìm kiếm</button>
+        </div>
+
+        <!-- Button to Show Image Creation Form -->
+        <button id="create-order-btn">Tạo Hình Ảnh</button>
+
+        <!-- Hidden Form for Adding New Image -->
+        <div id="create-order-form" style="display: none;">
+            <label for="product-id">Product ID:</label>
+            <input type="text" id="product-id" placeholder="Nhập Product ID">
+             <label for="stock-quantity">Stock Quantity:</label>
+            <input type="text" id="stock-quantity" placeholder="Nhập Stock Quantity">
+            <br>
+            <button id="submit-new-order">Thêm order</button>
+        </div>
+
+        <!-- Button to Show Image Deletion Form -->
+        <button id="delete-productorder-btn">Xóa Productorder</button>
+        <div id="delete-productorder-form" style="display: none;">
+            <label for="delete-orderID">orderID:</label>
+            <input type="number" id="delete-orderID" placeholder="Nhập orderID">
+            <br>
+            <button id="submit-delete-productorder">Xóa Productorder</button>
+        </div>
+
+        <!-- Product Image Management Table -->
+        <h2>Quản lý Hình Ảnh cho Kho</h2>
+        <p>Đây là trang quản lý kho</p>
+        <table>
+            <thead>
+                <tr>
+                    <th> OrderID </th>
+             
+                    <th> firstname </th>
+                    <th> lastname </th>
+                    <th> OrderDate </th>
+                    <th> OrderStatus </th>
+                    <th> ShippingAddress </th>
+                    <th> PhoneNumber </th>
+                    <th> TotalAmount $ </th>
+                </tr>
+            </thead>
+            <tbody id="productorder-table-body">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    `
     },
+
     'danhmuc-sanpham': {
         title: 'Danh mục sản phẩm',
         content: `
@@ -591,6 +654,8 @@ const pages = {
         <div id="create-image-form" style="display: none;">
             <label for="product-id">Product ID:</label>
             <input type="text" id="product-id" placeholder="Nhập Product ID">
+            <label for="productName">Product Name:</label>
+            <input type="text" id="ProductName" placeholder="Nhập Product Name">
             <label for="image-file">Chọn Hình Ảnh:</label>
             <input type="file" id="image-file">
             <br>
@@ -614,6 +679,7 @@ const pages = {
                 <tr>
                     <th>ImageID</th>
                     <th>ProductID</th>
+                    <th>Product name</th>
                     <th>ImageURL</th>
                 </tr>
             </thead>
@@ -1537,7 +1603,7 @@ function renderProductSize(productCategories) {
 
         productCategoryTableBody.insertAdjacentHTML('beforeend', row);
     });
- 
+
 }
 async function fetchProductSize() {
     let url = '/api/ProductSize/GetAllProductSize';
@@ -1807,20 +1873,63 @@ async function addBulkUpdateProductColor(productID, colorIDs) {
         console.error('Error adding productColor:', error);
     }
 }
+//order
+async function fetchOrder() {
 
 
+    try {
+        const response = await fetch('/api/Order/all'); // Adjust your API URL if needed
+        const productImages = await response.json();
+        console.log(productImages);
+        if (Array.isArray(productImages)) {
+            renderProductOrder(productImages); // Call render only when data is ready
+        } else {
+            console.error('Fetched data is not an array:', productImages);
+        }
+    } catch (error) {
+        console.error('Error fetching product images:', error);
+    }
+}
+function renderProductOrder(productCategories) {
+    const productCategoryTableBody = document.getElementById('productorder-table-body');
+    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+
+    if (Array.isArray(productCategories)) {
+        productCategories.forEach(productCategory => { // Rename for clarity
+            const row = `
+                <tr>
+                    <td>${productCategory.orderID}</td>    
+              
+                    <td>${productCategory.firstname}</td>
+                    <td>${productCategory.lastname}</td>    
+                    <td>${productCategory.orderDate}</td>
+                    <td>${productCategory.orderStatus}</td>
+                    <td>${productCategory.shippingAddress}</td>
+                    <td>${productCategory.phoneNumber}</td>
+                    <td>${productCategory.totalAmount}</td>    
+
+                </tr>
+            
+            `;
+            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        console.error('Data passed to renderProductImages is not an array:', productCategories);
+    }
+}
 
 //Image
 
 async function fetchImage() {
- 
+
 
     try {
         const response = await fetch('/api/Image/all'); // Adjust your API URL if needed
         const productImages = await response.json();
-
+        console.log(productImages);
         if (Array.isArray(productImages)) {
             renderProductImages(productImages); // Call render only when data is ready
+
         } else {
             console.error('Fetched data is not an array:', productImages);
         }
@@ -1838,7 +1947,9 @@ function renderProductImages(productCategories) {
                 <tr>
                     <td>${productCategory.imageID}</td>    
                     <td>${productCategory.productID}</td>
-                    <td>${productCategory.imageURL}</td>
+                    <td>${productCategory.productName}</td>
+                    <td><img src="${productCategory.imageURL}" alt="Product Image" style="width: 100px; height: auto;"></td>
+
                 </tr>
             `;
             productCategoryTableBody.insertAdjacentHTML('beforeend', row);
@@ -1850,11 +1961,12 @@ function renderProductImages(productCategories) {
 
 
 
-async function addProductImages(productID, imageFile) {
+async function addProductImages(productID, imageFile, ProductName) {
     try {
         // Prepare form data to include the product ID and the image file
         const formData = new FormData();
         formData.append('ProductID', productID);  // Adding ProductID to the form
+        formData.append('ProductName', ProductName);
         formData.append('ImageFile', imageFile);  // Adding Image file to the form
 
         const response = await fetch('/api/Image/upload', {
@@ -1937,7 +2049,7 @@ function renderProductInventory(productCategories) {
 
 async function addProductInventory(productID, quantity) {
     try {
-      
+
         const response = await fetch('/api/Image/upload', {
             method: 'POST',
             body: JSON.stringify({
@@ -1979,7 +2091,23 @@ async function deleteProductInventory(imageID) {
     }
 }
 
+async function deleteProductOrder(orderID) {
+    try {
+        const response = await fetch(`/api/order/${orderID}`, {
+            method: 'DELETE'
+        });
 
+        const result = await response.json(); // Parse the JSON response
+
+        if (result.isSuccess) {
+            alert(result.message); // Notify success
+        } else {
+            alert(result.message); // Notify error
+        }
+    } catch (error) {
+        console.error('Error deleting product order:', error);
+    }
+}
 
 
 
@@ -2504,9 +2632,9 @@ menuItems.forEach(item => {
                 }
             }, 0); // Đảm bảo các phần tử đã tồn tại trước khi gắn sự kiện
 
-            
-                    
-            
+
+
+
         }
         if (page === 'product-size') {
             fetchProductSize(); // Load the list of product sizes
@@ -2638,7 +2766,7 @@ menuItems.forEach(item => {
         if (page === 'product-color') {
             fetchProductColor(); // Load the list of product sizes
 
-            setTimeout(() => {  
+            setTimeout(() => {
                 const searchProductBtn = document.getElementById('search-productcolor-btn'); // Correct the ID for search button
                 const productCategoryTableBody = document.getElementById('productcolor-table-body');
 
@@ -2794,9 +2922,9 @@ menuItems.forEach(item => {
             submitNewImageBtn.addEventListener('click', async () => {
                 const productID = document.getElementById('product-id').value;
                 const imageFile = document.getElementById('image-file').files[0];
-
-                if (productID && imageFile) {
-                    await addProductImages(productID, imageFile);
+                const ProductName = document.getElementById('ProductName').value;
+                if (productID && imageFile && ProductName) {
+                    await addProductImages(productID, imageFile, ProductName);
                 } else {
                     alert('Vui lòng nhập đầy đủ thông tin Product ID và chọn Hình ảnh');
                 }
@@ -2883,7 +3011,66 @@ menuItems.forEach(item => {
             });
         }
 
-        
+        if (page == 'don-hang') {
+            // Fetch and display the product images
+            fetchOrder(); // Load the list of product images
+
+            // Event listener for searching images by product ID
+            const searchProductBtn = document.getElementById('search-order-btn');
+            const productCategoryTableBody = document.getElementById('productorder-table-body');
+
+            if (searchProductBtn && productCategoryTableBody) {
+                searchProductBtn.addEventListener('click', () => {
+                    const query = document.getElementById('search-order-input').value.toLowerCase();
+                    const rows = productCategoryTableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                        row.style.display = productID.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+
+            // Show form to add a new image
+            const createImageBtn = document.getElementById('create-order-btn');
+            const createImageForm = document.getElementById('create-order-form');
+
+            createImageBtn.addEventListener('click', () => {
+                createImageForm.style.display = createImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for adding a new image
+            const submitNewImageBtn = document.getElementById('submit-new-order');
+            submitNewImageBtn.addEventListener('click', async () => {
+                const productID = document.getElementById('product-id').value;
+                const imageFile = document.getElementById('stock-quantity').value;
+
+                if (productID && imageFile) {
+                    await addProductorder(productID, imageFile);
+                } else {
+                    alert('Vui lòng nhập đầy đủ thông tin Product ID và chọn Hình ảnh');
+                }
+            });
+
+            // Show form to delete an image
+            const deleteImageBtn = document.getElementById('delete-productorder-btn');
+            const deleteImageForm = document.getElementById('delete-productorder-form');
+
+            deleteImageBtn.addEventListener('click', () => {
+                deleteImageForm.style.display = deleteImageForm.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Handle form submission for deleting an image
+            const submitDeleteImageBtn = document.getElementById('submit-delete-productorder');
+            submitDeleteImageBtn.addEventListener('click', async () => {
+                const productID = document.getElementById('delete-orderID').value;
+
+                if (productID) {
+                    await deleteProductOrder(orderID);
+                } else {
+                    alert('Vui lòng nhập orderID.');
+                }
+            });
+        }
 
     });
 });

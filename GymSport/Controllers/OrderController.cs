@@ -63,6 +63,31 @@ namespace GymSport.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpDelete("{OrderID}")]
+        public async Task<IActionResult> DeleteOrder(int OrderID)
+        {
+            try
+            {
+                // Call the method to delete the image
+                var response = await _orderRepository.DeleteOrder(OrderID);
+
+                if (response.IsDeleted)
+                {
+                    // If deletion was successful, return success JSON response
+                    return Ok(new { isSuccess = true, message = response.Message });
+                }
+                else
+                {
+                    // If the image does not exist, return not found with error message
+                    return NotFound(new { isSuccess = false, message = response.Message });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Return a JSON error response if there is an exception
+                return StatusCode(500, new { isSuccess = false, message = $"Internal server error: {ex.Message}" });
+            }
+        }
 
     }
 }

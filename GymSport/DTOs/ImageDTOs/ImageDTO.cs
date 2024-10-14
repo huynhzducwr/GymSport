@@ -5,11 +5,11 @@ namespace GymSport.DTOs.ImageDTOs
     public class ImageDTO
     {
 
-        public int ImageID {  get; set; }
+        public int ImageID { get; set; }
 
         public int ProductID { get; set; }
 
-        public string ImageURL {  get; set; }
+        public string ImageURL { get; set; }
         public string ProductName { get; set; }
     }
 }

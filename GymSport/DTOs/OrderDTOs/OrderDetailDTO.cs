@@ -12,7 +12,7 @@ namespace GymSport.DTOs.OrderDTOs
         public int Quantity { get; set; }
 
         [Required]
-        public decimal UnitPrice { get; set; }  
+        public decimal UnitPrice { get; set; }
 
         public string ImageURL { get; set; }  // Tùy chọn
         public string ProductCategory { get; set; }  // Tùy chọn
