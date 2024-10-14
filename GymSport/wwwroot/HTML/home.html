@@ -34,7 +34,9 @@
 
     <!--Thanh menu thứ 2-->
     <div class="container_menu_2">
-        <div class="logo">GYMSPORT</div>
+        <div class="logo">
+            <a href="/home" style="text-decoration: none; color: inherit; font-weight:bold">GYMSPORT</a>
+        </div>
 
         <div class="menu_select_product">
             <a class="link_cate1" href="#">WOMEN'S</a>
@@ -212,7 +214,6 @@
     </div>
 
 
-
     <div class="overlay"> </div>
 
     <div class="Bag_order">
@@ -230,46 +231,45 @@
     <script src="/JS/close_bag.js"></script>
 
 
-
     <div class="Bag_order_item">
         <h3 class="Your_bag">YOUR BAG <i class="fa-solid fa-xmark"></i></h3>
-        <div class="order_item">
 
-            <div class="img">
-                <img class="product_bag" src="/src/cbum.png">
-            </div>
-            <div class="description_product">
-                <p class="boldz">Property Of Stringer</p>
-                <p>Slim Fit</p>
-                <p>Reps Red</p>
-                <p class="boldz">$30</p>
-
-
-                <div class="heart_delete">
-                    <div class="heartt">
-                        <i class="fa-regular fa-heart"></i>
-
+        <div class="bag_itemm">
+            <div class="scrollable-content">
+                <!-- New wrapper for scrollable content -->
+                <div class="order_item ">
+                    <div class="img">
+                        <a class="container_img" href="/HTML/productdetail.html/1"><img class="edt_product1" src="../src/productt.png"></a>
                     </div>
-                    <div class="bin">
-                        <i class="fa-regular fa-trash-can"></i>
+                    <div class="description_product">
+                        <p class="boldz" id="bagProductName">Property Of Stringer</p>
+                        <p id="bagProductCategory">Slim Fit</p>
+                        <p id="bagProductSize">Size: M</p>
+                        <p id="bagProductPrice" class="boldz">$30</p>
+                        <p id="bagProductColor">Black</p>
+                        <div class="heart_delete">
+                            <div class="heartt">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="bin">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </div>
+                            <div class="qtyy">
+                                <p> Qty: 1</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="qtyy">
-                        <p> Qty: 1</p>
-                    </div>
-
                 </div>
+                <!-- Repeat for other order_item entries -->
             </div>
-
         </div>
 
         <div class="pricee">
             <p style="font-weight: bold;"> Total </p>
             <div class="css-price">
-                <p>US$85.50</p>
+                <p id="totalPrice">US$85.50</p>
             </div>
-
         </div>
-
 
         <button class="checkout">CHECKOUT SECURELY</button>
     </div>
@@ -297,9 +297,9 @@
         <h4 class="title_MENS">MENS</h4>
         <h2 class="title_after">SHOP CBUM'S TOP PICKS</h2>
 
-        <div class="container_product">
+        <div class="container_product" id="top-pick">
             <div class="product">
-                <img class="edt_product" src="/src/cbum.png">
+                <a class="container_img" href="/HTML/productdetail.html/1"><img class="edt_product1" src="../src/productt.png"></a>
                 <p class="name_pro">Property Of Stringer</p>
                 <p class="name_cate">Slim Fit</p>
                 <p class="name_color">Reps Red</p>
@@ -335,7 +335,7 @@
 
         <h2 class="title_after">POPULAR RIGHT NOW</h2>
 
-        <div class="container_product">
+        <div class="container_product" id="popular-pick">
             <div class="product">
                 <img class="edt_product" src="/src/cbum.png">
                 <p class="name_pro">Property Of Stringer</p>
@@ -519,7 +519,7 @@
             <ul class="list">
                 <li class="spc"> <a class="kegg" href="#">Login</a></li>
                 <li class="spc"><a class="kegg" href="#">Register</a></li>
-
+            </ul>
 
         </div>
         <div class="section_11">
@@ -554,5 +554,9 @@
     <script src="/JS/hover_menu2.js"></script>
     <script src="/JS/hover_menu3.js"></script>
     <script src="/JS/changelinklogin.js"></script>
+    <script src="/JS/viewproduct.js"></script>
+  <script src="/JS/bagg.js"></script>
+
+
 </body>
 </html>

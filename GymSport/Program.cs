@@ -2,6 +2,7 @@
 using GymSport.Connection;
 using Serilog;
 using GymSport.Repository;
+using Microsoft.AspNetCore.Http.Features;
 namespace GymSport
 {
     public class Program
@@ -22,8 +23,17 @@ namespace GymSport
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<ProductCategoryRepository>();
             builder.Services.AddScoped<ProductsRepository>();
+            builder.Services.AddScoped<SizeRepository>();
+            builder.Services.AddScoped<ColorRepository>();
+            builder.Services.AddScoped<ProductSizesRepository>();
+            builder.Services.AddScoped<ProductColorsRepository>();
+            builder.Services.AddScoped<ImageRepository>();
+            builder.Services.AddScoped<InventoryRepository>();
+            builder.Services.AddScoped<OrderRepository>();
+            builder.Services.AddScoped<PaymentMethodRepository>();
+            builder.Services.AddScoped<PaymentRepository>();
 
-
+            
 
             // Cấu hình CORS
             builder.Services.AddCors(options =>
@@ -59,5 +69,15 @@ namespace GymSport
             app.UseStaticFiles();
             app.Run();
         }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // Giới hạn 10MB
+            });
+        }
+
+
+
     }
 }

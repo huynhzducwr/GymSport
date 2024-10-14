@@ -8,21 +8,21 @@ namespace GymSport.Repository
 {
     public class UserRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-        public UserRepository(SqlConnectionFactory connectionFactory)
-        {
-            _connectionFactory = connectionFactory;
-        }
-
-
-        public async Task<CreateUserResponseDTO> RegisterUserAsync(CreateUserDTO user)
-        {
-            CreateUserResponseDTO createUserResponseDTO = new CreateUserResponseDTO();
-            using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spRegisterUser", connection)
+            private readonly SqlConnectionFactory _connectionFactory;
+            public UserRepository(SqlConnectionFactory connectionFactory)
             {
-                CommandType = CommandType.StoredProcedure
-            };
+                _connectionFactory = connectionFactory;
+            }
+
+
+            public async Task<CreateUserResponseDTO> RegisterUserAsync(CreateUserDTO user)
+            {
+                CreateUserResponseDTO createUserResponseDTO = new CreateUserResponseDTO();
+                using var connection = _connectionFactory.CreateConnection();
+                using var command = new SqlCommand("spRegisterUser", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
 
             command.Parameters.AddWithValue("@Email", user.Email);
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);

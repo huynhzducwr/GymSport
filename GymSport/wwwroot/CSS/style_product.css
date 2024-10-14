@@ -1,0 +1,915 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Lexend Deca", system-ui;
+    font-weight: 250;
+}
+
+
+
+/* thanh menu đầu   */
+.menu_top {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.menu_top_edit {
+    padding: 5px;
+}
+
+.container_menu_top {
+    width: 100%;
+    /*height:fit-content;*/
+    position: relative;
+    background-color: #ebebeb;
+}
+
+.link_menu {
+    text-decoration: none;
+    color: #686666;
+}
+
+    .link_menu:hover {
+        color: black;
+    }
+
+.menu_icon {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+@media screen and (max-width:768px) {
+    .menu_top {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background-color: #BCBCBC;
+        width: 100%;
+    }
+
+    .menu_top_edit {
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .menu_icon {
+        display: block;
+        color: #686666;
+    }
+
+    .menu_top.active {
+        display: flex;
+    }
+}
+
+/* thanh menu thứ 2 */
+.logo {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.search_bar {
+    position: relative;
+    width: 200px;
+    margin: 20px;
+}
+
+    .search_bar input {
+        width: 100%;
+        padding: 10px 40px 10px 15px; /* Chừa không gian cho icon */
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+
+    .search_bar i {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #333;
+    }
+
+    /* Tạo hiệu ứng hover cho input */
+    .search_bar input:focus {
+        outline: none;
+        border-color: #686666;
+    }
+
+.container_menu_2 {
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.link_cate {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 15px;
+    padding-right: 40px;
+}
+
+.search_order {
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+}
+
+.menu_select_product {
+    padding-left: 280px;
+}
+
+.link_order {
+    text-decoration: none;
+    color: black;
+    font-size: 23px;
+    padding-left: 10px;
+}
+
+.container_discount {
+    background-color: #ebebeb;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center; /* Canh giữa theo chiều ngang */
+    align-items: center; /* Canh giữa theo chiều dọc */
+    padding: 20px; /* Padding để tạo khoảng cách cho nội dung */
+    overflow: hidden; /* Ẩn phần tử không nằm trong khung nếu cần */
+    position: relative;
+}
+
+.text_discount {
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+    position: absolute;
+    bottom: -50px; /* Đặt phần tử ở dưới khung nhìn ban đầu */
+    transition: bottom 1s ease-out; /* Hiệu ứng lướt lên */
+    opacity: 0; /* Ẩn phần tử khi chưa hiển thị */
+}
+
+    /* Hiển thị phần tử hiện tại */
+    .text_discount.show {
+        bottom: 10px; /* Di chuyển lên vị trí ban đầu */
+        opacity: 1; /* Hiển thị phần tử */
+    }
+
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 580px;
+    overflow: hidden;
+}
+
+    .video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Đặt các phần tử theo cột */
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.additional-text {
+    margin-top: 10px; /* Khoảng cách giữa các thẻ h1 */
+}
+
+.title_MENS {
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+.title_after {
+    font-weight: 600;
+    padding-left: 10px;
+}
+
+.shopping {
+    margin-top: 60px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+}
+
+.edt_product {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.product {
+    margin-top: 10px;
+    width: 500px;
+    height: auto; /* Đặt chiều cao tự động để phù hợp với nội dung bên trong */
+    padding: 10px; /* Tạo khoảng cách giữa phần tử và biên của thẻ */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước của thẻ */
+}
+
+.name_pro {
+    font-size: 15px;
+}
+
+.name_cate {
+    color: #686666;
+    font-size: 14px;
+}
+
+.name_color {
+    color: #686666;
+    font-size: 14px;
+}
+
+.price {
+    font-weight: 400;
+}
+
+.container_product {
+    display: flex;
+}
+
+.product1 {
+    position: relative; /* Đặt thẻ cha ở vị trí tương đối để thẻ con có thể định vị theo nó */
+    margin-top: 10px;
+    width: 500px;
+    height: auto; /* Đặt chiều cao tự động để phù hợp với nội dung bên trong */
+    padding: 10px; /* Tạo khoảng cách giữa phần tử và biên của thẻ */
+    box-sizing: border-box;
+}
+
+.edt_product1 {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.overlay-text {
+    position: absolute; /* Đặt vị trí chữ tương đối với thẻ cha */
+    top: 80%; /* Căn giữa theo chiều dọc */
+    left: 20%; /* Căn giữa theo chiều ngang */
+    transform: translate(-50%, -50%); /* Di chuyển tâm chữ vào giữa */
+    color: white; /* Màu chữ */
+    font-size: 24px; /* Kích thước chữ */
+    font-weight: bold; /* Độ đậm của chữ */
+    z-index: 10; /* Đảm bảo chữ nằm trên video */
+}
+
+.shop_now {
+    border-radius: 20px;
+    background-color: white;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    width: 150px;
+    height: 40px;
+    position: absolute;
+    top: 85%; /* Căn giữa theo chiều dọc */
+    left: 7%; /* Căn giữa theo chiều ngang */
+    cursor: pointer;
+}
+
+
+.legging {
+    font-weight: 600;
+    font-size: 18px;
+    padding-left: 10px;
+}
+
+.list {
+    list-style: none;
+    padding-top: 15px;
+    padding-left: 10px;
+    padding-bottom: 50px;
+}
+
+.kegg {
+    text-decoration: none;
+    color: #686666;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.spc {
+    padding-top: 10px;
+}
+
+.shopping1 {
+    margin-top: 60px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+    display: flex;
+    border-bottom: 1px solid #BCBCBC;
+}
+
+.section_1 {
+    width: 300px;
+    height: auto;
+}
+
+.textt {
+    font-size: 15px;
+    font-weight: 200;
+}
+
+.title_foot {
+    font-weight: 600;
+    font-size: 25px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.foott {
+    border-top: 1px solid #BCBCBC;
+    margin-top: 60px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    border-bottom: 1px solid #BCBCBC;
+}
+
+.section_11 {
+    width: 300px;
+    padding-top: 30px;
+    height: auto;
+    padding-left: 66px;
+}
+
+.foot_2 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between; /* Căn giữa nội dung theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+
+    text-align: center; /* Căn giữa văn bản bên trong */
+}
+
+.z20241 {
+    font-size: 14px;
+    padding-left: 66px;
+}
+
+.z20242 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #686666;
+    padding-right: 20px;
+}
+
+.link_cate1 {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 15px;
+    padding-right: 40px;
+}
+
+.link_cate2 {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 15px;
+    padding-right: 40px;
+}
+
+.link_cate3 {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 15px;
+    padding-right: 40px;
+}
+
+
+.container_menu_2 {
+    position: relative;
+}
+
+.cate_hover {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    justify-content: center;
+    padding-top: 30px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    height: auto;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cate_hover2 {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    justify-content: center;
+    padding-top: 30px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    height: auto;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.cate_hover3 {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    justify-content: center;
+    padding-top: 30px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    height: auto;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.type_box {
+    padding: 10px;
+    cursor: pointer; /* Change the cursor to a pointer when hovering */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+    .type_box:hover {
+        background-color: rgba(0, 0, 0, 0.1); /* Change background color on hover */
+        color: black; /* Change text color on hover */
+    }
+
+
+
+.color_list:hover{
+    cursor:pointer;
+}
+
+.title_product {
+    padding-top: 15px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+}
+
+
+.container_product1 {
+    display: flex;
+    width: 80%;
+    margin-left:70px;
+    flex-wrap: wrap;
+}
+
+.nav_category {
+    position: sticky;
+    top: 0; /* Giữ cố định khi cuộn từ vị trí đỉnh của trang */
+    align-self: flex-start; /* Đảm bảo nó luôn dính vào đầu khi cuộn */
+    height: 100vh; /* Chiều cao toàn màn hình */
+    overflow-y: auto; /* Cuộn nếu nội dung quá dài */
+    
+}
+
+
+.product1 {
+    width: 25%; /* Đảm bảo 4 sản phẩm trong 1 hàng, mỗi cái chiếm khoảng 23% không gian */
+    margin-bottom: 20px; /* Khoảng cách dưới giữa các hàng */
+    box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi kích thước phần tử */
+    text-align: center; /* Canh giữa nội dung bên trong sản phẩm */
+}
+
+
+
+.edt_product1 {
+    width: 105%;
+    height: auto;
+    display: block;
+}
+
+.name_pro1 {
+    font-size: 15px;
+}
+
+.name_cate1 {
+    color: #686666;
+    font-size: 14px;
+}
+
+.name_color1 {
+    color: #686666;
+    font-size: 14px;
+}
+
+.price1 {
+    font-weight: 400;
+}
+
+.sort_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.product_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.size_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.feature_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+.feature_list:hover{
+    cursor:pointer;
+}
+
+.fit_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+    .fit_list:hover {
+        cursor: pointer;
+    }
+
+.activity_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+.activity_list {
+    cursor: pointer;
+}
+
+.collection_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+.collection_list{
+    cursor:pointer;
+}
+
+.discount_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.color_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.price_list {
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #BCBCBC;
+    padding-top: 20px;
+}
+
+.listt_product {
+    list-style: none;
+    display: none;
+}
+
+.listt_size {
+    list-style: none;
+    display: none;
+}
+
+.listt_feature {
+    list-style: none;
+    display: none;
+}
+
+.listt_fit {
+    list-style: none;
+    display: none;
+}
+
+.listt_activity {
+    list-style: none;
+    display: none;
+}
+
+.listt_collection {
+    list-style: none;
+    display: none;
+}
+
+.listt_color {
+    list-style: none;
+    display: none;
+}
+
+.listt_discount {
+    list-style: none;
+    display: none;
+}
+
+.listt_price {
+    list-style: none;
+    display: none;
+}
+
+.listt {
+    list-style: none;
+    display: none;
+}
+
+.container_product11 {
+    display: flex;
+    margin-top: 30px;
+  
+}
+
+.edt_radio {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.list_ {
+    padding-bottom: 10px;
+    padding-top: 15px;
+}
+
+.sort_list:hover {
+    cursor: pointer;
+}
+
+.product_list {
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.size_list {
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+
+.type_box {
+    margin-bottom: 10px;
+    text-align: center;
+    border: 1px solid #BCBCBC;
+    padding: 7px;
+    color: #686666;
+    font-size: 14px;
+    font-weight: 350;
+}
+
+
+.Bag_order {
+    display: none;
+    width: 30%;
+    top: 0;
+    right: 0;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: white;
+    z-index: 1001;
+    position: absolute;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Màu mờ */
+
+    z-index: 1000;
+}
+
+
+.img_bag {
+    width: 150px;
+    height: 130px;
+}
+
+.Your_bag {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 150px;
+}
+
+.bag_empty {
+    margin-top: 30px;
+    font-weight: 500;
+}
+
+.texxt1 {
+    color: #333;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.Shop_btn {
+    width: auto;
+    height: auto;
+    border-radius: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 60px;
+    padding-right: 60px;
+    color: white;
+    font-weight: 500;
+    font-size: 15px;
+    background-color: black;
+    margin-top: 20px;
+}
+
+.Your_bag {
+    display: flex;
+    margin-left: 200px;
+}
+
+    .Your_bag i {
+        margin-left: auto; /* Đẩy biểu tượng sang bên phải */
+        padding-right: 20px;
+    }
+
+
+.Bag_order_item {
+    display: none; /* Initially hidden */
+    width: 30%; /* Set the width */
+    top: 0; /* Position from the top */
+    right: 0; /* Position from the right */
+    z-index: 1001; /* Ensure it's above other elements */
+    position: absolute; /* Absolute positioning */
+    height: 100vh; /* Full height of the viewport */
+    align-items: center; /* Center items vertically */
+    text-align: center; /* Center text */
+    background-color: white; /* Background color */
+    flex-direction: column; /* Vertical alignment */
+    padding-bottom: 20px; /* Padding at the bottom */
+    /* Add overflow properties for scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
+    overflow-x: hidden; /* Hide horizontal scrolling */
+}
+
+
+.order_item {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2dfdf;
+}
+
+.img {
+    width: 30%;
+}
+
+
+.description_product {
+    width: 70%;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.product_bag {
+    width: 100%;
+    height: 100%;
+}
+
+.boldz {
+    font-weight: 500;
+}
+
+.heart_delete {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    margin-top: 20px;
+}
+
+.bin {
+    width: 20%;
+}
+
+.qtyy {
+    width: 30%;
+}
+
+.pricee {
+    margin-top: 30px;
+    width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2dfdf;
+    padding-bottom: 10px;
+}
+
+.css_price {
+    width: 70%;
+    text-align: right;
+}
+
+.scrollable-content {
+    flex: 1; /* Allow this section to grow */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 100%; /* Ensure it takes full width */
+}
+
+.checkout {
+    margin-top: 20px; /* Adjust if needed for spacing */
+    background-color: #5880bc;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 90%; /* Set button width */
+    text-align: center;
+    position: sticky; /* Make the button sticky */
+    bottom: 10px; /* Position at the bottom of the container */
+}
+
+    .checkout:hover {
+        background-color: #4c80d8;
+    }

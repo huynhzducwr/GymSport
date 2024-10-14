@@ -492,6 +492,8 @@
 }
 
 
+
+
 .Bag_order {
     display: none;
     width: 30%;
@@ -513,7 +515,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7); /* Màu mờ */
-    ;
+
     z-index: 1000;
 }
 
@@ -567,21 +569,24 @@
     }
 
 
-
 .Bag_order_item {
-    display: none;
-    width: 30%;
-    top: 0;
-    right: 0;
-    z-index: 1001;
-    position: absolute;
-    height: 100vh;
-    align-items: center;
-    text-align: center;
-    background-color: white;
-    flex-direction: column;
-    padding-bottom: 20px;
+    display: none; /* Initially hidden */
+    width: 30%; /* Set the width */
+    top: 0; /* Position from the top */
+    right: 0; /* Position from the right */
+    z-index: 1001; /* Ensure it's above other elements */
+    position: absolute; /* Absolute positioning */
+    height: 100vh; /* Full height of the viewport */
+    align-items: center; /* Center items vertically */
+    text-align: center; /* Center text */
+    background-color: white; /* Background color */
+    flex-direction: column; /* Vertical alignment */
+    padding-bottom: 20px; /* Padding at the bottom */
+    /* Add overflow properties for scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
+    overflow-x: hidden; /* Hide horizontal scrolling */
 }
+
 
 .order_item {
     display: flex;
@@ -644,8 +649,14 @@
     text-align: right;
 }
 
+.scrollable-content {
+    flex: 1; /* Allow this section to grow */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 100%; /* Ensure it takes full width */
+}
+
 .checkout {
-    margin-top: auto; /* Đẩy nút xuống cuối cùng */
+    margin-top: 20px; /* Adjust if needed for spacing */
     background-color: #5880bc;
     color: white;
     border: none;
@@ -653,12 +664,10 @@
     border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
-    width: 90%; /* Đặt nút rộng 90% để cân đối trong container */
+    width: 90%; /* Set button width */
     text-align: center;
-    position: absolute;
-    bottom: 10px;
-    left: 20px;
-    right: 10px;
+    position: sticky; /* Make the button sticky */
+    bottom: 10px; /* Position at the bottom of the container */
 }
 
     .checkout:hover {
