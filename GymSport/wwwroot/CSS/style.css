@@ -237,15 +237,16 @@
 
 .product {
     margin-top: 10px;
-    width: 500px;
+    width: 700px;
     height: auto; /* Đặt chiều cao tự động để phù hợp với nội dung bên trong */
     padding: 10px; /* Tạo khoảng cách giữa phần tử và biên của thẻ */
     box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước của thẻ */
 }
 
-.name_pro {
-    font-size: 15px;
-}
+
+    .name_pro {
+        font-size: 15px;
+    }
 
 .name_cate {
     color: #686666;

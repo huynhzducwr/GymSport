@@ -190,16 +190,42 @@ function renderProducts(products, productImages, productColors, productSizes) {
 
         // Create HTML for the product
         const productHTML = `
-            <div class="product1">
-                 <a class="container_img" href="/productdetail/${product.productID}"> <!-- Thêm liên kết tới trang chi tiết -->
-                    <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${product.productName}">
-                </a>
-                <p class="name_pro">${product.productName}</p>
-                <p class="name_cate">${product.productCategoryName || 'Thể loại'}</p>
-                <p class="name_color">${colorData ? colorData.colorName : 'Màu sắc không xác định'}</p>
-                <p class="price">$${product.price.toFixed(2)}</p>
-            </div>
-        `;
+    <div class="product1">
+        <a class="container_img" href="/productdetail/${product.productID}">
+            <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${product.productName}">
+        </a>
+        <p class="name_pro">${product.productName}</p>
+        <p class="name_cate">${product.productCategoryName || 'Thể loại'}</p>
+        <p class="name_color">${colorData ? colorData.colorName : 'Màu sắc không xác định'}</p>
+        <p class="price">$${product.price.toFixed(2)}</p>
+    </div>
+    
+                <style>
+             .container-img {
+                  display: block;
+                     overflow: hidden;
+        width: 100%;
+          }
+
+       /* Định dạng cho hình ảnh bên trong container */
+    .container-img img {
+           width: 100%;
+            height: auto;
+                height: 400px;
+
+        transition: transform 0.3s ease-in-out; /* Tạo hiệu ứng mượt mà */
+
+    }
+
+    /* Hiệu ứng zoom khi di chuột vào container chứa ảnh */
+    .container-img:hover img {
+        transform: scale(1.1); /* Zoom hình lên 10% khi di chuột */
+    }
+             </style>
+`;
+
+
+        
 
         // Add the product HTML to the container
         containerProduct.insertAdjacentHTML('beforeend', productHTML);
