@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\PaymentTransaction\" />
+    <Folder Include="Features\PaymentSignature\" />
+    <Folder Include="Features\PaymentNotification\" />
+    <Folder Include="Features\PaymentDestination\" />
+    <Folder Include="Features\Payment\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--<ProjectReference Include="..\..\infras\Payment.Service\Payment.Service.csproj" />-->
+    <ProjectReference Include="D:\GymSport\src\core\Payment.Domain\Payment.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
