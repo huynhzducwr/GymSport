@@ -11,7 +11,7 @@ namespace GymSport.Connection
         }
 
         public SqlConnection CreateConnection()
-            => new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            => new SqlConnection(_configuration.GetConnectionString("Database"));
     }
 
 

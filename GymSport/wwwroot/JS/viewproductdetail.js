@@ -248,11 +248,35 @@ async function handleCheckout() {
             return;
         }
 
-
         const paymentResponse = await createPayment(orderResponse.orderID, totalAmount, paymentMethodID, "Completed"); // Thay đổi PaymentStatus theo yêu cầu của bạn
-
+       
         if (paymentResponse && paymentResponse.isCreated) {
             alert('Order and payment created successfully!');
+
+            if (paymentMethodID == 3) {
+                const paymentMOMO = await createMomoPayment(
+                    "THANH TOAN DON HANG " + orderResponse.orderID, // PaymentContent
+                    "VND", // PaymentCurrency
+                    "ORD15z1", // PaymentRefId
+                    totalAmount, // RequiredAmount
+                    orderResponse.orderID, // OrderID
+                    userData1.userID, // UserID
+                    "vn", // PaymentLanguage
+                    "Mer0dbcf13bd6de6f5eb8064b74cb2caa33", // MerchantID
+                    "MOMO", // PaymentDestination
+                    "ABCD1234" // Signature
+                );
+
+                console.log('momo : ', paymentMOMO);
+
+                if (paymentMOMO && paymentMOMO.paymentUrl) {
+                    window.location.href = paymentMOMO.paymentUrl;
+                } else {
+                    alert('Error creating Momo payment link.');
+                }
+
+            }
+
         }
     } else {
         alert('There was a problem creating your order.');
@@ -296,15 +320,72 @@ async function createOrders(cartItems, shippingAddress, phoneNumber, totalAmount
             console.log('Order Created:', data);
             return data; // return response data from server
         } else {
-            const errorData = await response.json(); // Get error details from response
-            console.error('Error creating order:', errorData); // Log error details
-            alert(`There was an error creating your order: ${errorData.message || response.statusText}`);
+            const error = await response.json();
+            console.error('Error creating Momo payment:', error);
+            alert('Error creating Momo payment. Status: ' + response.status + ' Message: ' + JSON.stringify(error));
+
         }
     } catch (error) {
         console.error('Error creating order:', error);
         alert('There was an error creating your order. Please try again.');
     }
 }
+async function createMomoPayment(
+    paymentContent,
+    paymentCurrency,
+    paymentRefId,
+    requiredAmount,
+    orderID,
+    userID,
+    paymentLanguage,
+    merchantId,
+    paymentDestinationId,
+    signature
+) {
+    const url = '/api/payment'; // Đảm bảo rằng đây là endpoint đúng
+    const paymentMomo = {
+        paymentContent: paymentContent,
+        paymentCurrency: paymentCurrency,
+        paymentRefId: paymentRefId,
+        requiredAmount: requiredAmount,
+        orderID: orderID,
+        userID: userID,
+        paymentLanguage: paymentLanguage,
+        merchantId: merchantId,
+        paymentDestinationId: paymentDestinationId,
+        signature: signature
+    };
+    console.log('Payment Data:', paymentMomo);
+
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(paymentMomo)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Momo Payment Response:', result); // In ra toàn bộ phản hồi
+            if (result && result.data && result.data.paymentUrl) {
+                console.log('Payment URL:', result.data.paymentUrl); // In ra URL thanh toán
+                window.location.href = result.data.paymentUrl; // Chuyển hướng tới liên kết thanh toán
+            } else {
+                alert('Error: No payment URL returned.');
+            }
+        } else {
+            const error = await response.json();
+            console.error('Error creating Momo payment:', error);
+            alert('Error creating Momo payment. Status: ' + response.status + ' Message: ' + JSON.stringify(error));
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while creating the Momo payment.');
+    }
+}
+
 
 async function createPayment(orderID, totalAmount, paymentMethodID, paymentStatus) {
     const url = '/api/Payment/create';

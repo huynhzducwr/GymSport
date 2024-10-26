@@ -1,9 +1,15 @@
 ﻿using Microsoft.Data.SqlClient;
 using GymSport.Connection;
 using Serilog;
+using Payment.Persistence.Persist;
 using GymSport.Repository;
 using Microsoft.AspNetCore.Http.Features;
 using GymSport.Models;
+using System.Reflection;
+using Payment.Application.Interface;
+using Payment.Api.Services;
+using Payment.Application.Features.Commands;
+using Payment.Service.Momo.Config;
 
 namespace GymSport
 {
@@ -17,10 +23,51 @@ namespace GymSport
             // Thêm các dịch vụ vào container
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
             builder.Services.AddTransient<SqlConnectionFactory>();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Version = "v1",
+                    Title ="GymSport",
+                    Description = "Sample .NET GymSport ",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                    {
+                        Name ="HuynhDuc code",
+                        Url = new Uri("https://localhost:44326/home")
+                    }
+                });
+                var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var path = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+                options.IncludeXmlComments(path);
+            });
+
+            builder.Services.Configure<MomoConfig>(
+             builder.Configuration.GetSection(MomoConfig.ConfigName));
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ISqlService, SqlService>();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddScoped<IConnectionService, ConnectionService>();
+
+            builder.Services.AddMediatR(r =>
+            {
+                r.RegisterServicesFromAssembly(typeof(CreateMerchant).Assembly);
+            });
+            //builder.Services.AddHangfire(configuration => configuration
+            //    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            //    .UseSimpleAssemblyNameTypeSerializer()
+            //    .UseRecommendedSerializerSettings()
+            //    .UseSqlServerStorage(builder.Configuration.GetConnectionString("Database"),
+            //    new Hangfire.SqlServer.SqlServerStorageOptions()
+            //    {
+            //        //TODO: Change hangfire sql server option
+            //    }));
+            //builder.Services.AddHangfireServer();
+
+
+
             builder.Services.AddTransient<SqlConnectionFactory>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<ProductCategoryRepository>();

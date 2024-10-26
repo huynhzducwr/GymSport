@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>\bin\GymSport.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,9 +27,11 @@
   <ItemGroup>
     <None Include="wwwroot\JS\allProduct.js" />
   </ItemGroup>
+  
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
@@ -37,6 +41,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="D:\GymSport\src\core\Payment.Application\Payment.Application.csproj" />
+    <ProjectReference Include="D:\GymSport\src\infras\Payment.Persistence\Payment.Persistence.csproj" />
+    <ProjectReference Include="D:\GymSport\src\core\Payment.Service\Payment.Service.csproj" />
   </ItemGroup>
 
 </Project>

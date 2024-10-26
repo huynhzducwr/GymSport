@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mapster" Version="7.4.0" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="D:\GymSport\src\core\Payment.Service\Payment.Service.csproj" />
-    <ProjectReference Include="D:\GymSport\src\core\Payment.Domain\Payment.Domain.csproj" />
-  </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="D:\GymSport\src\core\Payment.Application\Payment.Application.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,23 +1,27 @@
-﻿async function fetchProducts(isActive = null) {
-    let url = '/api/Product/All';
-    if (isActive !== null) {
-        url += `?isActive=${isActive}`;
-    }
-
+﻿async function fetchProducts(topProductIDs) {
     try {
-        const response = await fetch(url);
-        if (response.ok) {
-            const data = await response.json(); // Chuyển đổi dữ liệu JSON từ API thành object
-            console.log(data);
-            const products = data.data;
-            const productImages = await fetchProductImages(); // Lấy dữ liệu hình ảnh
-            const productColors = await fetchProductColors(); // Lấy dữ liệu màu sắc
-            renderProducts(products, productImages, productColors); // Gọi hàm để hiển thị dữ liệu sản phẩm và màu sắc
+        const response = await fetch('/api/Product/All'); // Adjust the API endpoint
+        const result = await response.json(); // The API response includes the products in the "data" property
+
+        const products = result.data; // Access the array of products from the "data" property
+
+        console.log('Fetched products:', products); // Log the products array
+
+        if (Array.isArray(products)) {
+            const productImages = await fetchProductImages(); // Assuming you have a function for fetching product images
+            const productColors = await fetchProductColors(); // Assuming you have a function for fetching product colors
+
+            // Filter the products to only include the top products
+            const topProducts = products.filter(product => topProductIDs.includes(product.productID));
+
+            renderProducts(topProducts, productImages, productColors, 'top-pick');
+            const popularProducts = products.slice(0, 4);
+            renderProducts(popularProducts, productImages, productColors, 'popular-pick');
         } else {
-            console.error("Error fetching products:", response.statusText);
+            console.error('Products fetched is not an array:', products);
         }
     } catch (error) {
-        console.error("Network error:", error);
+        console.error('Error fetching products:', error);
     }
 }
 
@@ -57,28 +61,74 @@ async function fetchProductImages() {
     }
 }
 
-function renderProducts(products, productImages, productColors) {
-    const containerProduct = document.querySelector('#top-pick');
-    const containerProduct1 = document.querySelector('#popular-pick');
 
-    // Xóa sản phẩm hiện có trong cả hai container
-    containerProduct.innerHTML = '';
-    containerProduct1.innerHTML = '';
+//async function fetchorderdetail() {
+//    try {
+//        const response = await fetch('/api/OrderDetails/all'); // Adjust your API URL if needed
+//        const orderDetails = await response.json();
+//        console.log(orderDetails);
+//        if (Array.isArray(orderDetails)) {
+//            const topProducts = calculateTopProducts(orderDetails);
+//            fetchProducts(topProducts);
+         
+//        } else {
+//            console.error('Fetched data is not an array:', orderDetails);
+//        }
+//    } catch (error) {
+//        console.error('Error fetching order details:', error);
+//    }
+//}
+async function fetchpaymentdetail() {
 
-    // Kiểm tra xem có sản phẩm không
+
+    try {
+        const response = await fetch('/api/paymentdetail/all'); // Adjust your API URL if needed
+        const productImages = await response.json();
+        console.log(productImages);
+        if (Array.isArray(productImages)) {
+            const topProducts = calculateTopProducts(productImages);
+            fetchProducts(topProducts);
+
+        } else {
+            console.error('Fetched data is not an array:', productImages);
+        }
+    } catch (error) {
+        console.error('Error fetching paymentdetail:', error);
+    }
+}
+function calculateTopProducts(orderDetails) {
+    const productCountMap = {};
+    orderDetails.forEach(detail => {
+        const { productID, quantity } = detail;
+        if (!productCountMap[productID]){
+            productCountMap[productID] =0;
+        }
+        productCountMap[productID] += quantity;
+    });
+
+    const sortedProducts = Object.entries(productCountMap)
+        .map(([productID, totalQuantity]) => ({ productID: parseInt(productID), totalQuantity }))
+        .sort((a, b) => b.totalQuantity - a.totalQuantity);
+
+    return sortedProducts.slice(0, 4).map(product => product.productID);
+    
+}
+
+
+function renderProducts(products, productImages, productColors, containerId) {
+
+    const container = document.querySelector(`#${containerId}`);
+
+    container.innerHTML = '';
+
+    // Check if there are any products
     if (!Array.isArray(products) || products.length === 0) {
-        containerProduct.innerHTML = '<p>Không có sản phẩm nào để hiển thị.</p>';
+        container.innerHTML = '<p>No products to display.</p>';
         return;
     }
-
-    // Sắp xếp sản phẩm theo productID tăng dần
-    products.sort((a, b) => a.productID - b.productID);
-
-    // Giới hạn số lượng sản phẩm cho mỗi container
-    const maxProductsPerContainer = 4;
-
+   
     // Hiển thị sản phẩm theo thứ tự tăng dần
-    products.forEach((product, index) => {
+    products.forEach((product) => {
         // Lấy hình ảnh tương ứng với sản phẩm
         const imageData = productImages.find(image => image.productID === product.productID);
 
@@ -135,15 +185,12 @@ function renderProducts(products, productImages, productColors) {
 
         `;
 
-        // Chèn mã HTML vào container tương ứng
-        if (index < maxProductsPerContainer) {
-            containerProduct.insertAdjacentHTML('beforeend', productHTML); // Thêm vào phần sản phẩm hàng đầu
-        } else if (index < maxProductsPerContainer * 2) {
-            containerProduct1.insertAdjacentHTML('beforeend', productHTML); // Thêm vào phần sản phẩm phổ biến
-        }
+        container.insertAdjacentHTML('beforeend', productHTML);
     });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    fetchpaymentdetail();
+    const topProductIDs = [5, 7, 9, 10]; // Example top product IDs
     fetchProducts(); // Lấy và hiển thị sản phẩm khi trang tải
 });
