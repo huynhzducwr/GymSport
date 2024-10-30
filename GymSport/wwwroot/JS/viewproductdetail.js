@@ -576,7 +576,7 @@ addToBagButton.addEventListener('click', async function () {
 
 
 // Function to save the shopping bag to local storage
-function saveBagToLocalStorage(item) {
+ function saveBagToLocalStorage(item) {
     // Get existing items from local storage
     const existingItems = JSON.parse(localStorage.getItem('shoppingBag')) || [];
     // Add the new item

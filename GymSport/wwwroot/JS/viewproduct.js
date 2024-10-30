@@ -62,22 +62,7 @@ async function fetchProductImages() {
 }
 
 
-//async function fetchorderdetail() {
-//    try {
-//        const response = await fetch('/api/OrderDetails/all'); // Adjust your API URL if needed
-//        const orderDetails = await response.json();
-//        console.log(orderDetails);
-//        if (Array.isArray(orderDetails)) {
-//            const topProducts = calculateTopProducts(orderDetails);
-//            fetchProducts(topProducts);
-         
-//        } else {
-//            console.error('Fetched data is not an array:', orderDetails);
-//        }
-//    } catch (error) {
-//        console.error('Error fetching order details:', error);
-//    }
-//}
+
 async function fetchpaymentdetail() {
 
 
@@ -145,13 +130,15 @@ function renderProducts(products, productImages, productColors, containerId) {
     <p class="name_cate">${product.productCategoryName || 'Thể loại'}</p>
     <p class="name_color">${colorData ? colorData.colorName : 'Màu sắc không xác định'}</p>
     <p class="price">$${product.price.toFixed(2)}</p>
+      <i class="fa-regular fa-heart heart-icon"></i>
+
 </div>
 
 <style>
     /* Định dạng chung cho sản phẩm */
  
     .product {
-        text-align: center;
+        
       
     }
      /* Định dạng cho container chứa hình ảnh */
@@ -178,9 +165,19 @@ function renderProducts(products, productImages, productColors, containerId) {
     .container-img1:hover img {
         transform: scale(1.1); /* Zoom hình lên 10% khi di chuột */
     }
+.heart-icon {
+    font-size: 24px;
+    color: gray;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
 
+.heart-icon.active {
+    color: gray;
+}
    
 </style>
+ 
 
 
         `;
@@ -189,8 +186,75 @@ function renderProducts(products, productImages, productColors, containerId) {
     });
 }
 
+let fetchedImages = [];
+
+async function initializeImages() {
+    fetchedImages = await fetchProductImages();
+}
+
+initializeImages();
+
+// Event listener for "favorite" functionality
+async function toggleFavorite(event) {
+    event.target.classList.toggle("fa-regular");
+    event.target.classList.toggle("fa-solid");
+    event.target.classList.toggle("active");
+
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (!userInfo || !userInfo.isLogin) {
+        alert("Please log in to add to favorites.");
+        return;
+    }
+
+    const productElement = event.target.closest('.product');
+    const productID = parseInt(productElement.querySelector('a').getAttribute('href').split('/').pop());
+    const productName = productElement.querySelector('.name_pro').innerText;
+    const productCategoryName = productElement.querySelector('.name_cate').innerText;
+    const price = parseFloat(productElement.querySelector('.price').innerText.replace('$', ''));
+    const imageURL = productElement.querySelector('img').getAttribute('src');
+    const productImage = fetchedImages.find(image => image.productID === productID);
+    const imageID = productImage ? productImage.imageID : null;
+
+    const favoriteData = {
+        userID: userInfo.userID,
+        productID,
+        productName,
+        productCategoryName,
+        price,
+        imageURL,
+        imageID
+    };
+
+    try {
+        const response = await fetch('/api/WishList/AddWishList', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(favoriteData)
+        });
+
+        if (response.ok) {
+            console.log("Product added to favorites:", favoriteData);
+        } else {
+            console.error("Failed to add to favorites:", await response.json());
+        }
+    } catch (error) {
+        console.error("Network error while adding to favorites:", error);
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchpaymentdetail();
-    const topProductIDs = [5, 7, 9, 10]; // Example top product IDs
-    fetchProducts(); // Lấy và hiển thị sản phẩm khi trang tải
+    fetchProducts();
+    fetchProductImages();
+    fetchProductColors();
+
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("heart-icon")) {
+            toggleFavorite(event);
+        }
+    });
 });
+

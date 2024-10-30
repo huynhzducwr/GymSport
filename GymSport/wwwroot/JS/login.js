@@ -45,19 +45,18 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
         const data = await response.json();
         console.log('Response data:', data);
-        if (data.password != password) {
-            alert('Đăng nhập thất bại: ' + data.message); // In toàn bộ dữ liệu phản hồi
-        }
-
-        if (data.data.isLogin) {
+     
+        if (data.success) {
 
             localStorage.setItem('isLoggedIn', true);
             localStorage.setItem('userInfo', JSON.stringify(data.data));
-            
+
 
             alert('Đăng nhập thành công: ' + data.message);
             window.location.href = '/home';
-        } 
+        } else {
+            alert('Sai tên đăng nhập hoặc mật khẩu');
+        }
 
     } catch (error) {
         console.error('Lỗi:', error);
