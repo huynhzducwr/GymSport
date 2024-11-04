@@ -15,6 +15,108 @@
         return []; // Trả về mảng rỗng nếu có lỗi
     }
 }
+async function submitFeedback(event, productId) {
+    event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+    const url = '/api/FeedBack/AddFeedback';
+
+    // Lấy thông tin userID từ local storage
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userID = userInfo ? userInfo.userID : null; // Gán userID từ local storage
+
+    const comment = document.getElementById("customerComment").value;
+
+    const feedbackData = {
+        UserID: userID, // Sử dụng userID từ local storage
+        ProductID: productId, // Sử dụng productId từ URL
+        Comment: comment
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(feedbackData),
+        });
+
+        const result = await response.json();
+        console.log("Submit feedback result:", result);
+
+        if (result.success) {
+            // Hiển thị thông báo thành công
+            alert(result.message);
+            // Xóa nội dung trường nhập bình luận
+            document.getElementById("customerComment").value = '';
+        } else {
+            // Hiển thị thông báo lỗi
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Error submitting feedback:", error);
+        alert("Đã xảy ra lỗi khi gửi phản hồi. Vui lòng thử lại.");
+    }
+}
+
+async function fetchAllFeedBack(productId) { // Thêm productId làm tham số
+    const url = `/api/FeedBack/GetFeedbacksByProductId/${productId}`; // Gọi API với productId
+
+
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Fetch comment:", result);
+
+            const feedbackSection = document.getElementById('feedbackSection');
+            feedbackSection.style.display = 'block'; // Hiển thị feedback section
+
+            // Xóa hết các feedback cũ để tránh hiển thị trùng lặp
+            feedbackSection.innerHTML = '';
+
+            // Kiểm tra xem có dữ liệu không và duyệt qua mảng feedback từ result.data
+            if (result.data && Array.isArray(result.data)) {
+                result.data.forEach(feedback => {
+                    const feedbackDiv = document.createElement('div');
+                    feedbackDiv.classList.add('feedback-item');
+
+                    // Tạo các phần tử cho tên người dùng, ngày và bình luận
+                    const nameElement = document.createElement('p');
+                    nameElement.innerHTML = `<p style="font-weight: bold;">${feedback.lastName}</p>`;
+
+                    const dateElement = document.createElement('p');
+                    dateElement.classList.add('feedback-date');
+                    const feedbackDate = new Date(feedback.feedbackDate);
+                    const daysAgo = Math.floor((new Date() - feedbackDate) / (1000 * 60 * 60 * 24));
+                    dateElement.textContent = `${daysAgo} days ago`;
+
+                    const commentElement = document.createElement('p');
+                    commentElement.classList.add('feedback-comment');
+                    commentElement.textContent = feedback.comment;
+
+                    // Thêm các phần tử vào feedbackDiv
+                    feedbackDiv.appendChild(nameElement);
+                    feedbackDiv.appendChild(dateElement);
+                    feedbackDiv.appendChild(commentElement);
+
+                    // Thêm feedbackDiv vào feedbackSection
+                    feedbackSection.appendChild(feedbackDiv);
+                });
+            } else {
+                console.log("No feedback data available.");
+            }
+
+            return result.data;
+        } else {
+            console.error("Error fetching comment:", response.statusText);
+            return []; // Trả về mảng rỗng nếu có lỗi
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+        return [];
+    }
+}
 
 async function loadProductImages(productId) {
     const url = '/api/Image/all'; // Đường dẫn API lấy tất cả hình ảnh
@@ -433,7 +535,11 @@ window.onload = function () {
     fetchProductColors(productId);
     fetchProducts(productId);
     fetchPaymentMethod();
-
+    fetchAllFeedBack(productId);
+    // Gắn sự kiện submit cho biểu mẫu sau khi đã xác định productId
+    document.getElementById("commentForm").addEventListener("submit", function (event) {
+        submitFeedback(event, productId);
+    });
 };
 
 

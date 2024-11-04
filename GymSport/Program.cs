@@ -85,6 +85,7 @@ namespace GymSport
             builder.Services.AddScoped<OrderDetailsRepository>();
             builder.Services.AddScoped<PaymentdetailRepository>();
             builder.Services.AddScoped<WishListRepository>();
+            builder.Services.AddScoped<FeedBackRepository>();
             // Cấu hình CORS
             builder.Services.AddCors(options =>
             {

@@ -5,6 +5,71 @@
     font-family: "Lexend Deca", system-ui;
     font-weight: 250;
 }
+.feedback {
+    background-color: #f9f9f9; /* Màu nền sáng */
+    border: 1px solid #ddd; /* Viền xám */
+    border-radius: 5px; /* Bo tròn góc */
+    padding: 15px; /* Padding bên trong */
+    margin-top: 10px; /* Khoảng cách phía trên */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+}
+
+    .feedback p {
+        margin: 5px 0; /* Khoảng cách giữa các đoạn văn */
+    }
+
+    .feedback .feedback-date {
+        color: #888; /* Màu chữ xám cho ngày tháng */
+        font-size: 0.9em; /* Kích thước chữ nhỏ hơn */
+        .leave-a-comment
+
+{
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.leave-a-comment h3 {
+    margin-top: 0;
+}
+
+.leave-a-comment label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.leave-a-comment textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.leave-a-comment button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .leave-a-comment button:hover {
+        background-color: #45a049;
+    }
+
+.feedback-item {
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+ }
+
 
 .form-container {
     width: 100%;

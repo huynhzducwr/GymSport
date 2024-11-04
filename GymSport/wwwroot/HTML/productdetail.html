@@ -285,7 +285,33 @@
                 </div>
             </div>
         </div>
-        <button href="#">SEE MORE REVIEWS</button>
+        <button id="seeMoreButton">SEE MORE REVIEWS</button>
+        <div class="leave-a-comment">
+            <h3>Leave a Comment</h3>
+            <form id="commentForm">
+                <label for="customerComment">Comment:</label>
+                <textarea id="customerComment" required placeholder="Write your comment here..."></textarea>
+
+                <button type="submit">Submit Comment</button>
+            </form>
+        </div>
+
+        <div class="feedback" id="feedbackSection" style="display: none;">
+            <p style="font-weight:bold"><strong>Name customer</strong></p>
+            <p class="feedback-date">20 days ago</p>
+            <p class="feedback-comment">Comment about product</p>
+        </div>
+        <script>
+            document.getElementById("seeMoreButton").addEventListener("click", function () {
+                const feedbackSection = document.getElementById("feedbackSection");
+                if (feedbackSection.style.display === "none") {
+                    feedbackSection.style.display = "block"; // Hiện feedback
+                } else {
+                    feedbackSection.style.display = "none"; // Ẩn feedback nếu nhấn lại
+                }
+            });
+        </script>
+ 
     </div>
 
 
