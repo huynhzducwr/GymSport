@@ -63,6 +63,32 @@ namespace GymSport.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetOrdersByUserId(int userId)
+        {
+            try
+            {
+                // Gọi phương thức trong repository để lấy các đơn hàng của người dùng dựa trên userId
+                var orders = await _orderRepository.GetOrdersByUserId(userId);
+
+                // Kiểm tra nếu không có đơn hàng nào được tìm thấy
+                if (orders == null || !orders.Any())
+                {
+                    return NotFound($"No orders found for user with ID {userId}");
+                }
+
+                // Trả về kết quả nếu có đơn hàng
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi nếu có
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpDelete("{OrderID}")]
         public async Task<IActionResult> DeleteOrder(int OrderID)
         {
@@ -88,6 +114,17 @@ namespace GymSport.Controllers
                 return StatusCode(500, new { isSuccess = false, message = $"Internal server error: {ex.Message}" });
             }
         }
+        [HttpPost("ToggleActive")]
+        public async Task<IActionResult> ToggleActive([FromQuery] int orderId, [FromQuery] string newStatus)
+        {
+            var result = await _orderRepository.ToggleOrderStatusActiveAsync(orderId, newStatus);
+            if (!result.Success)
+            {
+                return BadRequest(new { message = result.Message });
+            }
+            return Ok(result);
+        }
+
 
     }
 }

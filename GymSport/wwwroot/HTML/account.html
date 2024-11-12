@@ -15,23 +15,148 @@
 
 
     <title>GymSport</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .tab-menu {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f4f4;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+            .tab-menu button {
+                background-color: transparent;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+
+                .tab-menu button.active {
+                    border-bottom: 3px solid black;
+                    color: black;
+                }
+
+        .content-section {
+            display: none;
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+            .content-section.active {
+                display: block;
+            }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        .update-btn, .log_out {
+            width: 100%;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .purchase-item, .tracking-item {
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+        }
+
+            .purchase-item img, .tracking-item img {
+                width: 80px;
+                height: 80px;
+                border-radius: 8px;
+                margin-right: 15px;
+            }
+
+        .purchase-details, .tracking-details {
+            flex: 1;
+        }
+
+            .purchase-details h4, .tracking-details h4 {
+                margin: 0;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .purchase-details p, .tracking-details p {
+                margin: 5px 0;
+                color: #555;
+            }
+
+        .status {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+    <script>
+        function openTab(tabName) {
+            // Hide all content sections
+            const sections = document.getElementsByClassName("content-section");
+            for (let i = 0; i < sections.length; i++) {
+                sections[i].classList.remove("active");
+            }
+
+            // Remove active class from all buttons
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            // Show the selected tab and activate the button
+            document.getElementById(tabName).classList.add("active");
+            document.getElementById(tabName + "-btn").classList.add("active");
+        }
+    </script>
 </head>
-<body>
+
+<body onload="openTab('account-info')">
+
 
 
     <!--Thanh menu đầu -->
     <div class="container_menu_top">
         <div class="menu_icon" onclick="toggleMenu()">&#9776;</div>
         <ul class="menu_top">
-            <li class="menu_top_edit"><a class="link_menu" href="#">Account  |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Accessibility Statement  |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Help  |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Email Sign Up  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Tài khoản  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Tuyên bố về khả năng tiếp cận  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Trợ giúp  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Đăng ký Email  |</a></li>
             <li class="menu_top_edit"><a class="link_menu" href="#">Blog  |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">US  ^</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">English ^</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Mỹ  ^</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Tiếng Việt ^</a></li>
         </ul>
-
     </div>
 
     <!--Thanh menu thứ 2-->
@@ -39,7 +164,7 @@
         <div class="logo">GYMSPORT</div>
 
         <div class="menu_select_product">
-            <a class="link_cate1" href="#">WOMEN'S</a>
+            <a class="link_cate1" href="#">DÀNH CHO NỮ</a>
             <div class="cate_hover">
 
                 <div class="section_1">
@@ -95,11 +220,11 @@
 
 
             </div>
-            <a class="link_cate2" href="#">MEN'S</a>
+            <a class="link_cate2" href="#">DÀNH CHO NAM</a>
             <div class="cate_hover2">
 
                 <div class="section_1">
-                    <h3 class="legging">TRENDING</h3>
+                    <h3 class="legging">Đang thịnh hành</h3>
                     <ul class="list">
                         <li class="spc"> <a class="kegg" href="#">New Arrivals</a></li>
                         <li class="spc"><a class="kegg" href="#">Shop The Look-LIFT:NYC</a></li>
@@ -114,7 +239,7 @@
                 <div class="section_1">
                     <h3 class="legging">Product</h3>
                     <ul class="list">
-                        <li class="spc"> <a class="kegg" href="product.html">All Product</a></li>
+                        <li class="spc"> <a class="kegg" href="product.html">Tất cả sản phẩm</a></li>
                         <li class="spc"><a class="kegg" href="#">Shorts</a></li>
                         <li class="spc"><a class="kegg" href="#">T-Shirts & Tops</a></li>
                         <li class="spc"><a class="kegg" href="#">Jogger & Sweatpants</a></li>
@@ -131,9 +256,9 @@
 
                 </div>
                 <div class="section_1">
-                    <h3 class="legging">Accessories</h3>
+                    <a class="link_cate3" href="#">Phụ kiện</a>
                     <ul class="list">
-                        <li class="spc"> <a class="kegg" href="#">All Accessories</a></li>
+                        <li class="spc"> <a class="kegg" href="#">Tất cả phụ kiện</a></li>
 
                     </ul>
 
@@ -143,11 +268,11 @@
 
 
             </div>
-            <a class="link_cate3" href="#">ACCESSORIES</a>
+            <a class="link_cate3" href="#">Phụ kiện</a>
             <div class="cate_hover3">
 
                 <div class="section_1">
-                    <h3 class="legging">TRENDING</h3>
+                    <h3 class="legging">Đang thịnh hành</h3>
                     <ul class="list">
                         <li class="spc"> <a class="kegg" href="#">New Arrivals</a></li>
                         <li class="spc"><a class="kegg" href="#">Shop The Look-LIFT:NYC</a></li>
@@ -160,7 +285,7 @@
                 </div>
 
                 <div class="section_1">
-                    <h3 class="legging">FOOTWEAR</h3>
+                    <h3 class="legging">Giày dép</h3>
                     <ul class="list">
                         <li class="spc"> <a class="kegg" href="#">All Slides</a></li>
 
@@ -168,9 +293,9 @@
 
                 </div>
                 <div class="section_1">
-                    <h3 class="legging">HEADWEAR</h3>
+                    <h3 class="legging">Mũ</h3>
                     <ul class="list">
-                        <li class="spc"> <a class="kegg" href="#">All HeadWear</a></li>
+                        <li class="spc"> <a class="kegg" href="#">Tất cả mũ</a></li>
                         <li class="spc"> <a class="kegg" href="#">Caps</a></li>
                         <li class="spc"> <a class="kegg" href="#">Beanies</a></li>
 
@@ -180,9 +305,9 @@
                 </div>
 
                 <div class="section_1">
-                    <h3 class="legging">ACCESSORIES SALE</h3>
+                    <h3 class="legging">Phụ kiện giảm giá</h3>
                     <ul class="list">
-                        <li class="spc"> <a class="kegg" href="#">All Accessories</a></li>
+                        <li class="spc"> <a class="kegg" href="#">Tất cả phụ kiện</a></li>
 
                     </ul>
 
@@ -227,82 +352,118 @@
 
 
 
-    <div class="titlee">
-        <h1 style="text-align: center;">YOUR GYMSPORT ACCOUNT</h1>
-    </div>
-    <div class="formm">
-        <div style="width:100%">
-            <label for="firstname">FirstName</label>
-            <input type="text" id="firstname" placeholder="Enter first name" required>
-        </div>
-        <div style="width:100%">
-            <label for="lastname">LastName</label>
-            <input type="text" id="lastname" placeholder="Enter last name" required>
-        </div>
-        <div style="width:100%">
-            <label for="email-update">Email Address</label>
-            <input type="email" id="email-update" placeholder="Enter email address" required>
-        </div>
-        <div style="width:100%">
-            <label for="password-update">Password</label>
-            <input type="password" id="password-update" placeholder="Enter password" required>
-        </div>
-        <button type="submit" class="update-btn">Update Infor</button>
-        <button class="log_out">Log out</button>
+    <!-- Tab Menu -->
+    <div class="tab-menu">
+        <button id="account-info-btn" class="tab-btn active" onclick="openTab('account-info')">Thông tin Tài khoản</button>
+        <button id="purchase-history-btn" class="tab-btn" onclick="openTab('purchase-history')">Lịch sử Mua hàng</button>
+        <button id="order-tracking-btn" class="tab-btn" onclick="openTab('order-tracking')">Tiến độ Giao hàng</button>
     </div>
 
-    <!--<div class="item-history">
-        <div class="product">
-            <img src="/src/cbum.png" />
-            <p>Name product</p>
-            <p>Size</p>
-            <p>Color</p>
-            <p>Price</p>
-            <p>Đã thanh toán</p>
+    <!-- Account Information Section -->
+    <div id="account-info" class="content-section active">
+        <h2>Thông tin Tài khoản</h2>
+        <div>
+            <label for="firstname">Tên</label>
+            <input type="text" id="firstname" placeholder="Nhập tên của bạn" required>
         </div>
-        <div class="product">
-            <img src="/src/cbum.png" />
-            <p>Name product</p>
-            <p>Size</p>
-            <p>Color</p>
-            <p>Price</p>
-            <p>Đã thanh toán</p>
+        <div>
+            <label for="lastname">Họ và lót</label>
+            <input type="text" id="lastname" placeholder="Nhập họ và lót" required>
         </div>
-    </div>-->
+        <div>
+            <label for="email-update">Email</label>
+            <input type="email" id="email-update" placeholder="Nhập địa chỉ email" required>
+        </div>
+        <div>
+            <label for="password-update">Mật khẩu</label>
+            <input type="password" id="password-update" placeholder="Nhập mật khẩu" required>
+        </div>
+        <button type="submit" class="update-btn">Cập nhật thông tin</button>
+        <button class="log_out">Đăng xuất</button>
+    </div>
+
+    <!-- Purchase History Section -->
+    <div id="purchase-history" class="content-section">
+        <h2>Lịch sử Mua hàng</h2>
+
+        <div class="purchase-item">
+            <img src="https://via.placeholder.com/80" alt="Product Image">
+            <div class="purchase-details">
+                <h4>Đơn #12345</h4>
+                <p>Ngày: 2024-10-11</p>
+                <p>Tổng: $120.00</p>
+                <p>Vật phẩm: T-shirt, Shorts, Water Bottle</p>
+            </div>
+        </div>
+
+        <div class="purchase-item">
+            <img src="https://via.placeholder.com/80" alt="Product Image">
+            <div class="purchase-details">
+                <h4>Đơn #12346</h4>
+                <p>Ngày: 2024-09-15</p>
+                <p>Tổng: $80.00</p>
+                <p>Vập phẩm: Gym Gloves, Protein Shake</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tracking Section -->
+    <div id="order-tracking" class="content-section">
+        <h2>Tiến độ Giao hàng</h2>
+
+        <div class="tracking-item">
+            <img src="https://via.placeholder.com/80" alt="Product Image">
+            <div class="tracking-details">
+                <h4>Đơn #12345</h4>
+                <p>Ngày: 2024-10-11</p>
+                <p>Trạng thái: <span class="status">Đang giao</span></p>
+            </div>
+        </div>
+
+        <div class="tracking-item">
+            <img src="https://via.placeholder.com/80" alt="Product Image">
+            <div class="tracking-details">
+                <h4>Đơn #12346</h4>
+                <p>Ngày: 2024-09-15</p>
+                <p>Trạng thái: <span class="status">Đã giao</span></p>
+            </div>
+        </div>
+
+    </div>
 
 
     <div class="foott">
         <div class="section_11">
-            <h3 class="legging">HELP</h3>
+            <h3 class="legging">Giúp đỡ</h3>
             <ul class="list">
                 <li class="spc"> <a class="kegg" href="#">FAQ</a></li>
-                <li class="spc"><a class="kegg" href="#">Delivery Information</a></li>
-                <li class="spc"><a class="kegg" href="#">Returns Policy</a></li>
-                <li class="spc"><a class="kegg" href="#">Make A Return</a></li>
-                <li class="spc"><a class="kegg" href="#">Orders</a></li>
-                <li class="spc"><a class="kegg" href="#">Submit a Fake</a></li>
+                <li class="spc"><a class="kegg" href="#">Thông tin giao hàng</a></li>
+                <li class="spc"><a class="kegg" href="#">Chính sách hoàn trả</a></li>
+                <li class="spc"><a class="kegg" href="#">Trả lại</a></li>
+                <li class="spc"><a class="kegg" href="#">Đơn hàng</a></li>
+                <li class="spc"><a class="kegg" href="#">Báo cáo hàng giả</a></li>
 
             </ul>
 
         </div>
         <div class="section_11">
-            <h3 class="legging">MY ACCOUNT</h3>
+            <h3 class="legging">Tài khoản của tôi</h3>
             <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Login</a></li>
-                <li class="spc"><a class="kegg" href="#">Register</a></li>
-
+                <li class="spc"> <a class="kegg" href="#">Đăng nhập</a></li>
+                <li class="spc"><a class="kegg" href="#">Đăng kí</a></li>
+            </ul>
 
         </div>
         <div class="section_11">
-            <h3 class="legging">PAGES</h3>
+            <h3 class="legging">Trang</h3>
             <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Refer aFriend</a></li>
-                <li class="spc"><a class="kegg" href="#">GymSportCentral</a></li>
-                <li class="spc"><a class="kegg" href="#">About Us</a></li>
-                <li class="spc"><a class="kegg" href="#">Careers</a></li>
-                <li class="spc"><a class="kegg" href="#">Student Discount</a></li>
-                <li class="spc"><a class="kegg" href="#">Military Discount</a></li>
-                <li class="spc"><a class="kegg" href="#">Accessibility Statement</a></li>
+                <li class="spc"> <a class="kegg" href="#">Giới thiệu bạn bè</a></li>
+                <li class="spc"><a class="kegg" href="#">Phòng Tập Thể Dục</a></li>
+                <li class="spc"><a class="kegg" href="#">Về chúng tôi</a></li>
+                <li class="spc"><a class="kegg" href="#">Sự nghiệp</a></li>
+                <li class="spc"><a class="kegg" href="#">Giảm giá cho sinh viên</a></li>
+                <li class="spc"><a class="kegg" href="#">Giảm giá cho quân đội</a></li>
+                <li class="spc"><a class="kegg" href="#">Khả năng truy cập</a></li>
 
             </ul>
 
@@ -310,8 +471,8 @@
     </div>
 
     <div class="foot_2">
-        <p class="z20241">© 2024 | Gymshark Limited | All Rights Reserved. | We Do Gym.</p>
-        <p class="z20242">Terms & Conditions | Terms of Use | Privacy Notice | Cookie Policy | Modern Slavery |  US |  English</p>
+        <p class="z20241">© 2024 | TNHH Gymsport | Mọi quyền được bảo lưu | Chúng tôi tập thể dục.</p>
+        <p class="z20242">Điều khoản & Điều kiện | Điều khoản sử dụng | Thông báo về quyền riêng tư | Chính sách cookie |  Mỹ |  Tiếng Anh</p>
     </div>
 
 

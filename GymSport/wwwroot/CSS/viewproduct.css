@@ -21,7 +21,7 @@
     .feedback .feedback-date {
         color: #888; /* Màu chữ xám cho ngày tháng */
         font-size: 0.9em; /* Kích thước chữ nhỏ hơn */
-        .leave-a-comment
+    }.leave-a-comment
 
 {
     margin: 20px 0;
@@ -30,7 +30,30 @@
     border-radius: 5px;
     background-color: #f9f9f9;
 }
+.rating {
+    margin: 10px 0;
+}
 
+.star-rating {
+    display: flex;
+    direction: row-reverse;
+    justify-content: flex-start;
+}
+
+.star {
+    font-size: 30px;
+    color: #ddd; /* Default color for unselected stars */
+    cursor: pointer;
+}
+
+    .star:hover,
+    .star-rating input:checked ~ .star {
+        color: #ffcc00; /* Color for selected stars */
+    }
+
+input[type="radio"] {
+    display: none; /* Hide radio buttons */
+}
 .leave-a-comment h3 {
     margin-top: 0;
 }
@@ -1191,4 +1214,60 @@ p {
 
     .checkout:hover {
         background-color: #4c80d8;
+    }
+
+/* Alert Box Styles */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 20px;
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    border-radius: 5px;
+    z-index: 9999;
+    transition: opacity 0.6s, visibility 0.6s; /* Transition for fade effect */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Close Button Styles */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+    .closebtn:hover {
+        color: #bbb;
+    }
+
+/* Fade Out Effect */
+.alert.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+/* Success Alert Box Styles */
+.success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 20px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border-radius: 5px;
+    z-index: 9999;
+    transition: opacity 0.6s, visibility 0.6s; /* Transition for fade effect */
+    opacity: 1;
+    visibility: visible;
+}
+
+    /* Fade Out Effect for Success Alert */
+    .success.fade-out {
+        opacity: 0;
+        visibility: hidden;
     }

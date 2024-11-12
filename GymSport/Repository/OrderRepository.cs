@@ -114,6 +114,40 @@ namespace GymSport.Repository
             return images;
         }
 
+        public async Task<IEnumerable<OrderDTO>> GetOrdersByUserId(int userId)
+        {
+            var orders = new List<OrderDTO>();
+
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = new SqlCommand("spGetOrdersByUserID", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            // Add the parameter for UserID
+            command.Parameters.AddWithValue("@UserID", userId);
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                orders.Add(new OrderDTO
+                {
+                    OrderID = reader.GetInt32(0),
+                    UserID = reader.GetInt32(1),
+                    firstname = reader.GetValueByColumn<string>("firstname"),
+                    lastname = reader.GetValueByColumn<string>("lastname"),
+                    OrderDate = reader.GetValueByColumn<DateTime?>("OrderDate"),
+                    OrderStatus = reader.GetValueByColumn<string>("OrderStatus"),
+                    ShippingAddress = reader.GetValueByColumn<string>("ShippingAddress"),
+                    PhoneNumber = reader.GetValueByColumn<string>("PhoneNumber"),
+                    TotalAmount = reader.GetDecimal(8)
+                });
+            }
+
+            return orders;
+        }
 
         public async Task<DeleteOrderResponseDTO> DeleteOrder(int orderID)
         {
@@ -144,6 +178,42 @@ namespace GymSport.Repository
             return responseDTO;
         }
 
+        public async Task<(bool Success, string Message)> ToggleOrderStatusActiveAsync(int orderId, string newStatus)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = new SqlCommand("spToggleOrderStatusActive", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            // Thêm các tham số đầu vào cho thủ tục lưu trữ
+            command.Parameters.AddWithValue("@OrderID", orderId);
+            command.Parameters.AddWithValue("@NewStatus", newStatus);
+
+            // Thiết lập tham số đầu ra để nhận mã trạng thái và thông báo từ thủ tục
+            var statusCode = new SqlParameter("@StatusCode", SqlDbType.Int)
+            {
+                Direction = ParameterDirection.Output
+            };
+            var message = new SqlParameter("@Message", SqlDbType.NVarChar, 255)
+            {
+                Direction = ParameterDirection.Output
+            };
+
+            command.Parameters.Add(statusCode);
+            command.Parameters.Add(message);
+
+            // Mở kết nối và thực thi thủ tục
+            await connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
+
+            // Lấy thông báo phản hồi từ thủ tục và kiểm tra thành công hay thất bại
+            var responseMessage = message.Value.ToString();
+            var success = (int)statusCode.Value == 0;
+
+            // Trả về kết quả
+            return (success, responseMessage);
+        }
 
 
 

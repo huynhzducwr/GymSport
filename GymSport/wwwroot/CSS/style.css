@@ -472,7 +472,8 @@ input[type="text"] {
 
 .textt {
     font-size: 15px;
-    font-weight: 200;
+    font-weight: 300;
+    color:#444444;
 }
 
 .title_foot {

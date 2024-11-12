@@ -44,6 +44,20 @@ namespace GymSport.Repository
                       ? null
                       : reader.GetString(reader.GetOrdinal("ProductName")),
 
+                    ImageURL = reader.IsDBNull(reader.GetOrdinal("ImageURL"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ImageURL")),
+                    ProductCategory = reader.IsDBNull(reader.GetOrdinal("ProductCategory"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ProductCategory")),
+                    ProductColor = reader.IsDBNull(reader.GetOrdinal("ProductColor"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ProductColor")),
+
+                    ProductSize = reader.IsDBNull(reader.GetOrdinal("ProductSize"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ProductSize")),
+
                     Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
 
                     // For UnitPrice, assume it's always a decimal
@@ -65,6 +79,69 @@ namespace GymSport.Repository
             
             return images;
         }
+
+        public async Task<IEnumerable<OrderDetailsDTO>> GetOrderDetailsByOrderID(int orderId)
+        {
+            var orderDetailsList = new List<OrderDetailsDTO>();
+
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = new SqlCommand("spGetOrderDetailsByOrderID", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            // Thêm tham số đầu vào cho OrderID
+            command.Parameters.AddWithValue("@OrderID", orderId);
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                orderDetailsList.Add(new OrderDetailsDTO
+                {
+                    OrderDetailID = reader.GetInt32(reader.GetOrdinal("OrderDetailID")),
+                    OrderID = reader.GetInt32(reader.GetOrdinal("OrderID")),
+                    ProductID = reader.GetInt32(reader.GetOrdinal("ProductID")),
+
+                    // Sử dụng hàm kiểm tra null cho ProductName
+                    ProductName = reader.IsDBNull(reader.GetOrdinal("ProductName"))
+                        ? null
+                        : reader.GetString(reader.GetOrdinal("ProductName")),
+                    ImageURL = reader.IsDBNull(reader.GetOrdinal("ImageURL"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ImageURL")),
+                    ProductCategory = reader.IsDBNull(reader.GetOrdinal("ProductCategory"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ProductCategory")),
+                    ProductColor = reader.IsDBNull(reader.GetOrdinal("ProductColor"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ProductColor")),
+
+                    ProductSize = reader.IsDBNull(reader.GetOrdinal("ProductSize"))
+                      ? null
+                      : reader.GetString(reader.GetOrdinal("ProductSize")),
+
+                    Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+
+                    // Đảm bảo UnitPrice luôn là kiểu decimal
+                    UnitPrice = reader.GetDecimal(reader.GetOrdinal("UnitPrice")),
+
+                    // Xử lý DateTime có thể là null
+                    OrderDate = (reader.GetValue(reader.GetOrdinal("OrderDate")) as DateTime?) ?? DateTime.MinValue,
+
+                    TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount")),
+
+                    // Xử lý OrderStatus với trường hợp null
+                    OrderStatus = reader.IsDBNull(reader.GetOrdinal("OrderStatus"))
+                        ? null
+                        : reader.GetString(reader.GetOrdinal("OrderStatus")),
+                });
+            }
+
+            return orderDetailsList;
+        }
+
 
 
         public async Task<DeleteOrderDetailsResponseDTO> DeleteOrderDetails(int OrderDetailID)

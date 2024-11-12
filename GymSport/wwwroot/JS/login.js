@@ -52,10 +52,10 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
             localStorage.setItem('userInfo', JSON.stringify(data.data));
 
 
-            alert('Đăng nhập thành công: ' + data.message);
+            showSuccessAlert('Đăng nhập thành công: ' + data.message);
             window.location.href = '/home';
         } else {
-            alert('Sai tên đăng nhập hoặc mật khẩu');
+            showAlert('Sai tên đăng nhập hoặc mật khẩu');
         }
 
     } catch (error) {
@@ -63,7 +63,49 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
     }
 });
 
+async function showAlert(message) {
+    const alertBox = document.getElementById('alert-box');
+    const alertMessage = document.getElementById('alert-message');
 
+    alertMessage.textContent = message; // Set the alert message
+    alertBox.style.display = 'block'; // Show the alert box
+
+    // Automatically hide the alert after 3 seconds
+    setTimeout(() => {
+        alertBox.classList.add('fade-out');
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+            alertBox.classList.remove('fade-out');
+        }, 600); // Match the transition duration
+    }, 1000); // Show for 3 seconds
+}
+
+async function closeAlert() {
+    const alertBox = document.getElementById('alert-box');
+    alertBox.style.display = 'none'; // Close the alert
+}
+
+async function showSuccessAlert(message) {
+    const successBox = document.getElementById('success-box');
+    const successMessage = document.getElementById('success-message');
+
+    successMessage.textContent = message; // Set the success message
+    successBox.style.display = 'block'; // Show the success box
+
+    // Automatically hide the success alert after 3 seconds
+    setTimeout(() => {
+        successBox.classList.add('fade-out');
+        setTimeout(() => {
+            successBox.style.display = 'none';
+            successBox.classList.remove('fade-out');
+        }, 600); // Match the transition duration
+    }, 1000); // Show for 3 seconds
+}
+
+async function closeSuccessAlert() {
+    const successBox = document.getElementById('success-box');
+    successBox.style.display = 'none'; // Close the success alert
+}
 
 
 // Xử lý gửi biểu mẫu đăng ký
@@ -86,14 +128,14 @@ document.getElementById('signup-form').addEventListener('submit', async (event) 
 
         const data = await response.json();
         if (data.data.isCreated) {
-            alert('Tạo tài khoản thành công');
+            showSuccessAlert('Tạo tài khoản thành công');
             // Có thể chuyển hướng đến trang đăng nhập hoặc trang khác
         } else {
-            alert('Tạo tài khoản thất bại: ' + data.message);
+            showAlert('Tạo tài khoản thất bại: ' + data.message);
         }
     } catch (error) {
         console.error('Lỗi:', error);
-        alert('Đã xảy ra lỗi trong quá trình tạo tài khoản.');
+        showAlert('Đã xảy ra lỗi trong quá trình tạo tài khoản.');
     }
 });
 

@@ -8,6 +8,62 @@
     align-items: center;
     overflow: hidden;
 }
+/* Alert Box Styles */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 20px;
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    border-radius: 5px;
+    z-index: 9999;
+    transition: opacity 0.6s, visibility 0.6s; /* Transition for fade effect */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Close Button Styles */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+    .closebtn:hover {
+        color: #bbb;
+    }
+
+/* Fade Out Effect */
+.alert.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+/* Success Alert Box Styles */
+.success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 20px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border-radius: 5px;
+    z-index: 9999;
+    transition: opacity 0.6s, visibility 0.6s; /* Transition for fade effect */
+    opacity: 1;
+    visibility: visible;
+}
+
+    /* Fade Out Effect for Success Alert */
+    .success.fade-out {
+        opacity: 0;
+        visibility: hidden;
+    }
+
 
 .left, .right {
     width: 50vw;

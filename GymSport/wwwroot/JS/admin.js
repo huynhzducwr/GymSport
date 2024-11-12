@@ -148,30 +148,6 @@ const pages = {
     </tbody>
 </table>
 
-<style>
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    #create-product-form {
-        margin: 20px 0;
-    }
-    #create-product-btn {
-        margin-bottom: 10px;
-    }
-    #search-product-input {
-        margin-right: 5px;
-    }
-</style>
 `
     },
     'don-hang': {
@@ -220,6 +196,7 @@ const pages = {
                     <th> ShippingAddress </th>
                     <th> PhoneNumber </th>
                     <th> TotalAmount $ </th>
+                    <th>   Update      </th>
                 </tr>
             </thead>
             <tbody id="productorder-table-body">
@@ -227,20 +204,7 @@ const pages = {
             </tbody>
         </table>
 
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
+        
     `
     },
     'payment': {
@@ -272,20 +236,7 @@ const pages = {
             </tbody>
         </table>
 
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
+        
     `
     },
     'paymentdetail': {
@@ -316,20 +267,7 @@ const pages = {
             </tbody>
         </table>
 
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
+        
     `
     },
 
@@ -384,20 +322,7 @@ const pages = {
                 </tbody>
             </table>
 
-            <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid black;
-                    padding: 8px;
-                    text-align: left;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-            </style>
+          
         `
 
     },
@@ -446,20 +371,7 @@ const pages = {
                 </tbody>
             </table>
 
-            <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid black;
-                    padding: 8px;
-                    text-align: left;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-            </style>
+         
         `
 
     },
@@ -508,20 +420,7 @@ const pages = {
                 </tbody>
             </table>
 
-            <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid black;
-                    padding: 8px;
-                    text-align: left;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-            </style>
+           
         `
     },
     'product-size': {
@@ -605,23 +504,7 @@ const pages = {
         </tbody>
     </table>
 
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        #add-productsize-form, #delete-productsize-form, #bulk-insert-productsize-form, #bulk-update-productsize-form {
-            margin-bottom: 20px;
-        }
-    </style>
+ 
         `
 
     },
@@ -708,23 +591,7 @@ const pages = {
         </tbody>
     </table>
 
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        #add-productcolor-form, #delete-productcolor-form, #bulk-insert-productcolor-form, #bulk-update-productcolor-form {
-            margin-bottom: 20px;
-        }
-    </style>
+ 
         `
 
     },
@@ -778,20 +645,7 @@ const pages = {
             </tbody>
         </table>
 
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
+     
     `
     },
     'product-inventory': {
@@ -842,20 +696,7 @@ const pages = {
             </tbody>
         </table>
 
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
+        
     `
     },
     'order-detail': {
@@ -904,20 +745,7 @@ const pages = {
             </tbody>
         </table>
 
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
+      
     `
     },
     
@@ -1165,6 +993,26 @@ async function toggleProductActive(userId, isActive) {
         }
     } catch (error) {
         console.error("Error toggling user active status:", error);
+    }
+}
+
+
+async function toggleOrderStatus(orderId, newStatus) {
+    console.log('OrderID:', orderId, 'NewStatus:', newStatus); // Log orderId and newStatus
+    try {
+        const response = await fetch(`/api/Order/ToggleActive?orderId=${orderId}&newStatus=${encodeURIComponent(newStatus)}`, {
+            method: 'POST', // POST nếu API của bạn yêu cầu
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        showSuccessAlert(result.message);
+            fetchOrders(); // Gọi lại hàm để load danh sách đơn hàng mới
+      
+    } catch (error) {
+        console.error("Error toggling order status:", error);
     }
 }
 
@@ -2026,49 +1874,54 @@ async function addBulkUpdateProductColor(productID, colorIDs) {
 }
 //order
 async function fetchOrder() {
+    // Giả sử fetchOrders là API để lấy danh sách đơn hàng
+    const response = await fetch('/api/Order/all');
+    const orders = await response.json();
 
+    const productOrderTableBody = document.getElementById('productorder-table-body');
+    productOrderTableBody.innerHTML = ''; // Xóa dữ liệu cũ
 
-    try {
-        const response = await fetch('/api/Order/all'); // Adjust your API URL if needed
-        const productImages = await response.json();
-        console.log(productImages);
-        if (Array.isArray(productImages)) {
-            renderProductOrder(productImages); // Call render only when data is ready
-        } else {
-            console.error('Fetched data is not an array:', productImages);
-        }
-    } catch (error) {
-        console.error('Error fetching product images:', error);
-    }
-}
-function renderProductOrder(productCategories) {
-    const productCategoryTableBody = document.getElementById('productorder-table-body');
-    productCategoryTableBody.innerHTML = ''; // Clear existing rows
+    orders.forEach(order => {
+        const row = document.createElement('tr');
 
-    if (Array.isArray(productCategories)) {
-        productCategories.forEach(productCategory => { // Rename for clarity
-            const row = `
-                <tr>
-                    <td>${productCategory.orderID}</td>    
-              
-                    <td>${productCategory.firstname}</td>
-                    <td>${productCategory.lastname}</td>    
-                    <td>${productCategory.orderDate}</td>
-                    <td>${productCategory.orderStatus}</td>
-                    <td>${productCategory.shippingAddress}</td>
-                    <td>${productCategory.phoneNumber}</td>
-                    <td>${productCategory.totalAmount}</td>    
+        row.innerHTML = `
+            <td>${order.orderID}</td>
+            <td>${order.firstname}</td>
+            <td>${order.lastname}</td>
+            <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+            <td>${order.orderStatus}</td>
+            <td>${order.shippingAddress}</td>
+            <td>${order.phoneNumber}</td>
+            <td>${order.totalAmount}</td>
+            <td>
+                <!-- Dropdown cho trạng thái mới -->
+                <select class="status-dropdown" data-order-id="${order.orderID}">
+                    <option value="Đang chờ lấy hàng">Đang chờ lấy hàng</option>
+                    <option value="Shipper đã nhận đơn hàng">Shipper đã nhận đơn hàng</option>
+                    <option value="Đang giao">Đang giao</option>
+                    <option value="Đã giao">Đã giao</option>
+                </select>
+                <button class="update-status-btn" data-order-id="${order.orderID}">Cập Nhật Trạng Thái</button>
+            </td>
+        `;
 
-                </tr>
-            
-            `;
-            productCategoryTableBody.insertAdjacentHTML('beforeend', row);
+        // Thêm dòng vào bảng
+        productOrderTableBody.appendChild(row);
+    });
+
+    // Thêm event listener cho tất cả các nút "Cập Nhật Trạng Thái"
+    document.querySelectorAll('.update-status-btn').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const orderId = button.getAttribute('data-order-id');
+            const dropdown = document.querySelector(`.status-dropdown[data-order-id="${orderId}"]`);
+            const newStatus = dropdown.value;
+
+            // Gọi hàm để cập nhật trạng thái
+            await toggleOrderStatus(orderId, newStatus);
         });
-    } else {
-        console.error('Data passed to renderProductImages is not an array:', productCategories);
-    }
+    });
 }
-//order detail
+
 async function fetchorderdetail() {
     try {
         const response = await fetch('/api/OrderDetails/all'); // Adjust your API URL if needed
@@ -2415,8 +2268,9 @@ async function fetchUsers(isActive = null) {
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json(); // Chuyển dữ liệu JSON từ API thành object
-            renderUsers(data.data);
             console.log(data);// Gọi hàm hiển thị dữ liệu lên bảng
+            renderUsers(data.data);
+
         } else {
             console.error("Error fetching users:", response.statusText);
         }

@@ -25,6 +25,114 @@
     }
 }
 
+
+async function fetchPopularProducts() {
+    const feedbackData = await fetchAllFeedBack();
+
+    if (!Array.isArray(feedbackData)) {
+        console.error("Feedback data is not an array:", feedbackData);
+        return;
+    }
+
+    // Aggregate high ratings (4 and 5 stars) for each product
+    const ratingCounts = {};
+    feedbackData.forEach(feedback => {
+        if (feedback.rating >= 4) { // Consider only 4 and 5-star ratings
+            if (!ratingCounts[feedback.productID]) {
+                ratingCounts[feedback.productID] = 0;
+            }
+            ratingCounts[feedback.productID]++;
+        }
+    });
+
+    // Sort products by the number of high ratings in descending order and get the top 4
+    const popularProductIDs = Object.entries(ratingCounts)
+        .sort((a, b) => b[1] - a[1]) // Sort by count of high ratings
+        .slice(0, 4) // Get top 4 products
+        .map(entry => parseInt(entry[0])); // Extract product IDs
+
+    // Fetch and display popular products based on high ratings
+    if (popularProductIDs.length > 0) {
+        fetchProductss(popularProductIDs); // Only popularProductIDs will be used for 'popular-pick'
+    } else {
+        console.log("No popular products based on feedback ratings.");
+    }
+}
+
+async function fetchProductss(topProductIDs) {
+    try {
+        const response = await fetch('/api/Product/All'); // Adjust the API endpoint
+        const result = await response.json(); // The API response includes the products in the "data" property
+
+        const products = result.data; // Access the array of products from the "data" property
+
+        console.log('Fetched products:', products); // Log the products array
+
+        if (Array.isArray(products)) {
+            const productImages = await fetchProductImages(); // Assuming you have a function for fetching product images
+            const productColors = await fetchProductColors(); // Assuming you have a function for fetching product colors
+
+            // Filter the products to only include the top products
+            const topProducts = products.filter(product => topProductIDs.includes(product.productID));
+
+            renderProducts(topProducts, productImages, productColors, 'popular-pick');
+            //const popularProducts = products.slice(0, 4);
+            //renderProducts(popularProducts, productImages, productColors, 'popular-pick');
+        } else {
+            console.error('Products fetched is not an array:', products);
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+}
+
+
+function showAlert(message) {
+    const alertBox = document.getElementById('alert-box');
+    const alertMessage = document.getElementById('alert-message');
+
+    alertMessage.textContent = message; // Set the alert message
+    alertBox.style.display = 'block'; // Show the alert box
+
+    // Automatically hide the alert after 3 seconds
+    setTimeout(() => {
+        alertBox.classList.add('fade-out');
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+            alertBox.classList.remove('fade-out');
+        }, 600); // Match the transition duration
+    }, 1000); // Show for 3 seconds
+}
+
+async function closeAlert() {
+    const alertBox = document.getElementById('alert-box');
+    alertBox.style.display = 'none'; // Close the alert
+}
+
+function showSuccessAlert(message) {
+    const successBox = document.getElementById('success-box');
+    const successMessage = document.getElementById('success-message');
+
+    successMessage.textContent = message; // Set the success message
+    successBox.style.display = 'block'; // Show the success box
+
+    // Automatically hide the success alert after 3 seconds
+    setTimeout(() => {
+        successBox.classList.add('fade-out');
+        setTimeout(() => {
+            successBox.style.display = 'none';
+            successBox.classList.remove('fade-out');
+        }, 600); // Match the transition duration
+    }, 1000); // Show for 3 seconds
+}
+
+async function closeSuccessAlert() {
+    const successBox = document.getElementById('success-box');
+    successBox.style.display = 'none'; // Close the success alert
+}
+
+
+
 // Hàm để lấy dữ liệu màu sắc
 async function fetchProductColors() {
     let url = '/api/ProductColor/GetAllProductColor';
@@ -186,13 +294,7 @@ function renderProducts(products, productImages, productColors, containerId) {
     });
 }
 
-let fetchedImages = [];
 
-async function initializeImages() {
-    fetchedImages = await fetchProductImages();
-}
-
-initializeImages();
 
 // Event listener for "favorite" functionality
 async function toggleFavorite(event) {
@@ -245,11 +347,35 @@ async function toggleFavorite(event) {
 }
 
 
+
+async function fetchAllFeedBack() {
+    const url = `/api/FeedBack/GetAllFeedBack`;
+
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Fetch feedback:", result);
+
+            return result.data;
+        } else {
+            console.error("Error fetching feedback:", response.statusText);
+            return []; // Return an empty array if an error occurs
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+        return [];
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchpaymentdetail();
     fetchProducts();
     fetchProductImages();
     fetchProductColors();
+    fetchPopularProducts(); 
+    fetchAllFeedBack();
 
     document.addEventListener("click", function (event) {
         if (event.target.classList.contains("heart-icon")) {

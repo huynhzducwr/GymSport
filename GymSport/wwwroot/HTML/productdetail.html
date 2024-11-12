@@ -14,6 +14,46 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
    
     <title>Chi tiết sản phẩm</title>
+    <style>
+  
+
+            .sp #productName1 {
+                font-size: 18px;
+                color: #000;
+                padding-bottom: 10px;
+                display: inline-block;
+            }
+
+            .sp #productCategory1 {
+                font-size: 14px;
+                color: #666;
+                padding-bottom: 10px;
+                display: inline-block;
+            }
+
+            .sp #productPrice1 {
+                font-size: 16px;
+                color: black;
+                font-weight: bold;
+                padding-bottom: 10px;
+                display: inline-block;
+            }
+
+            .sp #productDescription {
+                cursor: pointer;
+                font-size: 14px;
+                color: black;
+                font-weight: bold;
+                margin-top: 20px;
+                display: inline-block;
+                transition: color 0.3s ease;
+            }
+
+                .sp #productDescription:hover {
+                    color: #0056b3; /* Đổi màu khi hover */
+                }
+
+    </style>
 </head>
 
 
@@ -23,15 +63,14 @@
     <div class="container_menu_top">
         <div class="menu_icon" onclick="toggleMenu()">&#9776;</div>
         <ul class="menu_top">
-            <li class="menu_top_edit"><a class="link_menu" href="#">Account |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Accessibility Statement |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Help |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Email Sign Up |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">Blog |</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">US ^</a></li>
-            <li class="menu_top_edit"><a class="link_menu" href="#">English ^</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Tài khoản  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Tuyên bố về khả năng tiếp cận  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Trợ giúp  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Đăng ký Email  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Blog  |</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Mỹ  ^</a></li>
+            <li class="menu_top_edit"><a class="link_menu" href="#">Tiếng Việt ^</a></li>
         </ul>
-
     </div>
 
     <!--Thanh menu thứ 2-->
@@ -41,9 +80,9 @@
         </div>
 
         <div class="menu_select_product">
-            <a class="link_cate" id="hoverWomens" href="#">WOMEN'S</a>
-            <a class="link_cate" href="#">MEN'S</a>
-            <a class="link_cate" href="#">ACCESSORIES</a>
+            <a class="link_cate" id="hoverWomens" href="#">DÀNH CHO NỮ</a>
+            <a class="link_cate" href="#">DÀNH CHO NAM</a>
+            <a class="link_cate" href="#">PHỤ KIỆN</a>
         </div>
 
         <div class="search_order">
@@ -65,21 +104,21 @@
 
     <div class="Bag_order">
 
-        <h3 class="Your_bag">YOUR BAG <i class="fa-solid fa-xmark"></i></h3>
+        <h3 class="Your_bag" style="text-align:center">GIỎ HÀNG <i class="fa-solid fa-xmark"></i></h3>
 
 
 
 
         <img class="img_bag" src="/src/bag_logo.png">
-        <h3 class="bag_empty">YOUR BAG IS EMPTY</h3>
-        <h6 class="texxt1">There are no products in your bag</h6>
+        <h3 class="bag_empty">GIỎ HÀNG CỦA BẠN ĐANG TRỐNG</h3>
+        <h6 class="texxt1">Không có sản phẩm nào trong giỏ hàng</h6>
         <button class="Shop_btn">SHOP</button>
     </div>
     <script src="/JS/close_bag.js"></script>
 
 
     <div class="Bag_order_item">
-        <h3 class="Your_bag">YOUR BAG <i class="fa-solid fa-xmark"></i></h3>
+        <h3 class="Your_bag">GIỎ HÀNG CỦA BẠN <i class="fa-solid fa-xmark"></i></h3>
 
         <div class="bag_itemm">
             <div class="scrollable-content">
@@ -91,9 +130,9 @@
                     <div class="description_product">
                         <p class="boldz" id="bagProductName">Property Of Stringer</p>
                         <p id="bagProductCategory">Slim Fit</p>
-                        <p id="bagProductSize">Size: M</p>
+                        <p id="bagProductSize">Kích thước: M</p>
                         <p id="bagProductPrice" class="boldz">$30</p>
-                        <p id="bagProductColor">Black</p>
+                        <p id="bagProductColor">Màu sắc: Đen</p>
                         <div class="heart_delete">
                             <div class="heartt">
                                 <i class="fa-regular fa-heart"></i>
@@ -102,7 +141,7 @@
                                 <i class="fa-regular fa-trash-can"></i>
                             </div>
                             <div class="qtyy">
-                                <p> Qty: 1</p>
+                                <p> Số lượng: 1</p>
                             </div>
                         </div>
                     </div>
@@ -112,7 +151,7 @@
         </div>
 
         <div class="pricee">
-            <p style="font-weight: bold;"> Total </p>
+            <p style="font-weight: bold;"> Tổng cộng </p>
             <div class="css-price">
                 <p id="totalPrice">US$85.50</p>
             </div>
@@ -120,30 +159,24 @@
 
         <div class="form-container">
             <div class="form-group">
-                <label for="shipping-address">Shipping Address</label>
-                <input type="text" id="shipping-address" placeholder="Enter Shipping Address" required>
+                <label for="shipping-address">Địa chỉ giao hàng</label>
+                <input type="text" id="shipping-address" placeholder="Nhập địa chỉ giao hàng" required>
             </div>
             <div class="form-group">
-                <label for="phone-number">PhoneNumber</label>
-                <input type="text" id="phone-number" placeholder="Enter PhoneNumber" required>
+                <label for="phone-number">Số điện thoại</label>
+                <input type="text" id="phone-number" placeholder="Nhập số điện thoại" required>
             </div>
             <!-- Dropdown phương thức thanh toán -->
             <div class="form-group dropdown">
-                <button class="dropbtn">Select Payment Method</button>
+                <button class="dropbtn">Chọn phương thức thanh toán</button>
                 <div class="dropdown-content" id="payment-method-dropdown">
                     <!-- Phương thức thanh toán sẽ được tạo động bởi fetchPaymentMethod -->
                 </div>
             </div>
         </div>
-        <button class="checkout" onclick="handleCheckout()">CHECKOUT SECURELY</button>
-        <p id="login-warning" style="display:none; color:red;">You must be logged in to checkout!</p>
-
-
+        <button class="checkout" onclick="handleCheckout()">THANH TOÁN AN TOÀN</button>
+        <p id="login-warning" style="display:none; color:red;">Bạn phải đăng nhập để thanh toán!</p>
     </div>
-
-
-
-
 
 
 
@@ -193,15 +226,15 @@
                         </div>
                     </div>
                 </div>
-                <button class="add-to-bag">ADD TO BAG</button>
-                <h5 style="margin-right: 300px; padding: 10px;">GET THE LOOK</h5>
+                <button class="add-to-bag">THÊM VÀO GIỎ HÀNG</button>
+                <h5 style="margin-right: 220px; padding: 10px;">THÔNG TIN VỀ SẢN PHẨM</h5>
 
 
                 <div class="sp">
                     <span style="font-weight:bold; padding-bottom:10px;" id="productName1">PROPERTY OF STRINGER</span><br />
                     <span id="productCategory1" style="padding-bottom: 10px;">Slim Fit</span><br />
                     <span style="font-weight: bold; padding-bottom: 10px;" id="productPrice1">$30</span> <br />
-                    <span id="productDescription" style="cursor: pointer; font-weight: bold; padding-bottom: 10px;">Description ></span>
+                    <span id="productDescription" style="cursor: pointer; font-weight: bold; padding-bottom: 10px; margin-top:20px;">CHI TIẾT SẢN PHẨM ></span>
                     <span id="description" style=" display: none">đâ</span>
 
                 </div>
@@ -227,91 +260,116 @@
 
 
     <div class="container">
-        <h1>WHAT OUR COMMUNITY SAYS</h1>
+        <h1>CỘNG ĐỒNG CỦA CHÚNG TÔI NÓI GÌ</h1>
         <div class="summary">
             <span>⭐ 3.7</span>
-            <span>3 Reviews</span>
-            <p>All reviews are verified purchasers</p>
+            <span>3 Đánh giá</span>
+            <p>Tất cả đánh giá đều là từ người mua đã được xác minh</p>
         </div>
         <div class="rated">
             <div class="criteria">
-                <h3>Sizing</h3>
+                <h3>Kích cỡ</h3>
                 <div class="bar">
                     <div class="fill" style="width: 60%;"></div>
                 </div>
                 <div class="labels">
-                    <span>Tight</span>
-                    <span>Loose</span>
+                    <span>Chật</span>
+                    <span>Rộng</span>
                 </div>
             </div>
             <div class="criteria">
-                <h3>Length</h3>
+                <h3>Chiều dài</h3>
                 <div class="bar">
                     <div class="fill" style="width: 70%;"></div>
                 </div>
                 <div class="labels">
-                    <span>Short</span>
-                    <span>Long</span>
+                    <span>Ngắn</span>
+                    <span>Dài</span>
                 </div>
             </div>
             <div class="criteria">
-                <h3>Value</h3>
+                <h3>Giá trị</h3>
                 <div class="bar">
                     <div class="fill" style="width: 80%;"></div>
                 </div>
                 <div class="labels">
-                    <span>Poor</span>
-                    <span>Excellent</span>
+                    <span>Kém</span>
+                    <span>Tuyệt vời</span>
                 </div>
             </div>
             <div class="criteria">
-                <h3>Comfort</h3>
+                <h3>Sự thoải mái</h3>
                 <div class="bar">
                     <div class="fill" style="width: 75%;"></div>
                 </div>
                 <div class="labels">
-                    <span>Uncomfortable</span>
-                    <span>Comfortable</span>
+                    <span>Không thoải mái</span>
+                    <span>Thoải mái</span>
                 </div>
             </div>
             <div class="criteria">
-                <h3>Quality</h3>
+                <h3>Chất lượng</h3>
                 <div class="bar">
                     <div class="fill" style="width: 85%;"></div>
                 </div>
                 <div class="labels">
-                    <span>1 Star</span>
-                    <span>5 Star</span>
+                    <span>1 Sao</span>
+                    <span>5 Sao</span>
                 </div>
             </div>
         </div>
-        <button id="seeMoreButton">SEE MORE REVIEWS</button>
+        <button id="seeMoreButton">XEM THÊM ĐÁNH GIÁ</button>
         <div class="leave-a-comment">
-            <h3>Leave a Comment</h3>
+            <h3>Để lại bình luận</h3>
             <form id="commentForm">
-                <label for="customerComment">Comment:</label>
-                <textarea id="customerComment" required placeholder="Write your comment here..."></textarea>
+                <label for="customerComment">Bình luận:</label>
+                <textarea id="customerComment" required placeholder="Viết bình luận của bạn tại đây..."></textarea>
 
-                <button type="submit">Submit Comment</button>
+                <div class="rating">
+                    <label for="rating">Đánh giá:</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label for="star5" class="star">&#9733;</label>
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label for="star4" class="star">&#9733;</label>
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label for="star3" class="star">&#9733;</label>
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label for="star2" class="star">&#9733;</label>
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label for="star1" class="star">&#9733;</label>
+                    </div>
+                </div>
+
+                <button type="submit">Gửi bình luận</button>
             </form>
         </div>
 
         <div class="feedback" id="feedbackSection" style="display: none;">
-            <p style="font-weight:bold"><strong>Name customer</strong></p>
-            <p class="feedback-date">20 days ago</p>
-            <p class="feedback-comment">Comment about product</p>
+            <p style="font-weight:bold"><strong>Tên khách hàng</strong></p>
+            <p class="feedback-date">20 ngày trước</p>
+            <p class="ratingz">5 sao</p>
+            <p class="feedback-comment">Bình luận về sản phẩm</p>
         </div>
         <script>
             document.getElementById("seeMoreButton").addEventListener("click", function () {
                 const feedbackSection = document.getElementById("feedbackSection");
                 if (feedbackSection.style.display === "none") {
-                    feedbackSection.style.display = "block"; // Hiện feedback
+                    feedbackSection.style.display = "block"; // Hiện bình luận
                 } else {
-                    feedbackSection.style.display = "none"; // Ẩn feedback nếu nhấn lại
+                    feedbackSection.style.display = "none"; // Ẩn bình luận nếu nhấn lại
                 }
             });
         </script>
- 
+    </div>
+
+    <div id="alert-box" class="alert" style="display: none;">
+        <span class="closebtn" onclick="closeAlert()">&times;</span>
+        <strong>Warning!</strong> <span id="alert-message"></span>
+    </div>
+    <div id="success-box" class="alert success" style="display: none;">
+        <span class="closebtn" onclick="closeSuccessAlert()">&times;</span>
+        <strong>Success!</strong> <span id="success-message"></span>
     </div>
 
 
@@ -323,46 +381,40 @@
 
     <div class="foott">
         <div class="section_11">
-            <h3 class="legging">HELP</h3>
+            <h3 class="legging">TRỢ GIÚP</h3>
             <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">FAQ</a></li>
-                <li class="spc"><a class="kegg" href="#">Delivery Information</a></li>
-                <li class="spc"><a class="kegg" href="#">Returns Policy</a></li>
-                <li class="spc"><a class="kegg" href="#">Make A Return</a></li>
-                <li class="spc"><a class="kegg" href="#">Orders</a></li>
-                <li class="spc"><a class="kegg" href="#">Submit a Fake</a></li>
-
+                <li class="spc"> <a class="kegg" href="#">Câu hỏi thường gặp</a></li>
+                <li class="spc"><a class="kegg" href="#">Thông tin giao hàng</a></li>
+                <li class="spc"><a class="kegg" href="#">Chính sách trả hàng</a></li>
+                <li class="spc"><a class="kegg" href="#">Thực hiện trả hàng</a></li>
+                <li class="spc"><a class="kegg" href="#">Đơn hàng</a></li>
+                <li class="spc"><a class="kegg" href="#">Báo cáo hàng giả</a></li>
             </ul>
-
         </div>
         <div class="section_11">
-            <h3 class="legging">MY ACCOUNT</h3>
+            <h3 class="legging">TÀI KHOẢN CỦA TÔI</h3>
             <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Login</a></li>
-                <li class="spc"><a class="kegg" href="#">Register</a></li>
-                </ul>
-
+                <li class="spc"> <a class="kegg" href="#">Đăng nhập</a></li>
+                <li class="spc"><a class="kegg" href="#">Đăng ký</a></li>
+            </ul>
         </div>
         <div class="section_11">
-            <h3 class="legging">PAGES</h3>
+            <h3 class="legging">TRANG KHÁC</h3>
             <ul class="list">
-                <li class="spc"> <a class="kegg" href="#">Refer aFriend</a></li>
+                <li class="spc"> <a class="kegg" href="#">Giới thiệu bạn bè</a></li>
                 <li class="spc"><a class="kegg" href="#">GymSportCentral</a></li>
-                <li class="spc"><a class="kegg" href="#">About Us</a></li>
-                <li class="spc"><a class="kegg" href="#">Careers</a></li>
-                <li class="spc"><a class="kegg" href="#">Student Discount</a></li>
-                <li class="spc"><a class="kegg" href="#">Military Discount</a></li>
-                <li class="spc"><a class="kegg" href="#">Accessibility Statement</a></li>
-
+                <li class="spc"><a class="kegg" href="#">Về chúng tôi</a></li>
+                <li class="spc"><a class="kegg" href="#">Nghề nghiệp</a></li>
+                <li class="spc"><a class="kegg" href="#">Giảm giá cho sinh viên</a></li>
+                <li class="spc"><a class="kegg" href="#">Giảm giá cho quân nhân</a></li>
+                <li class="spc"><a class="kegg" href="#">Tuyên bố về khả năng tiếp cận</a></li>
             </ul>
-
         </div>
     </div>
+
     <div class="foot_2">
-        <p class="z20241">© 2024 | Gymshark Limited | All Rights Reserved. | We Do Gym.</p>
-        <p class="z20242">
-            Terms & Conditions | Terms of Use | Privacy Notice | Cookie Policy | Modern Slavery | US | English
-        </p>
+        <p class="z20241">© 2024 | Gymshark Limited | Tất cả các quyền được bảo lưu. | Chúng tôi đam mê Gym.</p>
+        <p class="z20242">Điều khoản & Điều kiện | Điều khoản sử dụng | Chính sách cookie  | Mỹ | Tiếng Việt</p>
     </div>
     <script src="/JS/script.js"></script>
     <script src="/JS/script2.js"></script>

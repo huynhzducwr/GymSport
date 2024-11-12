@@ -33,6 +33,30 @@ namespace GymSport.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("details/{orderId}")]
+        public async Task<IActionResult> GetOrderDetailsByOrderID(int orderId)
+        {
+            try
+            {
+                // Gọi phương thức trong repository để lấy chi tiết đơn hàng dựa trên orderId
+                var orderDetails = await _OrderDetailsRepository.GetOrderDetailsByOrderID(orderId);
+
+                // Kiểm tra nếu không có chi tiết nào được tìm thấy
+                if (orderDetails == null || !orderDetails.Any())
+                {
+                    return NotFound($"No order details found for order with ID {orderId}");
+                }
+
+                // Trả về kết quả nếu có chi tiết đơn hàng
+                return Ok(orderDetails);
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi nếu có
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         [HttpDelete("{OrderDetailID}")]
         public async Task<IActionResult> DeleteOrderDetail(int OrderDetailID)
         {

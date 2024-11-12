@@ -83,3 +83,81 @@ header {
     padding: 20px;
     border-radius: 8px;
 }
+/* Cài đặt chung cho nút */
+button {
+    margin: 3px;
+    padding: 8px 16px; /* Giảm padding để nút nhỏ hơn */
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px; /* Giảm kích thước font */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    button:hover {
+        background-color: cornflowerblue;
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+
+/* Cài đặt cho các input */
+input[type="text"],
+input[type="number"],
+select {
+    margin: 3px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+input::placeholder {
+    color: #aaa;
+}
+
+/* Căn chỉnh khoảng cách giữa các form và bảng */
+.form-group, .table-container {
+    margin-bottom: 20px;
+}
+
+/* Phong cách bảng */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f7f7f7;
+    color: #333;
+    font-weight: bold;
+}
+
+td {
+    background-color: #fff;
+}
+
+tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}

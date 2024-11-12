@@ -14,21 +14,22 @@ namespace GymSport.Repository
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<GiveAFeedBackResponseDTO> GiveFeedback(GiveAFeedBackDTO request) // Hàm gửi phản hồi với tham số là CreateFeedbackDTO
+        public async Task<GiveAFeedBackResponseDTO> GiveFeedback(GiveAFeedBackDTO request)
         {
-           GiveAFeedBackResponseDTO createFeedbackResponseDTO = new GiveAFeedBackResponseDTO();
-            using var connection = _connectionFactory.CreateConnection(); // Tạo kết nối tới database
-            var command = new SqlCommand("spSubmitProductFeedback", connection) // Liên kết tới stored procedure
+            GiveAFeedBackResponseDTO createFeedbackResponseDTO = new GiveAFeedBackResponseDTO();
+            using var connection = _connectionFactory.CreateConnection(); // Create a connection to the database
+            var command = new SqlCommand("spSubmitProductFeedback", connection) // Link to stored procedure
             {
                 CommandType = CommandType.StoredProcedure
             };
 
-            // Gán các tham số cho stored procedure
+            // Assign parameters for the stored procedure
             command.Parameters.AddWithValue("@UserID", request.UserID);
             command.Parameters.AddWithValue("@ProductID", request.ProductID);
+            command.Parameters.AddWithValue("@Rating", request.Rating); // Add Rating parameter
             command.Parameters.AddWithValue("@Comment", request.Comment);
 
-            // Khai báo các tham số đầu ra
+            // Declare output parameters
             var outputFeedbackID = new SqlParameter("@FeedbackID", SqlDbType.Int)
             {
                 Direction = ParameterDirection.Output
@@ -42,36 +43,36 @@ namespace GymSport.Repository
                 Direction = ParameterDirection.Output
             };
 
-            // Thêm các tham số đầu ra vào lệnh
+            // Add output parameters to command
             command.Parameters.Add(outputFeedbackID);
             command.Parameters.Add(outputStatusCode);
             command.Parameters.Add(outputMessage);
 
             try
             {
-                await connection.OpenAsync(); // Mở kết nối
-                await command.ExecuteNonQueryAsync(); // Thực thi lệnh
+                await connection.OpenAsync(); // Open connection
+                await command.ExecuteNonQueryAsync(); // Execute command
 
-                // Kiểm tra StatusCode trả về từ procedure
-                if ((int)outputStatusCode.Value == 0) // Thành công
+                // Check the StatusCode returned from the procedure
+                if ((int)outputStatusCode.Value == 0) // Success
                 {
                     createFeedbackResponseDTO.FeedBackID = (int)outputFeedbackID.Value;
                     createFeedbackResponseDTO.Message = outputMessage.Value.ToString();
                     createFeedbackResponseDTO.IsSuccess = true;
                 }
-                else // Không thành công
+                else // Not successful
                 {
                     createFeedbackResponseDTO.Message = outputMessage.Value.ToString();
                     createFeedbackResponseDTO.IsSuccess = false;
                 }
 
-                return createFeedbackResponseDTO; // Trả về DTO với kết quả
+                return createFeedbackResponseDTO; // Return DTO with the result
             }
-            catch (SqlException ex) // Bắt lỗi
+            catch (SqlException ex) // Catch errors
             {
                 createFeedbackResponseDTO.Message = ex.Message;
                 createFeedbackResponseDTO.IsSuccess = false;
-                return createFeedbackResponseDTO; // Trả về DTO với thông tin lỗi
+                return createFeedbackResponseDTO; // Return DTO with error information
             }
         }
 
@@ -95,6 +96,7 @@ namespace GymSport.Repository
                     FeedbackID = reader.GetInt32(reader.GetOrdinal("FeedbackID")),
                     Comment = reader.GetString(reader.GetOrdinal("Comment")),
                     FeedbackDate = reader.GetDateTime(reader.GetOrdinal("FeedbackDate")),
+                    Rating = reader.GetInt32(reader.GetOrdinal("Rating")),
                     UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
                     LastName = reader.GetString(reader.GetOrdinal("lastname")),
                     ProductID = reader.GetInt32(reader.GetOrdinal("ProductID"))
@@ -126,6 +128,7 @@ namespace GymSport.Repository
                     FeedbackID = reader.GetInt32(reader.GetOrdinal("FeedbackID")),
                     Comment = reader.GetString(reader.GetOrdinal("Comment")),
                     FeedbackDate = reader.GetDateTime(reader.GetOrdinal("FeedbackDate")),
+                    Rating = reader.GetInt32(reader.GetOrdinal("Rating")),
                     UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
                     LastName = reader.GetString(reader.GetOrdinal("lastname"))
                     // ProductID không cần thêm vào FeedbackDTO ở đây nếu không được trả về từ procedure

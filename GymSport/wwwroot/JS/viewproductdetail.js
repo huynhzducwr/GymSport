@@ -16,20 +16,29 @@
     }
 }
 async function submitFeedback(event, productId) {
-    event.preventDefault(); // Ngăn chặn hành động mặc định của form
+    event.preventDefault(); // Prevent the form's default submission action
 
     const url = '/api/FeedBack/AddFeedback';
 
-    // Lấy thông tin userID từ local storage
+    // Retrieve userID from local storage
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const userID = userInfo ? userInfo.userID : null; // Gán userID từ local storage
+    const userID = userInfo ? userInfo.userID : null; // Assign userID from local storage if available
 
+    // Retrieve the comment and rating values
     const comment = document.getElementById("customerComment").value;
+    const rating = document.querySelector('input[name="rating"]:checked')?.value; // Get selected rating value
 
+    if (!rating) {
+        showAlert("Please select a rating."); // Ensure a rating is selected
+        return;
+    }
+
+    // Construct feedback data with the added rating
     const feedbackData = {
-        UserID: userID, // Sử dụng userID từ local storage
-        ProductID: productId, // Sử dụng productId từ URL
-        Comment: comment
+        UserID: userID, // Use userID from local storage
+        ProductID: productId, // Use productId from function argument
+        Comment: comment,
+        Rating: rating // Include rating in feedback data
     };
 
     try {
@@ -45,23 +54,69 @@ async function submitFeedback(event, productId) {
         console.log("Submit feedback result:", result);
 
         if (result.success) {
-            // Hiển thị thông báo thành công
-            alert(result.message);
-            // Xóa nội dung trường nhập bình luận
+            // Display success message
+            showSuccessAlert(result.message);
+            // Clear comment and rating inputs
             document.getElementById("customerComment").value = '';
+            document.querySelector('input[name="rating"]:checked').checked = false;
+            fetchAllFeedBack(productId);
         } else {
-            // Hiển thị thông báo lỗi
-            alert(result.message);
+            // Display error message
+            showAlert(result.message);
         }
     } catch (error) {
         console.error("Error submitting feedback:", error);
-        alert("Đã xảy ra lỗi khi gửi phản hồi. Vui lòng thử lại.");
+        alert("An error occurred while submitting feedback. Please try again.");
     }
 }
 
-async function fetchAllFeedBack(productId) { // Thêm productId làm tham số
-    const url = `/api/FeedBack/GetFeedbacksByProductId/${productId}`; // Gọi API với productId
 
+async function showAlert(message) {
+    const alertBox = document.getElementById('alert-box');
+    const alertMessage = document.getElementById('alert-message');
+
+    alertMessage.textContent = message; // Set the alert message
+    alertBox.style.display = 'block'; // Show the alert box
+
+    // Automatically hide the alert after 3 seconds
+    setTimeout(() => {
+        alertBox.classList.add('fade-out');
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+            alertBox.classList.remove('fade-out');
+        }, 600); // Match the transition duration
+    }, 1000); // Show for 3 seconds
+}
+
+async function closeAlert() {
+    const alertBox = document.getElementById('alert-box');
+    alertBox.style.display = 'none'; // Close the alert
+}
+
+async function showSuccessAlert(message) {
+    const successBox = document.getElementById('success-box');
+    const successMessage = document.getElementById('success-message');
+
+    successMessage.textContent = message; // Set the success message
+    successBox.style.display = 'block'; // Show the success box
+
+    // Automatically hide the success alert after 3 seconds
+    setTimeout(() => {
+        successBox.classList.add('fade-out');
+        setTimeout(() => {
+            successBox.style.display = 'none';
+            successBox.classList.remove('fade-out');
+        }, 600); // Match the transition duration
+    }, 1000); // Show for 3 seconds
+}
+
+async function closeSuccessAlert() {
+    const successBox = document.getElementById('success-box');
+    successBox.style.display = 'none'; // Close the success alert
+}
+
+async function fetchAllFeedBack(productId) {
+    const url = `/api/FeedBack/GetFeedbacksByProductId/${productId}`;
 
     try {
         const response = await fetch(url);
@@ -70,20 +125,21 @@ async function fetchAllFeedBack(productId) { // Thêm productId làm tham số
             console.log("Fetch comment:", result);
 
             const feedbackSection = document.getElementById('feedbackSection');
-            feedbackSection.style.display = 'block'; // Hiển thị feedback section
+            feedbackSection.style.display = 'block'; // Display feedback section
 
-            // Xóa hết các feedback cũ để tránh hiển thị trùng lặp
+            // Clear old feedback to avoid duplication
             feedbackSection.innerHTML = '';
 
-            // Kiểm tra xem có dữ liệu không và duyệt qua mảng feedback từ result.data
+            // Check if data exists and loop through feedback array from result.data
             if (result.data && Array.isArray(result.data)) {
                 result.data.forEach(feedback => {
                     const feedbackDiv = document.createElement('div');
                     feedbackDiv.classList.add('feedback-item');
 
-                    // Tạo các phần tử cho tên người dùng, ngày và bình luận
+                    // Create elements for user name, date, rating, and comment
                     const nameElement = document.createElement('p');
-                    nameElement.innerHTML = `<p style="font-weight: bold;">${feedback.lastName}</p>`;
+                    nameElement.style.fontWeight = 'bold';
+                    nameElement.innerHTML = `${feedback.lastName}`;
 
                     const dateElement = document.createElement('p');
                     dateElement.classList.add('feedback-date');
@@ -91,16 +147,25 @@ async function fetchAllFeedBack(productId) { // Thêm productId làm tham số
                     const daysAgo = Math.floor((new Date() - feedbackDate) / (1000 * 60 * 60 * 24));
                     dateElement.textContent = `${daysAgo} days ago`;
 
+                    const ratingElement = document.createElement('p');
+                    ratingElement.classList.add('ratingz');
+
+                    // Generate star icons based on the rating value
+                    const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating); // Filled and empty stars
+                    ratingElement.textContent = stars; // Set star icons as text content
+
+
                     const commentElement = document.createElement('p');
                     commentElement.classList.add('feedback-comment');
                     commentElement.textContent = feedback.comment;
 
-                    // Thêm các phần tử vào feedbackDiv
+                    // Append elements to feedbackDiv
                     feedbackDiv.appendChild(nameElement);
                     feedbackDiv.appendChild(dateElement);
+                    feedbackDiv.appendChild(ratingElement);
                     feedbackDiv.appendChild(commentElement);
 
-                    // Thêm feedbackDiv vào feedbackSection
+                    // Append feedbackDiv to feedbackSection
                     feedbackSection.appendChild(feedbackDiv);
                 });
             } else {
@@ -110,13 +175,14 @@ async function fetchAllFeedBack(productId) { // Thêm productId làm tham số
             return result.data;
         } else {
             console.error("Error fetching comment:", response.statusText);
-            return []; // Trả về mảng rỗng nếu có lỗi
+            return []; // Return an empty array if an error occurs
         }
     } catch (error) {
         console.error("Network error:", error);
         return [];
     }
 }
+
 
 async function loadProductImages(productId) {
     const url = '/api/Image/all'; // Đường dẫn API lấy tất cả hình ảnh
@@ -378,6 +444,16 @@ async function handleCheckout() {
                 }
 
             }
+            if (paymentMethodID == 5) {
+                const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.productPrice), 0).toFixed(2);
+                console.log(orderResponse.orderID);
+                console.log(totalAmount);
+
+                // Thay đổi đường dẫn để sử dụng "/html/payment.html"
+                window.location.href = `https://localhost:44326/html/payment.html?reservationID=${orderResponse.orderID}&totalAmount=${totalAmount}`;
+            }
+
+
 
         }
     } else {
@@ -623,32 +699,33 @@ addToBagButton.addEventListener('click', async function () {
 
     // Create a new item entry for the bag
     const newItemHTML = `
-        <div class="order_item">
-            <div class="img">
-                <a class="container_img" href="/productdetail/${product.productID}">
-                    <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${productName}">
-                </a>
-            </div>
-            <div class="description_product">
-                <p class="boldz" id="bagProductName">${productName}</p>
-                <p id="bagProductCategory">${productCategory}</p>
-                <p id="bagProductSize">Size: ${productSize}</p>
-                <p id="bagProductPrice" class="boldz">$${productPrice.toFixed(2)}</p>
-                <p id="bagProductColor">Color: ${productColor}</p>
-                <div class="heart_delete">
-                    <div class="heartt">
-                        <i class="fa-regular fa-heart"></i>
-                    </div>
-                    <div class="bin">
-                        <i class="fa-regular fa-trash-can"></i>
-                    </div>
-                    <div class="qtyy">
-                        <p> Qty: 1</p>
-                    </div>
+    <div class="order_item">
+        <div class="img">
+            <a class="container_img" href="/productdetail/${product.productID}">
+                <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${productName}">
+            </a>
+        </div>
+        <div class="description_product">
+            <p class="boldz" id="bagProductName">${productName}</p>
+            <p id="bagProductCategory">${productCategory}</p>
+            <p id="bagProductSize">Kích thước: ${productSize}</p>
+            <p id="bagProductPrice" class="boldz">$${productPrice.toFixed(2)}</p>
+            <p id="bagProductColor">Màu sắc: ${productColor}</p>
+            <div class="heart_delete">
+                <div class="heartt">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="bin">
+                    <i class="fa-regular fa-trash-can"></i>
+                </div>
+                <div class="qtyy">
+                    <p> Số lượng: 1</p>
                 </div>
             </div>
         </div>
-    `;
+    </div>
+`;
+
 
     // Append the new item to the existing items
     containerProduct.insertAdjacentHTML('beforeend', newItemHTML); // Append the new item
@@ -781,13 +858,19 @@ document.addEventListener('click', function (event) {
 });
 
 
-// Function to update the total price (example implementation)
+
+
+
 function updateTotalPrice() {
-    // You can add logic here to sum up all prices in the cart
     let total = 0;
     document.querySelectorAll('.Bag_order_item .description_product #bagProductPrice').forEach(priceElement => {
         const priceText = priceElement.textContent.replace('$', '');
         total += parseFloat(priceText);
     });
+
+    // Display the total in the UI
     document.querySelector('.pricee .css-price p').textContent = `US$${total.toFixed(2)}`;
+
+    // Save the total price to local storage
+    localStorage.setItem('totalPrice', total.toFixed(2));
 }

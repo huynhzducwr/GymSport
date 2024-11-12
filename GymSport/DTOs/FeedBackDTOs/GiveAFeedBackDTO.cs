@@ -10,6 +10,8 @@ namespace GymSport.DTOs.FeedBackDTOs
 
         [Required]
         public int UserID { get; set; }
+        [Required]
+        public int Rating {  get; set; }
 
         //[Range(1, 5, ErrorMessage = "Rating must be between 1 and 5.")]
         //public int Rating { get; set; }
