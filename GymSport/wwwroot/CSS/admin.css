@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #263544;
 }
 
 .logo img {
@@ -21,7 +21,7 @@ body {
 
 .sidebar {
     width: 250px;
-    background-color: #212327;
+    background-color: #2a2f62;
     color: rgb(255, 255, 255);
     padding: 20px;
 }
@@ -49,7 +49,7 @@ body {
         }
 
             .sidebar ul li:hover {
-                background-color: #ff0a0a;
+                background-color: #181a4d;
             }
 
 .main-content {
@@ -87,7 +87,7 @@ header {
 button {
     margin: 3px;
     padding: 8px 16px; /* Giảm padding để nút nhỏ hơn */
-    background-color: dodgerblue;
+    background-color: #309e72;
     color: white;
     border: none;
     border-radius: 4px;

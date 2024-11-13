@@ -39,5 +39,5 @@ document.querySelector('.log_out').addEventListener('click', () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userInfo');
    
-    window.location.href = '/login';
+    window.location.href = '/home';
 });

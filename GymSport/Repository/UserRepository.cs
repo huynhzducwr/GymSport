@@ -249,7 +249,7 @@ namespace GymSport.Repository
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.AddWithValue("@Email",login.Email);
+            command.Parameters.AddWithValue("@Email", login.Email);
 
             var passwordHashParam = new SqlParameter("@PasswordHash", SqlDbType.NVarChar, 255)
             {
@@ -261,28 +261,37 @@ namespace GymSport.Repository
                 Direction = ParameterDirection.Output
             };
 
+            var roleIdParam = new SqlParameter("@RoleID", SqlDbType.Int) // Thêm tham số đầu ra cho RoleID
+            {
+                Direction = ParameterDirection.Output
+            };
+
             var errorMessage = new SqlParameter("@ErrorMessage", SqlDbType.NVarChar, 255)
             {
                 Direction = ParameterDirection.Output
             };
 
             command.Parameters.Add(userIdParam);
+            command.Parameters.Add(roleIdParam); // Thêm RoleID vào danh sách tham số
             command.Parameters.Add(errorMessage);
             command.Parameters.Add(passwordHashParam);
 
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
 
-            var success = userIdParam.Value != DBNull.Value && (int)userIdParam.Value > 0;  
+            var success = userIdParam.Value != DBNull.Value && (int)userIdParam.Value > 0;
             if (success)
             {
                 string hashedPasswordFromDb = passwordHashParam.Value.ToString();
-                bool isPasswordCorrect =BCrypt.Net.BCrypt.Verify(login.Password, hashedPasswordFromDb);
+                bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(login.Password, hashedPasswordFromDb);
 
                 if (isPasswordCorrect)
                 {
                     var userID = Convert.ToInt32(userIdParam.Value);
+                    var roleID = roleIdParam.Value != DBNull.Value ? Convert.ToInt32(roleIdParam.Value) : 0; // Lấy giá trị RoleID nếu có
+
                     userLoginResponseDTO.UserID = userID;
+                    userLoginResponseDTO.RoleID = roleID; // Gán RoleID vào DTO
                     userLoginResponseDTO.isLogin = true;
                     userLoginResponseDTO.Message = "Login Successful";
                     return userLoginResponseDTO;
@@ -290,19 +299,17 @@ namespace GymSport.Repository
                 else
                 {
                     userLoginResponseDTO.isLogin = false;
-                    userLoginResponseDTO.Message = "Thong tin khong hop le";
+                    userLoginResponseDTO.Message = "Thông tin không hợp lệ";
                     return userLoginResponseDTO;
                 }
-  
-
             }
 
             var message = errorMessage.Value?.ToString();
             userLoginResponseDTO.isLogin = false;
             userLoginResponseDTO.Message = message;
             return userLoginResponseDTO;
-           
         }
+
 
         public async Task<(bool Success, string Message)> ToggleUserActiveAsync(int userId,bool isActive)
         {

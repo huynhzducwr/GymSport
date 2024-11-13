@@ -496,16 +496,16 @@ async function createOrders(cartItems, shippingAddress, phoneNumber, totalAmount
         if (response.ok) {
             const data = await response.json();
             console.log('Order Created:', data);
+            showSuccessAlert('Đặt hàng thành công');
             return data; // return response data from server
         } else {
             const error = await response.json();
-            console.error('Error creating Momo payment:', error);
-            alert('Error creating Momo payment. Status: ' + response.status + ' Message: ' + JSON.stringify(error));
+   
 
         }
     } catch (error) {
         console.error('Error creating order:', error);
-        alert('There was an error creating your order. Please try again.');
+        showAlert('There was an error creating your order. Please try again.');
     }
 }
 async function createMomoPayment(

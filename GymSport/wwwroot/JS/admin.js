@@ -2430,13 +2430,34 @@ async function toggleUserActive(userId, isActive) {
 
 
 
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+const roleID = userInfo ? userInfo.roleID : null;
 
-// Thêm sự kiện click cho mỗi mục <li>
-// Thêm sự kiện click cho mỗi mục <li>
+console.log("User roleID:", roleID); // Kiểm tra roleID đã lấy đúng chưa
+
+const allowedPagesForRole3 = [
+    'danhmuc-sanpham',
+    'san-pham',
+    'size',
+    'color',
+    'don-hang',
+    'product-image',
+    'product-color',
+    'product-size',
+    'product-inventory',
+    'order-detail',
+    'payment',
+    'paymentdetail'
+];
 menuItems.forEach(item => {
     item.addEventListener('click', () => {
         // Lấy giá trị của thuộc tính data-page
         const page = item.getAttribute('data-page');
+
+        if (roleID === 3 && !allowedPagesForRole3.includes(page)) {
+            item.style.display = 'none'; // Hoặc sử dụng item.classList.add('disabled') để chỉ vô hiệu hóa
+            return;
+        }
 
         // Cập nhật nội dung phần main-content
         mainContent.querySelector('header h1').textContent = pages[page].title;

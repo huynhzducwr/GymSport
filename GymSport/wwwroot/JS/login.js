@@ -45,15 +45,22 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
         const data = await response.json();
         console.log('Response data:', data);
-     
-        if (data.success) {
 
+        if (data.success) {
             localStorage.setItem('isLoggedIn', true);
             localStorage.setItem('userInfo', JSON.stringify(data.data));
 
-
             showSuccessAlert('Đăng nhập thành công: ' + data.message);
-            window.location.href = '/home';
+
+            // Điều hướng dựa trên RoleID
+            if (data.data.roleID === 1 || data.data.roleID === 3) {
+                window.location.href = '/admin';
+            } else if (data.data.roleID === 2) {
+                window.location.href = '/home';
+            } else {
+                // Điều hướng mặc định nếu RoleID không phải 1 hoặc 2
+                window.location.href = '/home';
+            }
         } else {
             showAlert('Sai tên đăng nhập hoặc mật khẩu');
         }
@@ -62,6 +69,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         console.error('Lỗi:', error);
     }
 });
+
 
 async function showAlert(message) {
     const alertBox = document.getElementById('alert-box');
