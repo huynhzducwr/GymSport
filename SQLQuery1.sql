@@ -1,4 +1,4 @@
-﻿Create database QLGymSport
+Create database QLGymSport
 
 
 use QLGymSport
@@ -143,6 +143,11 @@ ModifiedDate datetime,
 foreign key (RoleID) references UserRoles(RoleID)
 );
 
+
+Insert into UserRoles(RoleName,Description) Values
+('Admin','Administrtor with full access'),
+('User','User with limited access'),
+('Manager','seller with extended access');
 
 INSERT INTO Users (
     RoleID, Email, firstname, lastname, PasswordHash, 
@@ -559,19 +564,25 @@ ADD ShippingAddress NVARCHAR(255),
 	go
 
 ALTER TABLE Orders
-ALTER COLUMN city NVARCHAR(255);
+ADD city NVARCHAR(255);
+go
 
 ALTER TABLE Orders
-ALTER COLUMN province NVARCHAR(255);
+ADD province NVARCHAR(255);
+go
 
 ALTER TABLE Orders
-ALTER COLUMN first_name NVARCHAR(255);
+ADD first_name NVARCHAR(255);
+go
 
 ALTER TABLE Orders
-ALTER COLUMN last_name NVARCHAR(255);
+ADD last_name NVARCHAR(255);
+go
 
 ALTER TABLE Orders
-ALTER COLUMN postal_code NVARCHAR(20);
+ADD postal_code NVARCHAR(20);
+
+go
 
 
 CREATE TABLE OrderDetails (
@@ -682,10 +693,6 @@ references Accessories(AccessoriesID);
 
 
 
-Insert into UserRoles(RoleName,Description) Values
-('Admin','Administrtor with full access'),
-('User','User with limited access'),
-('Manager','seller with extended access');
 
 
 Insert into ProductCategory(ProductCategoryName,Description,CreatedBy,ModifiedBy) values
@@ -839,7 +846,7 @@ BEGIN
     END CATCH
 END;
 
-
+go
 
 create or alter procedure spRegisterUser
 @Email nvarchar(100),
@@ -2834,6 +2841,8 @@ GO
 
 
 EXEC spGetAllOrders;
+go
+
 
 
 	CREATE or alter PROCEDURE spGetOrdersByUserID
@@ -3012,6 +3021,7 @@ create table Merchant (
     IsActive bit null
 
 );
+go
 
 create table PaymentDestination(
     Id nvarchar(50) primary key, 
@@ -3023,6 +3033,8 @@ create table PaymentDestination(
     IsActive bit null,
     CONSTRAINT FK_PaymentDestination_Parent FOREIGN KEY (ParentId) REFERENCES PaymentDestination(Id) -- Self-referencing foreign key
 );
+go
+
 
 -- PaymentMOMO table with foreign keys to Merchant and PaymentDestination
 create table PaymentMOMO(
@@ -3053,6 +3065,7 @@ ADD UserID INT NULL,
 
 
 
+
 -- PaymentTransaction table with foreign key to PaymentMOMO
 create table PaymentTransaction(
     Id nvarchar(50) primary key, -- Removed NULL for the primary key
@@ -3065,7 +3078,7 @@ create table PaymentTransaction(
     CONSTRAINT FK_PaymentTransaction_PaymentMOMO FOREIGN KEY (PaymentId) REFERENCES PaymentMOMO(Id)
 );
 
-
+go
 
 create table PaymentSignature (
     Id nvarchar(50) primary key, 
@@ -3183,7 +3196,11 @@ END
 GO
 
 
+INSERT INTO Merchant (Id, MerchantName, MerchantWebLink, MerchantIpnUrl, MerchantReturnUrl, SecretKey, IsActive, CreatedBy, LastUpdatedBy, CreatedAt, LastUpdatedAt)
+VALUES 
+('Mer0dbcf13bd6de6f5eb8064b74cb2caa33', 'Momo Merchant', 'https://momo.vn', 'https://momo.vn/ipn', 'https://momo.vn/return', 'secret123', 1, 'admin', 'admin', GETDATE(), GETDATE());
 
+go
 
 --update merchant
 
@@ -3882,7 +3899,6 @@ BEGIN
     SET @Message = N'Cập nhật trạng thái đơn hàng thành công.';
 END;
 GO
-
 
 
 
