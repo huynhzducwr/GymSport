@@ -20,71 +20,89 @@ namespace GymSport.Repository
         {
             CreateOrderResponseDTO responseDTO = new CreateOrderResponseDTO();
 
-            // Chuyển đổi danh sách CartItems thành kiểu bảng OrderDetailType
-            var cartItemsTable = new DataTable();
-            cartItemsTable.Columns.Add("ProductID", typeof(int));
-            cartItemsTable.Columns.Add("Quantity", typeof(int));
-            cartItemsTable.Columns.Add("UnitPrice", typeof(decimal));
-            cartItemsTable.Columns.Add("ImageURL", typeof(string));
-            cartItemsTable.Columns.Add("ProductCategory", typeof(string));
-            cartItemsTable.Columns.Add("ProductColor", typeof(string));
-            cartItemsTable.Columns.Add("ProductName", typeof(string));
-            cartItemsTable.Columns.Add("ProductSize", typeof(string));
-
-            foreach (var item in orderDto.CartItems)
+            try
             {
-                cartItemsTable.Rows.Add(item.ProductID, item.Quantity, item.UnitPrice, item.ImageURL, item.ProductCategory, item.ProductColor, item.ProductName, item.ProductSize);
+                // Chuyển đổi danh sách CartItems thành kiểu bảng OrderDetailType
+                var cartItemsTable = new DataTable();
+                cartItemsTable.Columns.Add("ProductID", typeof(int));
+                cartItemsTable.Columns.Add("Quantity", typeof(int));
+                cartItemsTable.Columns.Add("UnitPrice", typeof(decimal));
+                cartItemsTable.Columns.Add("ImageURL", typeof(string));
+                cartItemsTable.Columns.Add("ProductCategory", typeof(string));
+                cartItemsTable.Columns.Add("ProductColor", typeof(string));
+                cartItemsTable.Columns.Add("ProductName", typeof(string));
+                cartItemsTable.Columns.Add("ProductSize", typeof(string));
+
+                foreach (var item in orderDto.CartItems)
+                {
+                    cartItemsTable.Rows.Add(item.ProductID, item.Quantity, item.UnitPrice, item.ImageURL, item.ProductCategory, item.ProductColor, item.ProductName, item.ProductSize);
+                }
+
+                using var connection = _connectionFactory.CreateConnection();
+                using var command = new SqlCommand("spCreateOrders", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                // Thêm các tham số đầu vào
+                command.Parameters.AddWithValue("@UserID", orderDto.UserID);
+                command.Parameters.AddWithValue("@ShippingAddress", orderDto.ShippingAddress);
+                command.Parameters.AddWithValue("@PhoneNumber", orderDto.PhoneNumber);
+                command.Parameters.AddWithValue("@TotalAmount", orderDto.TotalAmount);
+                command.Parameters.AddWithValue("@City", orderDto.City);
+                command.Parameters.AddWithValue("@Province", orderDto.Province);
+                command.Parameters.AddWithValue("@FirstName", orderDto.FirstName);
+                command.Parameters.AddWithValue("@LastName", orderDto.LastName);
+                command.Parameters.AddWithValue("@PostalCode", orderDto.PostalCode);
+
+                // Định dạng kiểu bảng cho CartItems
+                var cartItemsParam = command.Parameters.AddWithValue("@CartItems", cartItemsTable);
+                cartItemsParam.SqlDbType = SqlDbType.Structured;
+                cartItemsParam.TypeName = "dbo.OrderDetailType"; // Đảm bảo kiểu này khớp với SQL Server
+
+                // Thêm tham số đầu ra
+                var orderIDParam = new SqlParameter("@OrderID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(orderIDParam);
+
+                var successParam = new SqlParameter("@IsSuccess", SqlDbType.Bit)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(successParam);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                // Kiểm tra giá trị của tham số đầu ra
+                var isSuccess = (bool)successParam.Value;
+                if (isSuccess)
+                {
+                    responseDTO.Message = "Đơn hàng đã được tạo thành công.";
+                    responseDTO.IsSuccess = true;
+                    responseDTO.OrderID = (int)orderIDParam.Value;
+                }
+                else
+                {
+                    responseDTO.Message = "Không thành công.";
+                    responseDTO.IsSuccess = false;
+                }
             }
-
-            // Gọi stored procedure spCreateOrders
-            using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spCreateOrders", connection)
+            catch (Exception ex)
             {
-                CommandType = CommandType.StoredProcedure
-            };
-
-            command.Parameters.AddWithValue("@UserID", orderDto.UserID);
-            command.Parameters.AddWithValue("@ShippingAddress", orderDto.ShippingAddress);
-            command.Parameters.AddWithValue("@PhoneNumber", orderDto.PhoneNumber);
-            command.Parameters.AddWithValue("@TotalAmount", orderDto.TotalAmount);
-            command.Parameters.AddWithValue("@CartItems", cartItemsTable);
-
-            // Thêm tham số đầu ra cho OrderID và IsSuccess
-            var orderIDParam = new SqlParameter("@OrderID", SqlDbType.Int)
-            {
-                Direction = ParameterDirection.Output
-            };
-            command.Parameters.Add(orderIDParam);
-
-            var successParam = new SqlParameter("@IsSuccess", SqlDbType.Bit)
-            {
-                Direction = ParameterDirection.Output
-            };
-            command.Parameters.Add(successParam);
-
-            await connection.OpenAsync();
-            await command.ExecuteNonQueryAsync();
-
-            // Kiểm tra giá trị của tham số đầu ra
-            var isSuccess = (bool)successParam.Value;
-            if (isSuccess)
-            {
-                responseDTO.Message = "Đơn hàng đã được tạo thành công.";
-                responseDTO.IsSuccess = true;
-                responseDTO.OrderID = (int)orderIDParam.Value;  // Đặt OrderID vào DTO nếu cần
-            }
-            else
-            {
-                responseDTO.Message = "Không thành công";
+                responseDTO.Message = $"Lỗi hệ thống: {ex.Message}";
                 responseDTO.IsSuccess = false;
             }
 
             return responseDTO;
         }
 
+
         public async Task<IEnumerable<OrderDTO>> GetAllOrders()
         {
-            var images = new List<OrderDTO>();
+            var orders = new List<OrderDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
             using var command = new SqlCommand("spGetAllOrders", connection)
@@ -97,22 +115,26 @@ namespace GymSport.Repository
 
             while (await reader.ReadAsync())
             {
-                images.Add(new OrderDTO
+                orders.Add(new OrderDTO
                 {
                     OrderID = reader.GetInt32(0),
                     UserID = reader.GetInt32(1),
-                    firstname = reader.GetValueByColumn<string>("firstname"),
-                    lastname = reader.GetValueByColumn<string>("lastname"),
-                    OrderDate = reader.GetValueByColumn<DateTime?>("OrderDate"), // Using the generic method here
+                    FirstName = reader.GetValueByColumn<string>("first_name"),
+                    LastName = reader.GetValueByColumn<string>("last_name"),
+                    City = reader.GetValueByColumn<string>("city"),
+                    Province = reader.GetValueByColumn<string>("province"),
+                    PostalCode = reader.GetValueByColumn<string>("postal_code"),
+                    OrderDate = reader.GetValueByColumn<DateTime?>("OrderDate"),
                     OrderStatus = reader.GetValueByColumn<string>("OrderStatus"),
                     ShippingAddress = reader.GetValueByColumn<string>("ShippingAddress"),
                     PhoneNumber = reader.GetValueByColumn<string>("PhoneNumber"),
-                    TotalAmount = reader.GetDecimal(8),
+                    TotalAmount = reader.GetDecimal(10), // Đảm bảo đúng index
                 });
             }
 
-            return images;
+            return orders;
         }
+
 
         public async Task<IEnumerable<OrderDTO>> GetOrdersByUserId(int userId)
         {
@@ -124,7 +146,7 @@ namespace GymSport.Repository
                 CommandType = CommandType.StoredProcedure
             };
 
-            // Add the parameter for UserID
+            // Thêm tham số cho UserID
             command.Parameters.AddWithValue("@UserID", userId);
 
             await connection.OpenAsync();
@@ -136,13 +158,16 @@ namespace GymSport.Repository
                 {
                     OrderID = reader.GetInt32(0),
                     UserID = reader.GetInt32(1),
-                    firstname = reader.GetValueByColumn<string>("firstname"),
-                    lastname = reader.GetValueByColumn<string>("lastname"),
+                    FirstName = reader.GetValueByColumn<string>("first_name"),
+                    LastName = reader.GetValueByColumn<string>("last_name"),
+                    City = reader.GetValueByColumn<string>("city"),
+                    Province = reader.GetValueByColumn<string>("province"),
+                    PostalCode = reader.GetValueByColumn<string>("postal_code"),
                     OrderDate = reader.GetValueByColumn<DateTime?>("OrderDate"),
                     OrderStatus = reader.GetValueByColumn<string>("OrderStatus"),
                     ShippingAddress = reader.GetValueByColumn<string>("ShippingAddress"),
                     PhoneNumber = reader.GetValueByColumn<string>("PhoneNumber"),
-                    TotalAmount = reader.GetDecimal(8)
+                    TotalAmount = reader.GetDecimal(10) // TotalAmount là cột thứ 10 trong kết quả
                 });
             }
 

@@ -43,11 +43,13 @@ public class ImageRepository
                 CommandType = CommandType.StoredProcedure
             };
 
+            // Chỉ cần truyền đúng các tham số mà stored procedure yêu cầu
             command.Parameters.AddWithValue("@ProductID", uploadImageDTO.ProductID);
             command.Parameters.AddWithValue("@ImageURL", imageUrl);
-            command.Parameters.AddWithValue("@ProductName", uploadImageDTO.ProductName);
+
             await connection.OpenAsync();
             var result = await command.ExecuteScalarAsync();
+
 
             if (result != null)
             {

@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .infor {
+            width: 60%;
+            border-radius: 8px;
+            margin-right: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            width: 38%;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 65%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .form-row .form-group {
+            width: 48%;
+        }
+
+        .payment-method {
+            display: flex;
+            justify-content: space-between;
+            width: 65%;
+        }
+
+        .payment-method label {
+            display: flex;
+            align-items: center;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background: #218838;
+        }
+
+        .cart-items {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 30%;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .momo-icon {
+            width: 30px;
+            height: 30px;
+            margin-left: 10px;
+        }
+
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-details {
+            width: 50%;
+        }
+
+        .cart-item-details span {
+            display: block;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .cart-item-price {
+            width: 15%;
+            text-align: right;
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-top: 2px solid #ddd;
+            border-radius: 5px;
+            
+    
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            .form-group label,
+            .form-group input,
+            .form-group select {
+                width: 100%;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-item img {
+                margin-bottom: 10px;
+            }
+
+            .cart-item-details,
+            .cart-item-price {
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Order Form Section -->
+        <div class="infor">
+            <h2>Điền thông tin đặt hàng</h2>
+
+            <!-- Họ và Tên -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">Họ</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Tên</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Địa chỉ nhận hàng</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="city">Tỉnh</label>
+                <select id="city" name="city" required>
+                    <option value="" disabled selected>Chọn tỉnh</option>
+                    <option value="Hanoi">Hà Nội</option>
+                    <option value="HoChiMinh">Hồ Chí Minh</option>
+                    <option value="DaNang">Đà Nẵng</option>
+                    <option value="HaiPhong">Hải Phòng</option>
+                    <option value="CanTho">Cần Thơ</option>
+                    <option value="LamDong">Lâm Đồng</option>
+                    <!-- Add more cities as needed -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="province">Thành phố</label>
+                <select id="province" name="province" required>
+                    <option value="" disabled selected>Chọn thành phố</option>
+                    <option value="HaGiang">Hà Giang</option>
+                    <option value="BacGiang">Bắc Giang</option>
+                    <option value="BinhDuong">Bình Dương</option>
+                    <option value="DongNai">Đồng Nai</option>
+                    <option value="VinhPhuc">Vĩnh Phúc</option>
+                    <option value="LamDong">Lâm Đồng</option>
+                    <!-- Add more provinces as needed -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="postalCode">Mã bưu điện</label>
+                <input type="text" id="postalCode" name="postalCode" required>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentMethod">Phương thức thanh toán</label>
+                <div class="payment-method">
+                    <label>
+                        <input type="radio" name="paymentMethod" value="cash" required> Tiền mặt
+                    </label>
+                    <label>
+                        <input type="radio" name="paymentMethod" value="momo" required> Momo
+                        <img src="/images/momo.png" alt="Momo Icon" class="momo-icon">
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-order-btn">Submit Order</button>
+
+
+        </div>
+      
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be dynamically inserted here -->
+            <div class="cart-total">
+                <span><strong>Tổng số tiền:</strong> <span id="total-price"></span></span>
+            </div>
+        </div>
+         
+        
+        <!-- Cart Items Section -->
+     
+
+
+        <script>
+            // Get the shopping bag data from localStorage
+            const shoppingBag = JSON.parse(localStorage.getItem('shoppingBag')) || [];
+
+            // Get the container where cart items will be displayed
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+
+            let totalAmount = 0;
+
+            // Loop through the shoppingBag and create the HTML content for each item
+            shoppingBag.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+
+                // Create and insert the image
+                const itemImage = document.createElement('img');
+                itemImage.src = item.imageURL;
+                itemImage.alt = item.productName;
+
+                // Create and insert the item details
+                const itemDetails = document.createElement('div');
+                itemDetails.classList.add('cart-item-details');
+                itemDetails.innerHTML = `
+                            <span><strong>Product Name:</strong> ${item.productName}</span>
+                            <span><strong>Color:</strong> ${item.productColor}</span>
+                            <span><strong>Size:</strong> ${item.productSize}</span>
+                            <span><strong>Quantity:</strong> ${item.quantity}</span>
+                        `;
+
+                // Create and insert the item price
+                const itemPrice = document.createElement('div');
+                itemPrice.classList.add('cart-item-price');
+                itemPrice.innerHTML = `<span><strong>Price:</strong> $${parseFloat(item.productPrice).toFixed(2)}</span>`;
+
+                // Append image, details, and price to the cart item
+                cartItem.appendChild(itemImage);
+                cartItem.appendChild(itemDetails);
+                cartItem.appendChild(itemPrice);
+
+                // Add the cart item to the container
+                cartItemsContainer.appendChild(cartItem);
+
+                // Update the total price
+                totalAmount += parseFloat(item.productPrice) * item.quantity;
+            });
+
+            // Display the total price
+            totalPriceElement.textContent = `$${totalAmount.toFixed(2)}`;
+        </script>
+
+
+    </div>
+
+    <script>
+        // Map of cities and their associated provinces
+        const cityProvinces = {
+            'Hanoi': ['Hà Giang', 'Bắc Giang', 'Bắc Ninh', 'Hà Nam'],
+            'HoChiMinh': ['Bình Dương', 'Đồng Nai', 'Vũng Tàu', 'Long An'],
+            'DaNang': ['Quảng Nam', 'Quảng Ngãi', 'Thừa Thiên-Huế'],
+            'HaiPhong': ['Hải Dương', 'Hưng Yên', 'Quảng Ninh'],
+            'CanTho': ['Sóc Trăng', 'Vĩnh Long', 'Hậu Giang'],
+            'LamDong': ['Đà Lạt', 'Bảo Lộc', 'Đơn Dương', 'Lâm Hà']
+        };
+
+        // Event listener for city selection change
+        document.getElementById('city').addEventListener('change', function () {
+            const selectedCity = this.value;
+            const provinceDropdown = document.getElementById('province');
+            provinceDropdown.innerHTML = '<option value="" disabled selected>Chọn thành phố</option>'; // Clear existing options
+
+            // Populate the provinces based on the selected city
+            if (cityProvinces[selectedCity]) {
+                cityProvinces[selectedCity].forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province;
+                    option.textContent = province;
+                    provinceDropdown.appendChild(option);
+                });
+            }
+        });
+    </script>
+    <script src="/JS/viewproductdetail.js">
+</body>
+</html>

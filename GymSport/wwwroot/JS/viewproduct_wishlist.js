@@ -145,60 +145,61 @@ function renderProducts(products, productColors) {
 
         const productHTML = `
             <div class="product1">
+            <div>
                 <a class="container-img" href="/productdetail/${product.productID}">
                     <img class="edt_product" src="${product ? product.imageURL : '/src/default-image.png'}" alt="${product.productName}">
                 </a>
+                      <i class="fa-regular fa-heart heart-icon" data-product-id="${product.productID}"></i>
+                </div>
                 <p class="name_pro1">${product.productName}</p>
                 <p class="name_cate1">${product.productCategoryName || 'Thể loại'}</p>
                 <p class="name_color1">${colorData ? colorData.colorName : 'Màu sắc không xác định'}</p>
                 <p class="price1">$${product.price.toFixed(2)}</p>
 
                 <!-- Added data-product-id attribute here -->
-                <i class="fa-regular fa-heart heart-icon" data-product-id="${product.productID}"></i>
-            </div>
+          </div>
+         
+
 
 <style>
-    /* Định dạng chung cho sản phẩm */
- 
-    .product1 {
-        
-      
-    }
-     /* Định dạng cho container chứa hình ảnh */
-    .container-img {
-        display: block;
-        overflow: hidden;
-        width: 100%;
+/* Định dạng container ảnh */
 
+.container-img {
+    position: relative; /* Để chứa icon ở góc */
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
 
+.container-img img {
+    width: 100%;
+    height: 300px;
+    transition: transform 0.3s ease-in-out;
+}
 
-    }
+/* Hiệu ứng zoom khi hover */
+.container-img:hover img {
+    transform: scale(1.1);
+}
 
-    /* Định dạng cho hình ảnh bên trong container */
-    .container-img img {
-           width: 100%;
-            height: auto;
-                height: 300px;
-
-        transition: transform 0.3s ease-in-out; /* Tạo hiệu ứng mượt mà */
-
-    }
-
-    /* Hiệu ứng zoom khi di chuột vào container chứa ảnh */
-    .container-img:hover img {
-        transform: scale(1.1); /* Zoom hình lên 10% khi di chuột */
-    }
+/* Định dạng icon heart */
 .heart-icon {
-    font-size: 24px;
+    position: absolute;  /* Cố định vị trí trên ảnh */
+    top: 15px;  /* Khoảng cách từ trên xuống */
+    right: 15px; /* Khoảng cách từ phải qua */
+    font-size: 15px;
     color: gray;
     cursor: pointer;
     transition: color 0.3s ease;
+    background: rgba(255, 255, 255, 0.7); /* Nền mờ giúp nhìn rõ icon */
+    padding: 5px;
+    border-radius: 50%;
 }
 
+/* Khi được active */
 .heart-icon.active {
     color: gray;
 }
-   
 </style>
  
  

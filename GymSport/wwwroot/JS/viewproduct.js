@@ -230,61 +230,59 @@ function renderProducts(products, productImages, productColors, containerId) {
 
         // Tạo mã HTML cho sản phẩm
         const productHTML = `
-      <div class="product">
-    <a class="container-img1" href="/productdetail/${product.productID}">
-        <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${product.productName}">
-    </a>
+     <div class="product">
+    <div class="container-img1">
+        <a href="/productdetail/${product.productID}">
+            <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${product.productName}">
+        </a>
+        <i class="fa-regular fa-heart heart-icon"></i> <!-- Đưa icon vào trong container -->
+    </div>
     <p class="name_pro">${product.productName}</p>
     <p class="name_cate">${product.productCategoryName || 'Thể loại'}</p>
     <p class="name_color">${colorData ? colorData.colorName : 'Màu sắc không xác định'}</p>
     <p class="price">$${product.price.toFixed(2)}</p>
-      <i class="fa-regular fa-heart heart-icon"></i>
-
 </div>
 
 <style>
-    /* Định dạng chung cho sản phẩm */
- 
-    .product {
-        
-      
-    }
-     /* Định dạng cho container chứa hình ảnh */
-    .container-img1 {
-        display: block;
-        overflow: hidden;
-        width: 100%;
+/* Định dạng container ảnh */
+.container-img1 {
+    position: relative; /* Để chứa icon ở góc */
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
 
+.container-img1 img {
+    width: 100%;
+    height: 400px;
+    transition: transform 0.3s ease-in-out;
+}
 
+/* Hiệu ứng zoom khi hover */
+.container-img1:hover img {
+    transform: scale(1.1);
+}
 
-    }
-
-    /* Định dạng cho hình ảnh bên trong container */
-    .container-img1 img {
-           width: 100%;
-            height: auto;
-                height: 400px;
-
-        transition: transform 0.3s ease-in-out; /* Tạo hiệu ứng mượt mà */
-
-    }
-
-    /* Hiệu ứng zoom khi di chuột vào container chứa ảnh */
-    .container-img1:hover img {
-        transform: scale(1.1); /* Zoom hình lên 10% khi di chuột */
-    }
+/* Định dạng icon heart */
 .heart-icon {
-    font-size: 24px;
+    position: absolute;  /* Cố định vị trí trên ảnh */
+    top: 10px;  /* Khoảng cách từ trên xuống */
+    right: 10px; /* Khoảng cách từ phải qua */
+    font-size: 15px;
     color: gray;
     cursor: pointer;
     transition: color 0.3s ease;
+    background: rgba(255, 255, 255, 0.7); /* Nền mờ giúp nhìn rõ icon */
+    padding: 5px;
+    border-radius: 50%;
 }
 
+/* Khi được active */
 .heart-icon.active {
     color: gray;
 }
-   
 </style>
+
  
 
 
@@ -294,6 +292,23 @@ function renderProducts(products, productImages, productColors, containerId) {
     });
 }
 
+
+let fetchedImages = []; // Initialize as an empty array
+
+async function fetchImages() {
+    try {
+        const response = await fetch('/api/Image/all');
+        if (response.ok) {
+            fetchedImages = await response.json();
+        } else {
+            console.error("Failed to fetch images:", await response.json());
+        }
+    } catch (error) {
+        console.error("Network error while fetching images:", error);
+    }
+}
+
+fetchImages(); // Ensure images are loaded when the page loads
 
 
 // Event listener for "favorite" functionality

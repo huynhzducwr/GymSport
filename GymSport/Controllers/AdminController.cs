@@ -10,7 +10,7 @@ namespace GymSport.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "HTML", "Admin.html"), "text/html");
+            return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "admin_frontend", "admin.html"), "text/html");
         }
     }
 }

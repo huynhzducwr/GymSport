@@ -1,4 +1,4 @@
-﻿async function fetchProductImages() {
+﻿    async function fetchProductImages() {
     let url = '/api/Image/all'; // Đường dẫn API để lấy hình ảnh
     try {
         const response = await fetch(url);
@@ -352,18 +352,46 @@ async function fetchPaymentMethod() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const submitButton = document.getElementById('submit-order-btn');
+    if (submitButton) {
+        submitButton.addEventListener('click', async function (event) {
+            event.preventDefault();
+            await handleCheckout();
+        });
+    } else {
+        console.error("Error: 'submit-order-btn' not found in the DOM.");
+    }
+});
+
 
 async function handleCheckout() {
-    const shippingAddress = document.getElementById('shipping-address').value.trim();
-    const phoneNumber = document.getElementById('phone-number').value.trim();
-    const paymentMethod = document.querySelector('.dropdown-content a.selected'); // Lấy phương thức thanh toán đã chọn
+    // Fetch form input values
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const phoneNumber = document.getElementById('phone').value.trim();
+    const shippingAddress = document.getElementById('address').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const province = document.getElementById('province').value.trim();
+    const postalCode = document.getElementById('postalCode').value.trim();
+    const paymentMethod = document.querySelector('.payment-method input:checked'); // Get selected payment method
     const userData = localStorage.getItem('userInfo');
-    const loginWarning = document.getElementById('login-warning');
+    let userID;
+    if (userData) {
+        const parsedData = JSON.parse(userData); // Parse the string into an object
+        userID = parsedData.userID; // Access userID from the parsed object
+        console.log(userID); // You can use the userID as needed
+    } else {
+        console.log("User not logged in");
+    }
 
+
+
+    // Check if user is logged in
     if (!userData) {
         alert('You must be logged in to proceed with checkout.');
-        loginWarning.style.display = 'block'; // Hiển thị cảnh báo đăng nhập
-        return; // Ngăn chặn quá trình checkout
+        loginWarning.style.display = 'block';
+        return;
     }
 
     const parsedData = JSON.parse(userData);
@@ -372,43 +400,101 @@ async function handleCheckout() {
         loginWarning.style.display = 'block';
         return;
     }
+    let paymentMethodID;
+    if (paymentMethod) {
+        switch (paymentMethod.value) {
+            case 'cash':
+                paymentMethodID = 1;  // Giả định ID cho tiền mặt
+                break;
+            case 'momo':
+                paymentMethodID = 3;  // Giả định ID cho Momo
+                break;
+            default:
+                alert('Phương thức thanh toán không hợp lệ.');
+                return;
+        }
+    } else {
+        alert('Vui lòng chọn phương thức thanh toán.');
+        return;
+    }
 
-    // Nếu người dùng đã đăng nhập, tiếp tục kiểm tra form
-    loginWarning.style.display = 'none'; // Ẩn cảnh báo đăng nhập
+
+
     let errorMessage = '';
 
-    // Kiểm tra địa chỉ giao hàng
+    // Validate input fields
+    if (!firstName || !lastName) {
+        errorMessage += 'Please enter your full name.\n';
+    }
     if (!shippingAddress) {
         errorMessage += 'Please enter a valid shipping address.\n';
     }
-
-    // Kiểm tra số điện thoại
     if (!phoneNumber) {
         errorMessage += 'Please enter a valid phone number.\n';
     }
-
-    // Kiểm tra phương thức thanh toán
+    if (!city || !province) {
+        errorMessage += 'Please select both city and province.\n';
+    }
+    if (!postalCode) {
+        errorMessage += 'Please enter your postal code.\n';
+    }
     if (!paymentMethod) {
         errorMessage += 'Please select a payment method.\n';
     }
 
     if (errorMessage) {
-        alert(errorMessage); // Hiển thị thông báo lỗi
-        return; // Không cho tiếp tục nếu có lỗi
+        alert(errorMessage); // Show error messages
+        return;
     }
 
-    // Nếu tất cả đều hợp lệ, thực hiện quá trình thanh toán
-  
-    // Thực hiện các bước checkout khác...
-    const cartItems = JSON.parse(localStorage.getItem('shoppingBag')) || []; // Lấy thông tin giỏ hàng
-    const userData1 = JSON.parse(localStorage.getItem('userInfo'));
-    const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.productPrice), 0); // Tính tổng tiền
-    console.log('Selected Payment Method:', paymentMethod);
-    const orderResponse = await createOrders(cartItems, shippingAddress, phoneNumber, totalAmount, userData1.userID);
+    // Fetch cart items and calculate total amount
+    let cartItems = [];
+    const cartData = localStorage.getItem('shoppingBag');
+    if (cartData) {
+        try {
+            cartItems = JSON.parse(cartData);
+            if (!Array.isArray(cartItems)) {
+                cartItems = [];
+            }
+        } catch (e) {
+            console.error("Error parsing cart data:", e);
+            cartItems = [];
+        }
+    }
+
+
+    const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.productPrice), 0);
+
+    // Create the orderDto with all the required information
+    const orderDto = {
+        userID: userID,
+        shippingAddress: shippingAddress,
+        phoneNumber: phoneNumber,
+        totalAmount: totalAmount,
+        cartItems: Array.isArray(cartItems) ? cartItems.map(item => ({
+            productID: item.productID,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            imageURL: item.imageURL,
+            productCategory: item.productCategory,
+            productColor: item.productColor,
+            productName: item.productName,
+            productSize: item.productSize
+        })) : [],
+        city: city,
+        province: province,
+        firstName: firstName,
+        lastName: lastName,
+        postalCode: postalCode
+    };
+
+
+    // Call API to create the order
+    const orderResponse = await createOrders(orderDto);
     console.log(orderResponse);
 
     if (orderResponse.isSuccess) {
-        const paymentMethodID = paymentMethod ? paymentMethod.getAttribute('data-methodid') : null; // Sử dụng getAttribute để lấy ID
+        /*paymentMethodID = paymentMethod ? paymentMethod.getAttribute('data-methodid') : null;*/ // Sử dụng getAttribute để lấy ID
 
 
         if (!paymentMethodID) {
@@ -419,7 +505,7 @@ async function handleCheckout() {
         const paymentResponse = await createPayment(orderResponse.orderID, totalAmount, paymentMethodID, "Completed"); // Thay đổi PaymentStatus theo yêu cầu của bạn
        
         if (paymentResponse && paymentResponse.isCreated) {
-            alert('Order and payment created successfully!');
+            showSuccessAlert('Đang tạo mã QR thanh toán');
 
             if (paymentMethodID == 3) {
                 const paymentMOMO = await createMomoPayment(
@@ -428,7 +514,7 @@ async function handleCheckout() {
                     "ORD15z1", // PaymentRefId
                     totalAmount, // RequiredAmount
                     orderResponse.orderID, // OrderID
-                    userData1.userID, // UserID
+                    userID, // UserID
                     "vn", // PaymentLanguage
                     "Mer0dbcf13bd6de6f5eb8064b74cb2caa33", // MerchantID
                     "MOMO", // PaymentDestination
@@ -440,18 +526,11 @@ async function handleCheckout() {
                 if (paymentMOMO && paymentMOMO.paymentUrl) {
                     window.location.href = paymentMOMO.paymentUrl;
                 } else {
-                    alert('Error creating Momo payment link.');
+                    showSuccessAlert('Đang tạo mã QR thanh toán');
                 }
 
             }
-            if (paymentMethodID == 5) {
-                const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.productPrice), 0).toFixed(2);
-                console.log(orderResponse.orderID);
-                console.log(totalAmount);
-
-                // Thay đổi đường dẫn để sử dụng "/html/payment.html"
-                window.location.href = `https://localhost:44326/html/payment.html?reservationID=${orderResponse.orderID}&totalAmount=${totalAmount}`;
-            }
+            
 
 
 
@@ -461,28 +540,8 @@ async function handleCheckout() {
     }
 }
 
-async function createOrders(cartItems, shippingAddress, phoneNumber, totalAmount, userID) {
+async function createOrders(orderDto) {
     const url = '/api/Order/create';
-
-    // Prepare the orderDto according to the specified schema
-    const orderDto = {
-        UserID: userID, // Make sure the key is "UserID" not "userID"
-        ShippingAddress: shippingAddress, // Make sure the key is "ShippingAddress"
-        PhoneNumber: phoneNumber, // Make sure the key is "PhoneNumber"
-        TotalAmount: totalAmount, // Make sure the key is "TotalAmount"
-        CartItems: cartItems.map(item => ({
-            productID: item.productID, // Make sure the key is "ProductID"
-            quantity: item.quantity, // Make sure the key is "Quantity"
-            unitPrice: item.productPrice, // Make sure the key is "UnitPrice"
-            imageURL: item.imageURL, // Make sure the key is "ImageURL"
-            productCategory: item.productCategory, // Make sure the key is "ProductCategory"
-            productColor: item.productColor, // Make sure the key is "ProductColor"
-            productName: item.productName, // Make sure the key is "ProductName"
-            productSize: item.productSize // Make sure the key is "ProductSize"
-        }))
-    };
-
-  
 
     try {
         const response = await fetch(url, {
@@ -497,17 +556,19 @@ async function createOrders(cartItems, shippingAddress, phoneNumber, totalAmount
             const data = await response.json();
             console.log('Order Created:', data);
             showSuccessAlert('Đặt hàng thành công');
-            return data; // return response data from server
+            return data; // Return response data from server
         } else {
             const error = await response.json();
-   
-
+            console.error('Error creating order:', error);
+            showAlert('There was an error creating your order. Please try again.');
         }
     } catch (error) {
         console.error('Error creating order:', error);
         showAlert('There was an error creating your order. Please try again.');
     }
 }
+
+
 async function createMomoPayment(
     paymentContent,
     paymentCurrency,
