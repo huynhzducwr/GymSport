@@ -6,27 +6,20 @@ using System.Data;
 using GymSport.DTOs.InventoryDTOs;
 using GymSport.Extensions;
 using GymSport.Controllers;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class OrderDetailsRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public OrderDetailsRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<IEnumerable<OrderDetailsDTO>> GetAllOrderDetails()
         {
             var images = new List<OrderDetailsDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetAllOrderDetails", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllOrderDetails", connection);
 
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
@@ -85,10 +78,8 @@ namespace GymSport.Repository
             var orderDetailsList = new List<OrderDetailsDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetOrderDetailsByOrderID", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetOrderDetailsByOrderID", connection);
+          
 
             // Thêm tham số đầu vào cho OrderID
             command.Parameters.AddWithValue("@OrderID", orderId);
@@ -149,10 +140,8 @@ namespace GymSport.Repository
             DeleteOrderDetailsResponseDTO responseDTO = new DeleteOrderDetailsResponseDTO();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spDeleteOrderDetail", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteOrderDetail", connection);
+        
 
             command.Parameters.AddWithValue("@OrderDetailID", OrderDetailID);
 

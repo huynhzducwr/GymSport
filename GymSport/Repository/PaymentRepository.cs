@@ -2,6 +2,7 @@
 using GymSport.DTOs.OrderDTOs;
 using GymSport.DTOs.PaymentDTOs;
 using GymSport.Extensions;
+using GymSport.Factory;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;
@@ -10,12 +11,7 @@ namespace GymSport.Repository
 {
     public class PaymentRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public PaymentRepository(SqlConnectionFactory connectionFactory) // Constructor for dependency injection
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<CreatePaymentResponseDTO> CreatePaymentAsync(CreatePaymentDTO paymentDto)
         {
@@ -23,11 +19,8 @@ namespace GymSport.Repository
 
             // Gọi stored procedure CreatePayment
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spCreatePayment", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreatePayment", connection);
+       
             // Thêm các tham số đầu vào cho stored procedure
             command.Parameters.AddWithValue("@OrderID", paymentDto.OrderID);
             command.Parameters.AddWithValue("@TotalAmount", paymentDto.TotalAmount);
@@ -78,10 +71,8 @@ namespace GymSport.Repository
             var images = new List<PaymentDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetAllpayment", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllpayment", connection);
+           
 
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();

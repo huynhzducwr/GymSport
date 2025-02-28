@@ -4,28 +4,22 @@ using GymSport.DTOs.ProductCategoryDTOs;
 using System.Data;
 using GymSport.DTOs.UserDTOs;
 using Microsoft.IdentityModel.Tokens;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class ProductCategoryRepository
     {
-         //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public ProductCategoryRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
+        //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<CreateProductCategoryResponseDTO> CreateProductCategory(CreateProductCategoryDTO request) //tao 1 ham tao productcategory
             //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
         {
             CreateProductCategoryResponseDTO createProductCategoryResponseDTO = new CreateProductCategoryResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
             using var connection = _connectionFactory.CreateConnection(); //goi de khoi tao 1 ham chua chuoi string ket noi toi db
-            var command = new SqlCommand("spCreateProductCatogry", connection) // tao 1 bien de lien ket toi procedure da code trong sql
-            {
-                CommandType = CommandType.StoredProcedure // type store procedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreateProductCatogry", connection);
+  
 
             command.Parameters.AddWithValue("@ProductCategoryName", request.ProductCategoryName); //gan du lieu @tendulieu vao request.ten bien de luu xuong db
             command.Parameters.AddWithValue("@Description", request.Description); //ad du lieu tu khau nhap xuong db
@@ -91,11 +85,8 @@ namespace GymSport.Repository
             };
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spUpdateProductCategory", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spUpdateProductCategory", connection);
+          
             command.Parameters.AddWithValue("@ProductCategoryID", user.ProductCategoryID);
             command.Parameters.AddWithValue("@ProductCategoryName", user.ProductCategoryName);
             command.Parameters.AddWithValue("@Description", user.Description);
@@ -142,10 +133,8 @@ namespace GymSport.Repository
             using var connection = _connectionFactory.CreateConnection();
 
             // Define the SQL command and stored procedure
-            using var command = new SqlCommand("spDeleteProductCategory", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };  
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteProductCategory", connection);
+          
 
             // Adding input parameter
             command.Parameters.AddWithValue("@ProductCategoryID", productCategoryID);
@@ -217,11 +206,9 @@ namespace GymSport.Repository
         public async Task<ProductCategoryDTO> GetProductCategoryByIDAsync(int ProductCategoryID)
         {
             using var connection = _connectionFactory.CreateConnection();
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetProductCategoryByID", connection);
 
-            var command = new SqlCommand("spGetProductCategoryByID", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+         
 
             command.Parameters.AddWithValue("@ProductCategoryID", ProductCategoryID);
             await connection.OpenAsync();
@@ -250,11 +237,8 @@ namespace GymSport.Repository
         public async Task<(bool Success, string Message)> ToggleProductCategoryActiveAsync(int ProductCategoryID, bool isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleProductCategoryActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleProductCategoryActive", connection);
+         
             command.Parameters.AddWithValue("@ProductCategoryID", ProductCategoryID);
             command.Parameters.AddWithValue("@IsActive", isActive);
 

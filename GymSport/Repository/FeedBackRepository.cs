@@ -2,27 +2,20 @@
 using Microsoft.Data.SqlClient;
 using GymSport.Connection;
 using GymSport.DTOs.FeedBackDTOs;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class FeedBackRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public FeedBackRepository(SqlConnectionFactory connectionFactory)   // Khởi tạo constructor với SqlConnectionFactory
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<GiveAFeedBackResponseDTO> GiveFeedback(GiveAFeedBackDTO request)
         {
-            GiveAFeedBackResponseDTO createFeedbackResponseDTO = new GiveAFeedBackResponseDTO();
+            var createFeedbackResponseDTO = new GiveAFeedBackResponseDTO();
             using var connection = _connectionFactory.CreateConnection(); // Create a connection to the database
-            var command = new SqlCommand("spSubmitProductFeedback", connection) // Link to stored procedure
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spSubmitProductFeedback", connection);
+           
             // Assign parameters for the stored procedure
             command.Parameters.AddWithValue("@UserID", request.UserID);
             command.Parameters.AddWithValue("@ProductID", request.ProductID);
@@ -79,10 +72,8 @@ namespace GymSport.Repository
         public async Task<List<FeedbackDTO>> ListAllFeedbacks()
         {
             using var connection = _connectionFactory.CreateConnection();
-            var command = new SqlCommand("spGetAllFeedbacks", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllFeedbacks", connection);
+          
 
             await connection.OpenAsync();
 
@@ -108,10 +99,8 @@ namespace GymSport.Repository
         public async Task<List<FeedbackDTO>> ListFeedbacksByProductId(int productId)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var command = new SqlCommand("spGetFeedbacksByProductID", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetFeedbacksByProductID", connection);
+       
 
             // Thêm tham số ProductID vào command
             command.Parameters.Add(new SqlParameter("@ProductID", productId));

@@ -3,26 +3,20 @@ using GymSport.DTOs.PaymentMethodsDTOs;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using GymSport.DTOs.ProductCategoryDTOs;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class PaymentMethodRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public PaymentMethodRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
         public async Task<CreatePaymentMethodResponseDTO> CreatePaymentMethod(CreatePaymentMethodDTO request) //tao 1 ham tao productcategory
                                                                                                                     //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
         {
-            CreatePaymentMethodResponseDTO createProductCategoryResponseDTO = new CreatePaymentMethodResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
+            var createProductCategoryResponseDTO = new CreatePaymentMethodResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
             using var connection = _connectionFactory.CreateConnection(); //goi de khoi tao 1 ham chua chuoi string ket noi toi db
-            var command = new SqlCommand("spCreatePaymentMethod ", connection) // tao 1 bien de lien ket toi procedure da code trong sql
-            {
-                CommandType = CommandType.StoredProcedure // type store procedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreatePaymentMethod", connection);
+         
 
             command.Parameters.AddWithValue("@PaymentMethodName", request.PaymentMethodName); //gan du lieu @tendulieu vao request.ten bien de luu xuong db
           
@@ -82,12 +76,9 @@ namespace GymSport.Repository
         public async Task<List<PaymentMethodDTO>> ListAllPaymentMethod(bool? IsActive)
         {
             using var connection = _connectionFactory.CreateConnection();
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllPaymentMethod", connection);
 
-            var command = new SqlCommand("spGetAllPaymentMethod", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+          
             command.Parameters.AddWithValue("@isActive", (object)IsActive ?? DBNull.Value);
             await connection.OpenAsync();
 

@@ -2,6 +2,7 @@
 using GymSport.DTOs.PaymentDetailsDTO;
 namespace GymSport.Repository;
 using GymSport.Connection;
+using GymSport.Factory;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;
@@ -9,20 +10,14 @@ using System.Threading.Tasks;
 
 public class PaymentdetailRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-        public PaymentdetailRepository(SqlConnectionFactory connectionFactory) // Constructor for dependency injection
-        {
-            _connectionFactory = connectionFactory;
-        }
-         public async Task<IEnumerable<PaymentDetailDTO>> GetAllpaymentdetail()
+    private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
+    public async Task<IEnumerable<PaymentDetailDTO>> GetAllpaymentdetail()
             {
             var images = new List<PaymentDetailDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetAllpaymentdetail", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+        using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllpaymentdetail", connection);
+    
 
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();

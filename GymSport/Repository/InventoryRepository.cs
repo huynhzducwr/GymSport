@@ -2,31 +2,24 @@
 using GymSport.DTOs.InventoryDTOs;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class InventoryRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-
-        public InventoryRepository(SqlConnectionFactory connectionFactory)
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<CreateInventoryResponseDTO> CreateInventoryAsync(CreateInventoryDTO uploadImageDTO)
         {
-            CreateInventoryResponseDTO responseDTO = new CreateInventoryResponseDTO();
+            var responseDTO = new CreateInventoryResponseDTO();
 
 
                 // Lưu vào cơ sở dữ liệu
                 using var connection = _connectionFactory.CreateConnection();
-                using var command = new SqlCommand("spCreateInventory", connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-
+               using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreateInventory", connection);
+         
+                
                 command.Parameters.AddWithValue("@ProductID", uploadImageDTO.ProductID);
                 command.Parameters.AddWithValue("@StockQuantity", uploadImageDTO.StockQuantity);
 
@@ -52,10 +45,8 @@ namespace GymSport.Repository
             var images = new List<InventoryDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetAllInventory", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllInventory", connection);
+      
 
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
@@ -80,10 +71,8 @@ namespace GymSport.Repository
             DeleteInventoryResponseDTO responseDTO = new DeleteInventoryResponseDTO();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spDeleteInventory", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteInventory", connection);
+        
 
             command.Parameters.AddWithValue("@InventoryID", imageID);
 

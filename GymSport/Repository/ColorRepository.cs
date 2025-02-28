@@ -2,28 +2,23 @@
 using GymSport.DTOs.ColorDTOs;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class ColorRepository
     {
         //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
-        private readonly SqlConnectionFactory _connectionFactory;
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
-        public ColorRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
-
+   
         public async Task<CreateColorResponseDTO> CreateColor(CreateColorDTO request) //tao 1 ham tao productcategory
                //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
         {
-            CreateColorResponseDTO createProductCategoryResponseDTO = new CreateColorResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
+            var createProductCategoryResponseDTO = new CreateColorResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
             using var connection = _connectionFactory.CreateConnection(); //goi de khoi tao 1 ham chua chuoi string ket noi toi db
-            var command = new SqlCommand("spCreateColorType", connection) // tao 1 bien de lien ket toi procedure da code trong sql
-            {
-                CommandType = CommandType.StoredProcedure // type store procedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreateColorType", connection);
+          
 
             command.Parameters.AddWithValue("@ColorName", request.ColorName); //gan du lieu @tendulieu vao request.ten bien de luu xuong db
 
@@ -33,7 +28,7 @@ namespace GymSport.Repository
                 Direction = ParameterDirection.Output
             };
 
-            var outputStatusCode = new SqlParameter("@StatusCode", SqlDbType.Int)   // lay du lieu tu db len
+            var outputStatusCode = new SqlParameter("@StatusCode", SqlDbType.Int)
             {
                 Direction = ParameterDirection.Output
             };
@@ -69,29 +64,20 @@ namespace GymSport.Repository
                 createProductCategoryResponseDTO.isCreated = false;
                 return createProductCategoryResponseDTO;
             }
-
-
-
-
-
-
-
         }
 
         //update
 
         public async Task<UpdateColorResponseDTO> UpdateColor(UpdateColorDTO user)
         {
-            UpdateColorResponseDTO updateUserResponseDTO = new UpdateColorResponseDTO()
+            var updateUserResponseDTO = new UpdateColorResponseDTO()
             {
                 ColorID = user.ColorID
             };
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spUpdateColorType", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spUpdateColorType", connection);
+          
 
             command.Parameters.AddWithValue("@ColorID", user.ColorID);
             command.Parameters.AddWithValue("@ColorName", user.ColorName);
@@ -136,12 +122,8 @@ namespace GymSport.Repository
 
             // Create the connection using the factory
             using var connection = _connectionFactory.CreateConnection();
-
-            // Define the SQL command and stored procedure
-            using var command = new SqlCommand("spDeleteColorType", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteColorType", connection);
+          
 
             // Adding input parameter
             command.Parameters.AddWithValue("@ColorID", productCategoryID);
@@ -184,11 +166,8 @@ namespace GymSport.Repository
         public async Task<List<ColorDTO>> ListAllColor(bool? IsActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-
-            var command = new SqlCommand("spGetAllColorTypes", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllColorTypes", connection);
+           
 
             command.Parameters.AddWithValue("@isActive", (object)IsActive ?? DBNull.Value);
             await connection.OpenAsync();
@@ -213,12 +192,8 @@ namespace GymSport.Repository
         public async Task<ColorDTO> GetColorByIDAsync(int ProductCategoryID)
         {
             using var connection = _connectionFactory.CreateConnection();
-
-            var command = new SqlCommand("spGetColorTypeById", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetColorTypeById", connection);
+        
             command.Parameters.AddWithValue("@ColorID", ProductCategoryID);
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
@@ -245,11 +220,8 @@ namespace GymSport.Repository
         public async Task<(bool Success, string Message)> ToggleColorActiveAsync(int ProductCategoryID, bool isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleColorTypeActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleColorTypeActive", connection);
+      
             command.Parameters.AddWithValue("@ColorID", ProductCategoryID);
             command.Parameters.AddWithValue("@isActive", isActive);
 

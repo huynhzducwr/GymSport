@@ -5,18 +5,21 @@ using GymSport.Connection;
 using GymSport.DTOs.ImageDTOs;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
+using GymSport.Factory;
 
 public class ImageRepository
 {
-    private readonly SqlConnectionFactory _connectionFactory;
-    private readonly string _imageFolderPath;
+    private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
+    private static readonly string _imageFolderPath;
 
-    public ImageRepository(SqlConnectionFactory connectionFactory)
+    // Khối static constructor để khởi tạo đường dẫn & tạo thư mục
+    static ImageRepository()
     {
-        _connectionFactory = connectionFactory;
         _imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
         Directory.CreateDirectory(_imageFolderPath); // Tạo thư mục nếu không tồn tại
     }
+
+  
 
     public async Task<UploadImageResponseDTO> UploadImageForProductAsync(UploadImageDTO uploadImageDTO)
     {
@@ -76,10 +79,8 @@ public class ImageRepository
         var images = new List<ImageDTO>();
 
         using var connection = _connectionFactory.CreateConnection();
-        using var command = new SqlCommand("spGetAllImages", connection)
-        {
-            CommandType = CommandType.StoredProcedure
-        };
+        using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllImages", connection);
+      
 
         await connection.OpenAsync();
         using var reader = await command.ExecuteReaderAsync();
@@ -104,10 +105,8 @@ public class ImageRepository
         DeleteImageResponseDTO responseDTO = new DeleteImageResponseDTO();
 
         using var connection = _connectionFactory.CreateConnection();
-        using var command = new SqlCommand("spDeleteImage", connection)
-        {
-            CommandType = CommandType.StoredProcedure
-        };
+        using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteImage", connection);
+      
 
         command.Parameters.AddWithValue("@ImageID", imageID);
 

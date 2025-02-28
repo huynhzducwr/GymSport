@@ -3,29 +3,21 @@ using GymSport.DTOs.WishListDTOs;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using GymSport.DTOs.SizeDTOs;
+using GymSport.Factory;
 namespace GymSport.Repository
 {
     public class WishListRepository
     {
 
-        //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public WishListRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
-
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<CreateWishListDTOResponseDTO> CreateWishList(CreateWishListDTO request) //tao 1 ham tao productcategory
                                                                                    //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
         {
             CreateWishListDTOResponseDTO createProductCategoryResponseDTO = new CreateWishListDTOResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
             using var connection = _connectionFactory.CreateConnection(); //goi de khoi tao 1 ham chua chuoi string ket noi toi db
-            var command = new SqlCommand("spAddProductToWishlist", connection) // tao 1 bien de lien ket toi procedure da code trong sql
-            {
-                CommandType = CommandType.StoredProcedure // type store procedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spAddProductToWishlist", connection);
+            
 
             command.Parameters.AddWithValue("@UserID", request.UserID);
             command.Parameters.AddWithValue("@ProductID", request.ProductID);
@@ -89,11 +81,8 @@ namespace GymSport.Repository
             using var connection = _connectionFactory.CreateConnection();
 
             // Define the SQL command and stored procedure
-            using var command = new SqlCommand("spRemoveProductFromWishlist", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spRemoveProductFromWishlist", connection);
+          
             // Adding input parameters for UserID and ProductID
             command.Parameters.AddWithValue("@UserID", userID);
             command.Parameters.AddWithValue("@ProductID", productID);
@@ -139,12 +128,8 @@ namespace GymSport.Repository
         public async Task<List<WishListDTO>> ListAllWishList()
         {
             using var connection = _connectionFactory.CreateConnection();
-
-            var command = new SqlCommand("spGetAllWishList", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllWishList", connection);
+         
 
             await connection.OpenAsync();
 
@@ -173,11 +158,8 @@ namespace GymSport.Repository
         public async Task<WishListDTO> GetWishListByIDAsync(int ProductCategoryID)
         {
             using var connection = _connectionFactory.CreateConnection();
-
-            var command = new SqlCommand("spGetProductWishListById", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetProductWishListById", connection);
+      
 
             command.Parameters.AddWithValue("@FavoriteID", ProductCategoryID);
             await connection.OpenAsync();

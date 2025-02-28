@@ -1,75 +1,81 @@
 ﻿
-using GymSport.Connection;
-using GymSport.DTOs.UserDTOs;
-using GymSport.Extensions;
-using Microsoft.Data.SqlClient;
-using System.Data;
+    using GymSport.Connection;
+    using GymSport.DTOs.UserDTOs;
+    using GymSport.Extensions;
+    using GymSport.Factory;
+    using Microsoft.Data.SqlClient;
+    using System.Data;
+    using GymSport.Email;
+
 namespace GymSport.Repository
 {
     public class UserRepository
     {
-            private readonly SqlConnectionFactory _connectionFactory;
-            public UserRepository(SqlConnectionFactory connectionFactory)
-            {
-                _connectionFactory = connectionFactory;
-            }
+               private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
+                private readonly IEmailService _emailService; // Inject EmailService
 
-
-            public async Task<CreateUserResponseDTO> RegisterUserAsync(CreateUserDTO user)
-            {
-                CreateUserResponseDTO createUserResponseDTO = new CreateUserResponseDTO();
-                using var connection = _connectionFactory.CreateConnection();
-                using var command = new SqlCommand("spRegisterUser", connection)
+                public UserRepository(IEmailService emailService)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-
-            command.Parameters.AddWithValue("@Email", user.Email);
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            command.Parameters.AddWithValue("@PasswordHash", hashedPassword);
-            command.Parameters.AddWithValue("@CreatedBy", "System");
-            command.Parameters.AddWithValue("@firstname", user.firstName);
-            command.Parameters.AddWithValue("@lastname", user.lastName);
-
-            var userIdParam = new SqlParameter("@UserID", SqlDbType.Int)
+                    _emailService = emailService; // Inject Email Service
+                }
+        public async Task<CreateUserResponseDTO> RegisterUserAsync(CreateUserDTO user)
             {
-                Direction = ParameterDirection.Output
-            };
-            var errorMessageParam = new SqlParameter("@ErrorMessage", SqlDbType.NVarChar, 255)
-            {
-                Direction = ParameterDirection.Output
-            };
-            command.Parameters.Add(userIdParam);
-            command.Parameters.Add(errorMessageParam);
+                var createUserResponseDTO = new CreateUserResponseDTO();
 
-            await connection.OpenAsync();
-            await command.ExecuteNonQueryAsync();
+                try
+                {
+                    using var connection = _connectionFactory.CreateConnection();
+                    using var command = SqlCommandFactory.CreateStoredProcedureCommand("spRegisterUser", connection);
 
-            var UserID = (int)userIdParam.Value;
-            if (UserID != -1)
-            {
-                createUserResponseDTO.UserID = UserID;
-                createUserResponseDTO.IsCreated = true;
-                createUserResponseDTO.Message = "Dang ki tai khoan thanh cong";
+                    command.Parameters.AddWithValue("@Email", user.Email ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@PasswordHash", BCrypt.Net.BCrypt.HashPassword(user.Password));
+                    command.Parameters.AddWithValue("@CreatedBy", "System");
+                    command.Parameters.AddWithValue("@firstname", user.firstName ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@lastname", user.lastName ?? (object)DBNull.Value);
+
+                    var userIdParam = new SqlParameter("@UserID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                    var verificationTokenParam = new SqlParameter("@VerificationToken", SqlDbType.NVarChar, 255) { Direction = ParameterDirection.Output };
+                    var errorMessageParam = new SqlParameter("@ErrorMessage", SqlDbType.NVarChar, 255) { Direction = ParameterDirection.Output };
+
+                    command.Parameters.Add(userIdParam);
+                    command.Parameters.Add(verificationTokenParam);
+                    command.Parameters.Add(errorMessageParam);
+
+                    //await connection.OpenAsync().ConfigureAwait(false);
+                    //await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+
+                    createUserResponseDTO.UserID = userIdParam.Value != DBNull.Value ? (int)userIdParam.Value : -1;
+                    createUserResponseDTO.IsCreated = createUserResponseDTO.UserID != -1;
+                    createUserResponseDTO.Message = createUserResponseDTO.IsCreated
+                ? "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để xác minh tài khoản."
+                : errorMessageParam.Value?.ToString() ?? "Đã xảy ra lỗi khi tạo tài khoản";
+
+                    if (createUserResponseDTO.IsCreated)
+                    {
+                        string verificationToken = verificationTokenParam.Value?.ToString();
+                        await _emailService.SendVerificationEmail(user.Email, verificationToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    createUserResponseDTO.IsCreated = false;
+                    createUserResponseDTO.Message = $"Lỗi hệ thống: {ex.Message}";
+                }
+
                 return createUserResponseDTO;
             }
 
-            var message = errorMessageParam.Value?.ToString();
-            createUserResponseDTO.IsCreated = false;
-            createUserResponseDTO.Message = message ?? "Da xay ra loi khi tao tai khoan";
-            return createUserResponseDTO;
-
-        }
-
+       
 
         public async Task<UserRoleResponseDTO> AssignRoleToUserAsync(UserRoleDTO userRole)
         {
-            UserRoleResponseDTO userRoleResponseDTO = new UserRoleResponseDTO();
+            var userRoleResponseDTO = new UserRoleResponseDTO();
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spAssignUserRole",connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+          
+             using var command = SqlCommandFactory.CreateStoredProcedureCommand("spAssignUserRole", connection);
+        
             command.Parameters.AddWithValue("@UserID", userRole.UserID);
             command.Parameters.AddWithValue("@RoleID", userRole.RoleID);
 
@@ -100,10 +106,9 @@ namespace GymSport.Repository
         public async Task<List<UserResponseDTO>> ListAllUserAsync(bool? isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spListAllUsers", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spListAllUsers", connection);
+          
             command.Parameters.AddWithValue("@IsActive", (object)isActive ?? DBNull.Value);
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
@@ -127,10 +132,8 @@ namespace GymSport.Repository
         public async Task<UserResponseDTO> GetUserByIDAsync(int userID)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetUserByID", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetUserByID", connection);
+         
             command.Parameters.AddWithValue("@UserID", userID);
             var errorMessageParam = new SqlParameter("@ErrorMessage",
                 SqlDbType.NVarChar, 255)
@@ -163,16 +166,14 @@ namespace GymSport.Repository
 
         public async Task<UpdateUserResponseDTO> UpdateUserAsync(UpdateUserDTO user)
         {
-            UpdateUserResponseDTO updateUserResponseDTO = new UpdateUserResponseDTO()
+            var updateUserResponseDTO = new UpdateUserResponseDTO()
             {
                 userID = user.userID
             };
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spUpdateUser", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spUpdateUser", connection);
+         
     
             command.Parameters.AddWithValue("@UserID",user.userID);
             command.Parameters.AddWithValue("@Email", user.Email);
@@ -208,12 +209,10 @@ namespace GymSport.Repository
 
         public async Task<DeleteUserResponseDTO> DeleteUserAsync(int userID)
         {
-            DeleteUserResponseDTO deleteUserResponseDTO = new DeleteUserResponseDTO();
+            var deleteUserResponseDTO = new DeleteUserResponseDTO();
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleActive", connection);
+         
             command.Parameters.AddWithValue("@UserID", userID);
             command.Parameters.AddWithValue("@isActive", false);
 
@@ -244,10 +243,8 @@ namespace GymSport.Repository
             LoginUserResponseDTO userLoginResponseDTO = new LoginUserResponseDTO();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spLoginUser", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spLoginUser", connection);
+         
 
             command.Parameters.AddWithValue("@Email", login.Email);
 
@@ -314,10 +311,8 @@ namespace GymSport.Repository
         public async Task<(bool Success, string Message)> ToggleUserActiveAsync(int userId,bool isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleActive", connection);
+        
 
             command.Parameters.AddWithValue("@UserID", userId);
             command.Parameters.AddWithValue("@isActive",isActive);
@@ -340,9 +335,9 @@ namespace GymSport.Repository
         public async Task<IEnumerable<RoleDTO>> GetRolesAsync()
         {
             var roles = new List<RoleDTO>();
-
+           
             using var connection = _connectionFactory.CreateConnection();
-            var command = new SqlCommand("spGetUserRoles", connection); // Thay đổi tên bảng nếu cần
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetUserRoles", connection);
 
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();

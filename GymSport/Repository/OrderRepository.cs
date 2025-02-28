@@ -5,20 +5,16 @@ using GymSport.DTOs.OrderDTOs;
 using System.Data;
 using GymSport.DTOs.InventoryDTOs;
 using GymSport.Extensions;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class OrderRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public OrderRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
         public async Task<CreateOrderResponseDTO> CreateOrderAsync(CreateOrderDTO orderDto)
         {
-            CreateOrderResponseDTO responseDTO = new CreateOrderResponseDTO();
+            var responseDTO = new CreateOrderResponseDTO();
 
             try
             {
@@ -39,10 +35,8 @@ namespace GymSport.Repository
                 }
 
                 using var connection = _connectionFactory.CreateConnection();
-                using var command = new SqlCommand("spCreateOrders", connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
+                using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreateOrders", connection);
+           
 
                 // Thêm các tham số đầu vào
                 command.Parameters.AddWithValue("@UserID", orderDto.UserID);
@@ -105,10 +99,8 @@ namespace GymSport.Repository
             var orders = new List<OrderDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetAllOrders", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllOrders", connection);
+    
 
             await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
@@ -141,10 +133,8 @@ namespace GymSport.Repository
             var orders = new List<OrderDTO>();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetOrdersByUserID", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetOrdersByUserID", connection);
+
 
             // Thêm tham số cho UserID
             command.Parameters.AddWithValue("@UserID", userId);
@@ -176,13 +166,11 @@ namespace GymSport.Repository
 
         public async Task<DeleteOrderResponseDTO> DeleteOrder(int orderID)
         {
-            DeleteOrderResponseDTO responseDTO = new DeleteOrderResponseDTO();
+            var responseDTO = new DeleteOrderResponseDTO();
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spDeleteorder", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteorder", connection);
+         
 
             command.Parameters.AddWithValue("@OrderID", orderID);
 
@@ -206,11 +194,8 @@ namespace GymSport.Repository
         public async Task<(bool Success, string Message)> ToggleOrderStatusActiveAsync(int orderId, string newStatus)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleOrderStatusActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleOrderStatusActive", connection);
+       
             // Thêm các tham số đầu vào cho thủ tục lưu trữ
             command.Parameters.AddWithValue("@OrderID", orderId);
             command.Parameters.AddWithValue("@NewStatus", newStatus);

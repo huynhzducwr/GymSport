@@ -8,13 +8,9 @@ namespace GymSport.Repository
 {
     public class ProductSizesRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-        public ProductSizesRepository(SqlConnectionFactory connectionFactory)
-        {
-            _connectionFactory = connectionFactory;
-        }
-    
-        
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
+
+
         //Fetch All Room Types Based on the AmenityID
         public async Task<List<FetchProductSizesResponseDTO>> FetchProductSizeBySizeIdAsync(int sizeId)
         {

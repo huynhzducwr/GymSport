@@ -1,5 +1,6 @@
 ﻿using GymSport.Connection;
 using GymSport.DTOs.ProductDTOs;
+using GymSport.Factory;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -7,12 +8,7 @@ namespace GymSport.Repository
 {
     public class ProductsRepository
     {
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public ProductsRepository(SqlConnectionFactory connectionFactory)
-        {
-            _connectionFactory = connectionFactory;
-        }
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 
         public async Task<CreateProductResponseDTO> CreateProductAsync(CreateProductRequestDTO request)
         {
@@ -58,11 +54,8 @@ namespace GymSport.Repository
         public async Task<UpdateProductResponseDTO> UpdateProductAsync(UpdateProductRequestDTO request)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spUpdateProduct", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spUpdateProduct", connection);
+          
 
             command.Parameters.AddWithValue("@ProductID", request.ProductID);
             command.Parameters.AddWithValue("@ProductName", request.ProductName);
@@ -96,11 +89,8 @@ namespace GymSport.Repository
         public async Task<DeleteProductResponseDTO> DeleteProductAsync(int productId)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spDeleteProduct", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteProduct", connection);
+       
             command.Parameters.AddWithValue("@ProductID", productId);
             command.Parameters.Add("@StatusCode", SqlDbType.Int).Direction = ParameterDirection.Output;
             command.Parameters.Add("@Message", SqlDbType.NVarChar, 255).Direction = ParameterDirection.Output;
@@ -124,10 +114,8 @@ namespace GymSport.Repository
         public async Task<ProductDetailResponseDTO> GetProductByIdAsync(int productId)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetProductByID", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetProductByID", connection);
+       
             command.Parameters.AddWithValue("@ProductID", productId);
 
             try
@@ -164,10 +152,8 @@ namespace GymSport.Repository
         public async Task<List<ProductDetailResponseDTO>> GetAllProductsAsync(GetAllProductsRequestDTO request)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spGetAllProducts", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllProducts", connection);
+            
 
             // Add parameters for ProductCategoryID and Status, handling nulls appropriately
             command.Parameters.Add(new SqlParameter("@ProductCategoryID", SqlDbType.Int)
@@ -214,11 +200,8 @@ namespace GymSport.Repository
         public async Task<(bool Success, string Message)> ToggleProductActiveAsync(int ProductID, bool isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleProductActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleProductActive", connection);
+         
             command.Parameters.AddWithValue("@ProductID", ProductID);
             command.Parameters.AddWithValue("@isActive", isActive);
 

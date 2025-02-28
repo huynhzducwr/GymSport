@@ -3,29 +3,21 @@
 using GymSport.DTOs.SizeDTOs;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using GymSport.Factory;
 
 namespace GymSport.Repository
 {
     public class SizeRepository
     {
 
-        //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
-        private readonly SqlConnectionFactory _connectionFactory;
-
-        public SizeRepository(SqlConnectionFactory connectionFactory)   //tao 1 constructor khoi tao truyen 1 bien 
-        {
-            _connectionFactory = connectionFactory;
-        }
-
+        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
         public async Task<CreateSizeResponseDTO> CreateSize(CreateSizeDTO request) //tao 1 ham tao productcategory
                                                                                                                     //voi bien truyen vao la 1 createProductcatgoryDTO de luu du lieu truyen xuong db
         {
             CreateSizeResponseDTO createProductCategoryResponseDTO = new CreateSizeResponseDTO(); //tao khoi tao 1 doi tuong response de tra ve api
             using var connection = _connectionFactory.CreateConnection(); //goi de khoi tao 1 ham chua chuoi string ket noi toi db
-            var command = new SqlCommand("spCreateSizeType", connection) // tao 1 bien de lien ket toi procedure da code trong sql
-            {
-                CommandType = CommandType.StoredProcedure // type store procedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spCreateSizeType", connection);
+          
 
             command.Parameters.AddWithValue("@SizeName", request.SizeName); //gan du lieu @tendulieu vao request.ten bien de luu xuong db
            
@@ -90,10 +82,8 @@ namespace GymSport.Repository
             };
 
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spUpdateSizeType", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spUpdateSizeType", connection);
+            
 
             command.Parameters.AddWithValue("@SizeID", user.SizeID);
             command.Parameters.AddWithValue("@SizeName", user.SizeName);
@@ -138,12 +128,9 @@ namespace GymSport.Repository
 
             // Create the connection using the factory
             using var connection = _connectionFactory.CreateConnection();
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spDeleteSizeType", connection);
             // Define the SQL command and stored procedure
-            using var command = new SqlCommand("spDeleteSizeType", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+          
 
             // Adding input parameter
             command.Parameters.AddWithValue("@SizeID", productCategoryID);
@@ -186,12 +173,8 @@ namespace GymSport.Repository
         public async Task<List<SizeDTO>> ListAllSize(bool? IsActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-
-            var command = new SqlCommand("spGetAllSizeTypes", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetAllSizeTypes", connection);
+            
             command.Parameters.AddWithValue("@isActive", (object)IsActive ?? DBNull.Value);
             await connection.OpenAsync();
 
@@ -215,11 +198,8 @@ namespace GymSport.Repository
         public async Task<SizeDTO> GetSizeByIDAsync(int ProductCategoryID)
         {
             using var connection = _connectionFactory.CreateConnection();
-
-            var command = new SqlCommand("spGetSizeTypeById", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetSizeTypeById", connection);
+            
 
             command.Parameters.AddWithValue("@SizeID", ProductCategoryID);
             await connection.OpenAsync();
@@ -247,10 +227,8 @@ namespace GymSport.Repository
         public async Task<(bool Success, string Message)> ToggleSizeActiveAsync(int ProductCategoryID, bool isActive)
         {
             using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spToggleSizeTypeActive", connection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
+            using var command = SqlCommandFactory.CreateStoredProcedureCommand("spToggleSizeTypeActive", connection);
+            
 
             command.Parameters.AddWithValue("@SizeID", ProductCategoryID);
             command.Parameters.AddWithValue("@isActive", isActive);

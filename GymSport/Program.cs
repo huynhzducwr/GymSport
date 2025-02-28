@@ -10,6 +10,7 @@ using Payment.Application.Interface;
 using Payment.Api.Services;
 using Payment.Application.Features.Commands;
 using Payment.Service.Momo.Config;
+using GymSport.Email;
 
 namespace GymSport
 {
@@ -24,7 +25,7 @@ namespace GymSport
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddTransient<SqlConnectionFactory>();
+         
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
@@ -50,25 +51,13 @@ namespace GymSport
             builder.Services.AddScoped<ISqlService, SqlService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IConnectionService, ConnectionService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddMediatR(r =>
             {
                 r.RegisterServicesFromAssembly(typeof(CreateMerchant).Assembly);
             });
-            //builder.Services.AddHangfire(configuration => configuration
-            //    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            //    .UseSimpleAssemblyNameTypeSerializer()
-            //    .UseRecommendedSerializerSettings()
-            //    .UseSqlServerStorage(builder.Configuration.GetConnectionString("Database"),
-            //    new Hangfire.SqlServer.SqlServerStorageOptions()
-            //    {
-            //        //TODO: Change hangfire sql server option
-            //    }));
-            //builder.Services.AddHangfireServer();
 
-
-
-            builder.Services.AddTransient<SqlConnectionFactory>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<ProductCategoryRepository>();
             builder.Services.AddScoped<ProductsRepository>();
@@ -129,9 +118,5 @@ namespace GymSport
                 options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // Giới hạn 10MB
             });
         }
-
-
-
-
     }
 }
