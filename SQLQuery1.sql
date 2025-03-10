@@ -125,43 +125,39 @@ END;
 GO
 
 
-create table Users (
+	create table Users (
 
-userID int primary key identity(1,1),
-RoleID int,
-Email nvarchar(100) unique not null,
-firstname nvarchar(50) not null,
-lastname nvarchar(50) not null,
-PasswordHash Nvarchar(255),
-CreatedAt Datetime default getdate(),
-LastLogin Datetime,
-IsActive bit default 1,
-CreatedBy nvarchar(100),
-CreatedDate Datetime default getdate(),
-ModifiedBy nvarchar(100),
-ModifiedDate datetime,
-foreign key (RoleID) references UserRoles(RoleID)
-);
+	userID int primary key identity(1,1),
+	RoleID int,
+	Email nvarchar(100) unique not null,
+	firstname nvarchar(50) not null,
+	lastname nvarchar(50) not null,
+	PasswordHash Nvarchar(255),
+	CreatedAt Datetime default getdate(),
+	LastLogin Datetime,
+	IsActive bit default 1,
+	CreatedBy nvarchar(100),
+	CreatedDate Datetime default getdate(),
+	ModifiedBy nvarchar(100),
+	ModifiedDate datetime,
+	foreign key (RoleID) references UserRoles(RoleID)
+	);
 
+	ALTER TABLE Users
+	ADD 
+		EmailVerified BIT DEFAULT 0, -- 0: Chưa xác minh, 1: Đã xác minh
+		VerificationToken NVARCHAR(255), -- Token để xác minh email
+		VerificationTokenExpiry DATETIME; -- Thời gian hết hạn của token
+
+
+
+		go
 
 Insert into UserRoles(RoleName,Description) Values
 ('Admin','Administrtor with full access'),
 ('User','User with limited access'),
 ('Manager','seller with extended access');
 
-INSERT INTO Users (
-    RoleID, Email, firstname, lastname, PasswordHash, 
-    CreatedAt, LastLogin, IsActive, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate
-) VALUES
-
-(1, 'thanh1234@gmail.com', 'Thanh', 'Nguyen', '$2a$11$7u8w2K7SpsFISVht/pbOPjruEKiOZGgl9A0RQ9/W6ZsU8G1o5lKn6', '2024-09-21 10:30:01.012', '2024-09-21 10:45:56.845', 1, 'System', '2024-09-21 10:30:01.012', 'Admin', '2024-09-21 10:45:56.845'),
-(3, 'lanh1234@gmail.com', 'Lanh', 'Tran', '$2a$11$ZDQXYyBZZLPW0oPTom9wTKznmZc/fj1p79hDrrIz6OgyfsHLzqUji', '2024-10-20 09:15:22.423', '2024-10-20 09:30:11.763', 1, 'System', '2024-10-20 09:15:22.423', 'Admin', '2024-10-20 09:30:11.763'),
-(2, 'khanh1234@gmail.com', 'Khanh', 'Pham', '$2a$11$K0tqUJYOuA9GVzywRGzNSe1sd8q6FuvV6HcplBa6szseHgGi7sbzy', '2024-11-10 14:00:30.221', '2024-11-10 14:30:40.562', 1, 'System', '2024-11-10 14:00:30.221', 'System', '2024-11-10 14:30:40.562'),
-(1, 'tuan1234@gmail.com', 'Tuan', 'Nguyen', '$2a$11$V/1lZzXtOhhbr.VrtRx2f7AKqWLjf6QHqFT8FYrc4Cbf8zn5OTNqf', '2024-09-15 16:22:13.234', '2024-09-15 16:45:22.345', 1, 'System', '2024-09-15 16:22:13.234', 'Admin', '2024-09-15 16:45:22.345'),
-(3, 'hoa1234@gmail.com', 'Hoa', 'Nguyen', '$2a$11$DRI1w8c9VhwDzTxOMFovt6BeD5zF4byO95ZmZQm/Fjbl1pxIVN44q', '2024-10-25 12:55:11.678', '2024-10-25 13:15:55.340', 1, 'System', '2024-10-25 12:55:11.678', 'System', '2024-10-25 13:15:55.340'),
-(2, 'linh1234@gmail.com', 'Linh', 'Vu', '$2a$11$D6XOSyAhfqk2cRhxjePb5t0Fl0YEGkdl6zXMq3PbBp/UgqZrx9q0m', '2024-11-07 08:15:44.892', '2024-11-07 08:25:30.556', 1, 'System', '2024-11-07 08:15:44.892', 'Admin', '2024-11-07 08:25:30.556'),
-(1, 'hoang1234@gmail.com', 'Hoang', 'Do', '$2a$11$SDiS9vv66jkmtm8R82ZyPo2Bghh47GlXvh6NrfO.d/cYF7D71WhZG', '2024-10-29 10:30:23.678', '2024-10-29 11:10:40.221', 1, 'System', '2024-10-29 10:30:23.678', 'System', '2024-10-29 11:10:40.221'),
-(3, 'bich1234@gmail.com', 'Bich', 'Le', '$2a$11$2QGSgV0mjq2guBO6yYf1JuChw5UzK7fG3wMyc5xzQI5v5FPBZZjZ6', '2024-11-01 15:42:11.551', '2024-11-01 16:12:18.812', 1, 'System', '2024-11-01 15:42:11.551', 'System', '2024-11-01 16:12:18.812');
 
 
 create table ProductCategory(
@@ -848,6 +844,10 @@ END;
 
 go
 
+
+
+
+
 create or alter procedure spRegisterUser
 @Email nvarchar(100),
 @firstname nvarchar(50),
@@ -855,6 +855,7 @@ create or alter procedure spRegisterUser
 @PasswordHash nvarchar(255),
 @CreatedBy nvarchar(100),
 @UserID int output,
+@VerificationToken NVARCHAR(255) OUTPUT,
 @ErrorMessage nvarchar(255) output
 as
 begin 
@@ -897,11 +898,15 @@ set @UserID =-1;
 return;
 end
 
+-- Sinh Verification Token ngẫu nhiên
+        SET @VerificationToken = NEWID();
+
 declare @DefaultRoleID int =2;
 begin transaction
-insert into Users(RoleID,firstname,lastname,Email,PasswordHash,CreatedBy,CreatedDate)
-values (@DefaultRoleID,@firstname,@lastname,@Email,@PasswordHash,@CreatedBy,GETDATE());
-
+--insert into Users(RoleID,firstname,lastname,Email,PasswordHash,CreatedBy,CreatedDate)
+--values (@DefaultRoleID,@firstname,@lastname,@Email,@PasswordHash,@CreatedBy,GETDATE());
+INSERT INTO Users (RoleID, firstname, lastname, Email, PasswordHash, CreatedBy, CreatedDate, EmailVerified, VerificationToken, VerificationTokenExpiry)
+        VALUES (@DefaultRoleID, @firstname, @lastname, @Email, @PasswordHash, @CreatedBy, GETDATE(), 0, @VerificationToken, DATEADD(HOUR, 24, GETDATE()));
 set @UserID = SCOPE_IDENTITY();
 set @ErrorMessage =null;
 commit transaction
@@ -914,6 +919,43 @@ set @UserID =-1;
 end catch
 end;
 go
+
+
+CREATE OR ALTER PROCEDURE spVerifyEmail
+    @Token NVARCHAR(255),
+    @Result BIT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @UserID INT, @TokenExpiry DATETIME;
+
+    -- Kiểm tra token có tồn tại và còn hiệu lực không
+    SELECT @UserID = UserID, @TokenExpiry = VerificationTokenExpiry
+    FROM Users
+    WHERE VerificationToken = @Token AND EmailVerified = 0;
+
+    IF @UserID IS NULL
+    BEGIN
+        SET @Result = 0; -- Token không hợp lệ
+        RETURN;
+    END
+
+    -- Kiểm tra token đã hết hạn chưa
+    IF @TokenExpiry < GETDATE()
+    BEGIN
+        SET @Result = 0; -- Token đã hết hạn
+        RETURN;
+    END
+
+    -- Cập nhật trạng thái xác minh email
+    UPDATE Users
+    SET EmailVerified = 1, VerificationToken = NULL, VerificationTokenExpiry = NULL
+    WHERE UserID = @UserID;
+
+    SET @Result = 1; -- Thành công
+END;
+go
+
 
 
 --Phân quy?n user
