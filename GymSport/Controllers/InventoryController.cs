@@ -16,6 +16,20 @@ namespace GymSport.Controllers
             _imageRepository = imageRepository;
         }
 
+        // Thêm factory method để tạo response
+        private IActionResult CreateResponse(bool isSuccess, object data = null, string message = null, int statusCode = 200)
+        {
+            var response = new
+            {
+                isSuccess = isSuccess,
+                message = message ?? (isSuccess ? "Operation successful" : "Operation failed"),
+                data = data
+            };
+
+            return StatusCode(statusCode, response);
+        }
+
+
         [HttpPost("upload")]
         public async Task<IActionResult> CreateInventory([FromBody] CreateInventoryDTO uploadImageDTO)
         {
@@ -33,18 +47,16 @@ namespace GymSport.Controllers
         {
             try
             {
-                // Gọi phương thức để lấy tất cả hình ảnh
                 var images = await _imageRepository.GetAllInventoryAsync();
-
-                // Trả về kết quả
-                return Ok(images);
+                return CreateResponse(true, images, "Retrieved all inventory successfully");
             }
             catch (Exception ex)
             {
-                // Trả về lỗi nếu có
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return CreateResponse(false, null, $"Internal server error: {ex.Message}", 500);
             }
         }
+
+
 
 
         [HttpDelete("{imageID}")]
@@ -52,24 +64,17 @@ namespace GymSport.Controllers
         {
             try
             {
-                // Call the method to delete the image
                 var response = await _imageRepository.DeleteInventoryAsync(imageID);
-
-                if (response.IsDeleted)
-                {
-                    // If deletion was successful, return success JSON response
-                    return Ok(new { isSuccess = true, message = response.Message });
-                }
-                else
-                {
-                    // If the image does not exist, return not found with error message
-                    return NotFound(new { isSuccess = false, message = response.Message });
-                }
+                return CreateResponse(
+                    response.IsDeleted,
+                    null,
+                    response.Message,
+                    response.IsDeleted ? 200 : 404
+                );
             }
             catch (Exception ex)
             {
-                // Return a JSON error response if there is an exception
-                return StatusCode(500, new { isSuccess = false, message = $"Internal server error: {ex.Message}" });
+                return CreateResponse(false, null, $"Internal server error: {ex.Message}", 500);
             }
         }
     }
