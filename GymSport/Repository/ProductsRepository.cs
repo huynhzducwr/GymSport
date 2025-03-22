@@ -6,50 +6,50 @@ using System.Data;
 
 namespace GymSport.Repository
 {
-    public class ProductsRepository
-    {
-        private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
-
-        public async Task<CreateProductResponseDTO> CreateProductAsync(CreateProductRequestDTO request)
+        public class ProductsRepository
         {
-            using var connection = _connectionFactory.CreateConnection();
-            using var command = new SqlCommand("spCreateProduct", connection)
+            private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
+
+            public async Task<CreateProductResponseDTO> CreateProductAsync(CreateProductRequestDTO request)
             {
-                CommandType = CommandType.StoredProcedure
-            };
-
-            // Ensure these parameters match your stored procedure definition
-            command.Parameters.Add("@ProductID", SqlDbType.Int).Direction = ParameterDirection.Output; // Output parameter
-            command.Parameters.AddWithValue("@ProductName", request.ProductName);
-            command.Parameters.AddWithValue("@Description", request.Description);
-            command.Parameters.AddWithValue("@ProductCategoryID", request.ProductCategoryID);
-            command.Parameters.AddWithValue("@Price", request.Price);
-            command.Parameters.AddWithValue("@Status", request.Status);
-
-            // Output parameters
-            command.Parameters.Add("@StatusCode", SqlDbType.Int).Direction = ParameterDirection.Output;
-            command.Parameters.Add("@Message", SqlDbType.NVarChar, 255).Direction = ParameterDirection.Output;
-
-            try
-            {
-                await connection.OpenAsync();
-                await command.ExecuteNonQueryAsync();
-
-                var outputProductID = command.Parameters["@ProductID"].Value;
-                var newProductID = outputProductID != DBNull.Value ? Convert.ToInt32(outputProductID) : 0;
-
-                return new CreateProductResponseDTO
+                using var connection = _connectionFactory.CreateConnection();
+                using var command = new SqlCommand("spCreateProduct", connection)
                 {
-                    ProductID = newProductID,
-                    IsCreated = (int)command.Parameters["@StatusCode"].Value == 0,
-                    Message = (string)command.Parameters["@Message"].Value
+                    CommandType = CommandType.StoredProcedure
                 };
+
+                // Ensure these parameters match your stored procedure definition
+                command.Parameters.Add("@ProductID", SqlDbType.Int).Direction = ParameterDirection.Output; // Output parameter
+                command.Parameters.AddWithValue("@ProductName", request.ProductName);
+                command.Parameters.AddWithValue("@Description", request.Description);
+                command.Parameters.AddWithValue("@ProductCategoryID", request.ProductCategoryID);
+                command.Parameters.AddWithValue("@Price", request.Price);
+                command.Parameters.AddWithValue("@Status", request.Status);
+
+                // Output parameters
+                command.Parameters.Add("@StatusCode", SqlDbType.Int).Direction = ParameterDirection.Output;
+                command.Parameters.Add("@Message", SqlDbType.NVarChar, 255).Direction = ParameterDirection.Output;
+
+                try
+                {
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+
+                    var outputProductID = command.Parameters["@ProductID"].Value;
+                    var newProductID = outputProductID != DBNull.Value ? Convert.ToInt32(outputProductID) : 0;
+
+                    return new CreateProductResponseDTO
+                    {
+                        ProductID = newProductID,
+                        IsCreated = (int)command.Parameters["@StatusCode"].Value == 0,
+                        Message = (string)command.Parameters["@Message"].Value
+                    };
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error creating product: {ex.Message}", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error creating product: {ex.Message}", ex);
-            }
-        }
 
         public async Task<UpdateProductResponseDTO> UpdateProductAsync(UpdateProductRequestDTO request)
         {
@@ -115,7 +115,7 @@ namespace GymSport.Repository
         {
             using var connection = _connectionFactory.CreateConnection();
             using var command = SqlCommandFactory.CreateStoredProcedureCommand("spGetProductByID", connection);
-       
+
             command.Parameters.AddWithValue("@ProductID", productId);
 
             try
@@ -132,6 +132,7 @@ namespace GymSport.Repository
                         Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? string.Empty : reader.GetString(reader.GetOrdinal("Description")),
                         Price = reader.IsDBNull(reader.GetOrdinal("Price")) ? 0 : reader.GetDecimal(reader.GetOrdinal("Price")),
                         isActive = reader.IsDBNull(reader.GetOrdinal("isActive")) ? false : reader.GetBoolean(reader.GetOrdinal("isActive")),
+                        ProductCategoryID = reader.IsDBNull(reader.GetOrdinal("ProductCategoryID")) ? 0 : reader.GetInt32(reader.GetOrdinal("ProductCategoryID")), // Thêm ID danh mục
                         ProductCategoryName = reader.IsDBNull(reader.GetOrdinal("ProductCategoryName")) ? string.Empty : reader.GetString(reader.GetOrdinal("ProductCategoryName")),
                         Status = reader.IsDBNull(reader.GetOrdinal("Status")) ? string.Empty : reader.GetString(reader.GetOrdinal("Status")),
                         ModifiedDate = reader.IsDBNull(reader.GetOrdinal("ModifiedDate")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("ModifiedDate"))
@@ -147,6 +148,37 @@ namespace GymSport.Repository
                 throw new Exception($"Error retrieving product by ID: {ex.Message}", ex);
             }
         }
+
+
+
+        public async Task<CreateProductResponseDTO> CloneProductAsync(int productId)
+        {
+            // Bước 1: Lấy thông tin sản phẩm gốc
+            var existingProduct = await GetProductByIdAsync(productId);
+            if (existingProduct == null)
+            {
+                return new CreateProductResponseDTO
+                {
+                    ProductID = 0,
+                    IsCreated = false,
+                    Message = "Product not found."
+                };
+            }
+
+            // Bước 2: Tạo DTO yêu cầu sản phẩm mới từ dữ liệu sản phẩm gốc
+            var clonedProductRequest = new CreateProductRequestDTO
+            {
+                ProductName = existingProduct.ProductName + " (Copy)", // Đổi tên tránh trùng lặp
+                Description = existingProduct.Description,
+                ProductCategoryID = existingProduct.ProductCategoryID, // Đã có ID, không phải Name
+                Price = existingProduct.Price,
+                Status = existingProduct.Status
+            };
+
+            // Bước 3: Tạo sản phẩm mới bằng cách gọi CreateProductAsync
+            return await CreateProductAsync(clonedProductRequest);
+        }
+
 
 
         public async Task<List<ProductDetailResponseDTO>> GetAllProductsAsync(GetAllProductsRequestDTO request)

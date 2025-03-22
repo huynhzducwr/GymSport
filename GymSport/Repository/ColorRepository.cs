@@ -8,6 +8,9 @@ namespace GymSport.Repository
 {
     public class ColorRepository
     {
+
+
+
         //tao 1 bien Read Only de doc chuoi string ket noi toi co so du lieu
         private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
 

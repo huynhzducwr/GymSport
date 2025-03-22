@@ -11,7 +11,7 @@ public class ImageRepository
 {
     private static readonly SqlConnectionFactory _connectionFactory = SqlConnectionFactory.Instance; // Dùng Singleton
     private static readonly string _imageFolderPath;
-
+        
     // Khối static constructor để khởi tạo đường dẫn & tạo thư mục
     static ImageRepository()
     {

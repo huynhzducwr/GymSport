@@ -115,35 +115,127 @@ async function closeSuccessAlert() {
     successBox.style.display = 'none'; // Close the success alert
 }
 
+class UserBuilder {
+    constructor() {
+        this.firstName = 'John'; // Mặc định
+        this.lastName = 'Doe'; // Mặc định
+        this.email = '';
+        this.password = ''; // Không có giá trị mặc định
+    }
 
-// Xử lý gửi biểu mẫu đăng ký
-document.getElementById('signup-form').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của form
-    const firstname = document.getElementById('username-signup').value;
-    const lastname = document.getElementById('lastname-signup').value;
-    const email = document.getElementById('email-signup').value;
-    const password = document.getElementById('password-signup').value;
+    setFirstName(firstName) {
+        this.firstName = firstName.trim() || this.firstName;
+        return this;
+    }
+
+    setLastName(lastName) {
+        this.lastName = lastName.trim() || this.lastName;
+        return this;
+    }
+
+    setEmail(email) {
+        if (!email.trim()) {
+            throw new Error('Email is required');
+        }
+        this.email = email.trim();
+        return this;
+    }
+
+    setPassword(password) {
+        if (!password.trim()) {
+            throw new Error('Password is required');
+        }
+        this.password = password.trim();
+        return this;
+    }
+
+    build() {
+        if (!this.email) {
+            throw new Error('Email is required');
+        }
+        if (!this.password) {
+            throw new Error('Password is required');
+        }
+
+        return {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+            password: this.password
+        };
+    }
+}
+
+async function isEmailDuplicate(email) {
+    try {
+        const response = await fetch('/api/User/AllUsers');
+        const data = await response.json();
+        console.log("Fetched data:", data);
+
+        if (!response.ok || !data.success) {
+            console.error('Failed to fetch users:', data.message);
+            return false;
+        }
+
+        if (!data.data || !Array.isArray(data.data)) {
+            console.error('Invalid data structure:', data);
+            return false;
+        }
+
+        const users = data.data; // Dữ liệu user nằm trong data.data, không phải data.result
+        return users.some(user => user.email.toLowerCase() === email.toLowerCase());
+
+    } catch (error) {
+        console.error('Error checking email duplication:', error);
+        return false;
+    }
+}
+
+// Xử lý sự kiện đăng ký
+document.getElementById("signup-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // Lấy giá trị từ các trường nhập liệu
+    let firstName = document.getElementById("username-signup").value;
+    let lastName = document.getElementById("lastname-signup").value;
+    let email = document.getElementById("email-signup").value;
+    let password = document.getElementById("password-signup").value;
 
     try {
-        const response = await fetch('https://localhost:44326/api/User/RegisterUser', {
+        // Kiểm tra xem email đã tồn tại chưa
+        const isDuplicate = await isEmailDuplicate(email);
+        if (isDuplicate) {
+            alert('This email is already registered. Please use another email.');
+            return; // Ngừng đăng ký nếu email đã tồn tại
+        }
+
+        // Sử dụng UserBuilder để tạo requestBody
+        const userBuilder = new UserBuilder();
+        const requestBody = userBuilder
+            .setFirstName(firstName)
+            .setLastName(lastName)
+            .setEmail(email)
+            .setPassword(password)
+            .build();
+
+        // Gửi dữ liệu đăng ký đến API
+        const response = await fetch('/api/User/RegisterUser', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ firstname: firstname, lastname: lastname,  email: email, password: password })
-        });  
-   
+            body: JSON.stringify(requestBody)
+        });
 
         const data = await response.json();
-        if (data.data.isCreated) {
-            showSuccessAlert('Tạo tài khoản thành công');
-            // Có thể chuyển hướng đến trang đăng nhập hoặc trang khác
+
+        if (response.ok) {
+            alert('User registered successfully!');
         } else {
-            showAlert('Tạo tài khoản thất bại: ' + data.message);
+            alert('Registration failed: ' + data.message);
         }
     } catch (error) {
-        console.error('Lỗi:', error);
-        showAlert('Đã xảy ra lỗi trong quá trình tạo tài khoản.');
+        alert('Error: ' + error.message);
     }
 });
 

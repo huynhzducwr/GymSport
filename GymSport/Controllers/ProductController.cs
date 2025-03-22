@@ -92,7 +92,18 @@ namespace GymSport.Controllers
                 return new APIResponse<CreateProductResponseDTO>(HttpStatusCode.InternalServerError, "Product creation failed.", ex.Message);
             }
         }
+        [HttpPost("clone/{productId}")]
+        public async Task<IActionResult> CloneProduct(int productId)
+        {
+            var clonedProduct = await _productRepository.CloneProductAsync(productId);
 
+            if (!clonedProduct.IsCreated)
+            {
+                return BadRequest(new { message = clonedProduct.Message });
+            }
+
+            return Ok(clonedProduct);
+        }
 
 
         [HttpPut("Update")]
@@ -162,4 +173,3 @@ namespace GymSport.Controllers
 
 
 }
-

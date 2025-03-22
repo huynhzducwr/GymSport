@@ -14,37 +14,43 @@ namespace GymSport.Controllers
     [ApiController]
     public class FeedBackController : ControllerBase
     {
+        private readonly FeedBackRepository _feedbackRepository; // Khai báo repository cho Feedback
+        private readonly ILogger<FeedBackController> _logger; // Khai báo logger
 
-        // Singleton instance cho controller
-    private static FeedBackController _instance;
-    private static readonly object _lock = new object();
-    
-    private readonly FeedBackRepository _feedbackRepository;
-    private readonly ILogger<FeedBackController> _logger;
-
-    // Constructor private để ngăn tạo instance trực tiếp
-    private FeedBackController(FeedBackRepository feedbackRepository, ILogger<FeedBackController> logger)
-    {
-        _feedbackRepository = feedbackRepository;
-        _logger = logger;
-    }
-
-    // Method để lấy instance
-    public static FeedBackController GetInstance(FeedBackRepository repo, ILogger<FeedBackController> logger)
-    {
-        if (_instance == null)
+        public FeedBackController(FeedBackRepository feedbackRepository, ILogger<FeedBackController> logger) // Constructor với tham số repository và logger
         {
-            lock (_lock)
+            _feedbackRepository = feedbackRepository;
+            _logger = logger;
+        }
+        [HttpPost("AddFeedback")]
+        public async Task<APIResponse<GiveAFeedBackResponseDTO>> GiveFeedback([FromBody] GiveAFeedBackDTO request)
+        {
+            _logger.LogInformation("Request Received for GiveFeedback: {@GiveAFeedBackDTO}", request);
+
+            if (!ModelState.IsValid)
             {
-                if (_instance == null)
+                _logger.LogInformation("Invalid request data in body");
+                return new APIResponse<GiveAFeedBackResponseDTO>(HttpStatusCode.BadRequest, "Invalid data in request body");
+            }
+
+            try
+            {
+                var response = await _feedbackRepository.GiveFeedback(request); // Gọi phương thức GiveFeedback từ repository
+                _logger.LogInformation("GiveFeedback Response from repository: {@GiveAFeedBackResponseDTO}", response);
+
+                if (response.IsSuccess)
                 {
-                    _instance = new FeedBackController(repo, logger);
+                    return new APIResponse<GiveAFeedBackResponseDTO>(response, response.Message);
                 }
+
+                return new APIResponse<GiveAFeedBackResponseDTO>(HttpStatusCode.BadRequest, response.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding feedback for ProductID {ProductID} by UserID {UserID}", request.ProductID, request.UserID);
+                return new APIResponse<GiveAFeedBackResponseDTO>(HttpStatusCode.InternalServerError, "Failed to add feedback", ex.Message);
             }
         }
-        return _instance;
-    }
-
 
 
         [HttpGet("GetAllFeedBack")]

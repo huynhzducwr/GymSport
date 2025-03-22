@@ -24,6 +24,18 @@ namespace GymSport.DTOs.ProductDTOs
         [RegularExpression("(Available|Sold Out)", ErrorMessage = "Status must be 'Available' or 'Sold Out'.")]
         public string Status { get; set; }
 
+        // Prototype Pattern - Clone object
+        public object Clone()
+        {
+            return new CreateProductRequestDTO
+            {
+                ProductName = this.ProductName,
+                ProductCategoryID = this.ProductCategoryID,
+                Description = this.Description,
+                Price = this.Price,
+                Status = this.Status
+            };
+        }
 
     }
 }

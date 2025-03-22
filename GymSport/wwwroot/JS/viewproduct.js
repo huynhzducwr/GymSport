@@ -5,7 +5,7 @@
 
         const products = result.data; // Access the array of products from the "data" property
 
-        console.log('Fetched products:', products); // Log the products array
+        
 
         if (Array.isArray(products)) {
             const productImages = await fetchProductImages(); // Assuming you have a function for fetching product images
@@ -18,71 +18,101 @@
             const popularProducts = products.slice(0, 4);
             renderProducts(popularProducts, productImages, productColors, 'popular-pick');
         } else {
-            console.error('Products fetched is not an array:', products);
+       
         }
     } catch (error) {
-        console.error('Error fetching products:', error);
+
     }
 }
 
+async function fetchAllFeedBack() {
+    const url = `/api/FeedBack/GetAllFeedBack`;
 
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Log feedback:", result);
+
+            return result.data;
+        } else {
+            console.error("Loi lay du lieu feedback:", response.statusText);
+            return [];
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+        return [];
+    }
+}
+
+class FeedbackIterator {
+    constructor(feedbacks) {
+        this.feedbacks = feedbacks;
+        this.index = 0;
+    }
+
+    hasNext() {
+        return this.index < this.feedbacks.length;
+    }
+
+    next() {
+        return this.hasNext() ? this.feedbacks[this.index++] : null;
+    }
+}
 async function fetchPopularProducts() {
     const feedbackData = await fetchAllFeedBack();
 
     if (!Array.isArray(feedbackData)) {
-        console.error("Feedback data is not an array:", feedbackData);
+        console.error("Du lieu feedback khong phai la 1 mang:", feedbackData);
         return;
     }
 
-    // Aggregate high ratings (4 and 5 stars) for each product
+    const iterator = new FeedbackIterator(feedbackData);
     const ratingCounts = {};
-    feedbackData.forEach(feedback => {
-        if (feedback.rating >= 4) { // Consider only 4 and 5-star ratings
-            if (!ratingCounts[feedback.productID]) {
-                ratingCounts[feedback.productID] = 0;
-            }
-            ratingCounts[feedback.productID]++;
+    while (iterator.hasNext()) {
+        const feedback = iterator.next();
+        if (feedback.rating >= 4) {
+            ratingCounts[feedback.productID] = (ratingCounts[feedback.productID] || 0) + 1;
         }
-    });
+    }
 
-    // Sort products by the number of high ratings in descending order and get the top 4
+
     const popularProductIDs = Object.entries(ratingCounts)
-        .sort((a, b) => b[1] - a[1]) // Sort by count of high ratings
-        .slice(0, 4) // Get top 4 products
-        .map(entry => parseInt(entry[0])); // Extract product IDs
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(entry => parseInt(entry[0]));
 
-    // Fetch and display popular products based on high ratings
+
     if (popularProductIDs.length > 0) {
-        fetchProductss(popularProductIDs); // Only popularProductIDs will be used for 'popular-pick'
+        fetchProductss(popularProductIDs);
     } else {
-        console.log("No popular products based on feedback ratings.");
+        console.log("Khong co san pham nao dua tren feedback rating");
     }
 }
 
 async function fetchProductss(topProductIDs) {
     try {
-        const response = await fetch('/api/Product/All'); // Adjust the API endpoint
-        const result = await response.json(); // The API response includes the products in the "data" property
+        const response = await fetch('/api/Product/All'); 
+        const result = await response.json(); 
 
-        const products = result.data; // Access the array of products from the "data" property
+        const products = result.data; 
 
-        console.log('Fetched products:', products); // Log the products array
+        console.log('In san pham:', products); 
 
         if (Array.isArray(products)) {
-            const productImages = await fetchProductImages(); // Assuming you have a function for fetching product images
-            const productColors = await fetchProductColors(); // Assuming you have a function for fetching product colors
+            const productImages = await fetchProductImages(); 
+            const productColors = await fetchProductColors(); 
 
-            // Filter the products to only include the top products
+   
             const topProducts = products.filter(product => topProductIDs.includes(product.productID));
 
             renderProducts(topProducts, productImages, productColors, 'popular-pick');
-            //const popularProducts = products.slice(0, 4);
-            //renderProducts(popularProducts, productImages, productColors, 'popular-pick');
+
         } else {
-            console.error('Products fetched is not an array:', products);
+            console.error('Product khong phai la 1 mang:', products);
         }
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Loi in ra product:', error);
     }
 }
 
@@ -133,7 +163,7 @@ async function closeSuccessAlert() {
 
 
 
-// Hàm để lấy dữ liệu màu sắc
+
 async function fetchProductColors() {
     let url = '/api/ProductColor/GetAllProductColor';
     try {
@@ -293,7 +323,7 @@ function renderProducts(products, productImages, productColors, containerId) {
 }
 
 
-let fetchedImages = []; // Initialize as an empty array
+let fetchedImages = [];
 
 async function fetchImages() {
     try {
@@ -308,10 +338,9 @@ async function fetchImages() {
     }
 }
 
-fetchImages(); // Ensure images are loaded when the page loads
+fetchImages(); 
 
 
-// Event listener for "favorite" functionality
 async function toggleFavorite(event) {
     event.target.classList.toggle("fa-regular");
     event.target.classList.toggle("fa-solid");
@@ -363,25 +392,7 @@ async function toggleFavorite(event) {
 
 
 
-async function fetchAllFeedBack() {
-    const url = `/api/FeedBack/GetAllFeedBack`;
 
-    try {
-        const response = await fetch(url);
-        if (response.ok) {
-            const result = await response.json();
-            console.log("Fetch feedback:", result);
-
-            return result.data;
-        } else {
-            console.error("Error fetching feedback:", response.statusText);
-            return []; // Return an empty array if an error occurs
-        }
-    } catch (error) {
-        console.error("Network error:", error);
-        return [];
-    }
-}
 
 
 document.addEventListener('DOMContentLoaded', () => {

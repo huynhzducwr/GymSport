@@ -9,6 +9,8 @@ namespace GymSport.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
+       
+
         private readonly InventoryRepository _imageRepository;
 
         public InventoryController(InventoryRepository imageRepository)
@@ -16,9 +18,16 @@ namespace GymSport.Controllers
             _imageRepository = imageRepository;
         }
 
-        // Thêm factory method để tạo response
-        private IActionResult CreateResponse(bool isSuccess, object data = null, string message = null, int statusCode = 200)
+        // ===== FACTORY METHOD PATTERN =====
+        // Factory Method Pattern định nghĩa một interface để tạo đối tượng,
+        // nhưng để các lớp con quyết định lớp nào sẽ được khởi tạo.
+        // Trong trường hợp này, chúng ta sử dụng một phương thức factory đơn giản
+        // để tạo ra các đối tượng response chuẩn hóa.
+
+        // Factory method để tạo response chuẩn hóa
+        private IActionResult CreateResponse(bool isSuccess, object? data = null, string? message = null, int statusCode = 200)
         {
+            // Tạo đối tượng response với cấu trúc chuẩn
             var response = new
             {
                 isSuccess = isSuccess,
@@ -26,8 +35,10 @@ namespace GymSport.Controllers
                 data = data
             };
 
+            // Trả về response với status code phù hợp
             return StatusCode(statusCode, response);
         }
+
 
 
         [HttpPost("upload")]
@@ -64,7 +75,10 @@ namespace GymSport.Controllers
         {
             try
             {
+                // Xóa dữ liệu từ repository
                 var response = await _imageRepository.DeleteInventoryAsync(imageID);
+
+                // Sử dụng factory method để tạo response phù hợp với kết quả
                 return CreateResponse(
                     response.IsDeleted,
                     null,
@@ -74,8 +88,10 @@ namespace GymSport.Controllers
             }
             catch (Exception ex)
             {
+                // Sử dụng factory method để tạo response lỗi
                 return CreateResponse(false, null, $"Internal server error: {ex.Message}", 500);
             }
         }
+
     }
 }

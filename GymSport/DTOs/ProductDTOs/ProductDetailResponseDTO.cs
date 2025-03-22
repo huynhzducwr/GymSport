@@ -8,6 +8,7 @@
         public decimal Price { get; set; }
         public bool isActive { get; set; }
         public string ProductCategoryName { get; set; }
+        public int ProductCategoryID { get; set; }
         public string Status { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

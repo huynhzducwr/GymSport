@@ -157,8 +157,9 @@ namespace GymSport.Repository
                     OrderStatus = reader.GetValueByColumn<string>("OrderStatus"),
                     ShippingAddress = reader.GetValueByColumn<string>("ShippingAddress"),
                     PhoneNumber = reader.GetValueByColumn<string>("PhoneNumber"),
-                    TotalAmount = reader.GetDecimal(10) // TotalAmount là cột thứ 10 trong kết quả
+                    TotalAmount = reader.GetValueByColumn<decimal>("TotalAmount") // Đổi từ GetDecimal(10)
                 });
+
             }
 
             return orders;

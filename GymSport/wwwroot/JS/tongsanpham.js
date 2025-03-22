@@ -60,6 +60,9 @@ function renderProducts(products, productImages, productColors) {
     products.forEach((product, index) => {
         const tr = document.createElement('tr');
 
+        const tdID = document.createElement('td');
+        tdID.textContent = product.productID || product.productID || 'N/A';
+        tr.appendChild(tdID);
         // Tên sản phẩm
         const tdName = document.createElement('td');
         tdName.textContent = product.name || product.productName || 'N/A';
@@ -67,7 +70,7 @@ function renderProducts(products, productImages, productColors) {
 
         // Chi tiết sản phẩm (nút xem thêm mở popup)
         const tdDetails = document.createElement('td');
-        const shortText = (product.description || product.detail || 'N/A').substring(0, 50) + '...';
+        const shortText = (product.description || product.detail || 'N/A').substring(0, 10) + '...';
 
         const spanText = document.createElement('span');
         spanText.textContent = shortText;
@@ -166,8 +169,14 @@ function renderProducts(products, productImages, productColors) {
 
 
 document.getElementById('add-product-btn').addEventListener('click', function () {
-    alert('Mở modal hoặc form để thêm sản phẩm!');
+    window.location.href = 'themsanpham';
 });
+document.getElementById('clone-product-btn').addEventListener('click', function () {
+  
+    window.location.href = 'themsanpham';
+});
+
+
 
 function addStyles() {
     const style = document.createElement('style');
@@ -188,6 +197,19 @@ function addStyles() {
             font-size: 14px;
         }
         #add-product-btn:hover {
+            background-color: #218838;
+        }
+        
+        #clone-product-btn {
+            padding: 8px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #clone-product-btn {
             background-color: #218838;
         }
     `;

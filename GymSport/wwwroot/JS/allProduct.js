@@ -1,23 +1,27 @@
 ﻿
+// Định nghĩa các chiến lược sắp xếp
+const SortStrategies = {
+    lowToHigh: (products) => [...products].sort((a, b) => a.price - b.price),
+    highToLow: (products) => [...products].sort((a, b) => b.price - a.price)
+};
+
+// Hàm xử lý thay đổi sắp xếp
 function handleSortChange(products, productImages, productColors) {
     const sortLowToHigh = document.getElementById('sortLowToHigh');
     const sortHighToLow = document.getElementById('sortHighToLow');
 
-    // Add event listeners to the sorting options
-    sortLowToHigh.addEventListener('click', () => {
-        console.log('Sorting by Price: Low to High');
-        // Sort by price low to high
-        const sortedProducts = [...products].sort((a, b) => a.price - b.price);
-        renderProducts(sortedProducts, productImages, productColors);
-    });
-
-    sortHighToLow.addEventListener('click', () => {
-        console.log('Sorting by Price: High to Low');
-        // Sort by price high to low
-        const sortedProducts = [...products].sort((a, b) => b.price - a.price);
-        renderProducts(sortedProducts, productImages, productColors);
-    });
+    // Xử lý sự kiện click và áp dụng chiến lược sắp xếp tương ứng
+    sortLowToHigh.addEventListener('click', () => applySorting("lowToHigh", products, productImages, productColors));
+    sortHighToLow.addEventListener('click', () => applySorting("highToLow", products, productImages, productColors));
 }
+
+// Hàm áp dụng chiến lược sắp xếp
+function applySorting(strategy, products, productImages, productColors) {
+    console.log(`Sorting by strategy: ${strategy}`);
+    const sortedProducts = SortStrategies[strategy](products);
+    renderProducts(sortedProducts, productImages, productColors);
+}
+
 
 //tim size
 async function fetchProductSize() {
@@ -59,24 +63,99 @@ function handleSizeFilter(products, productImages, productColors, productSizes) 
         });
     });
 }
-//tim product theo category
+// Hàm để lấy dữ liệu màu sắc
+
+
+function handleColorFilter(products, productImages, productColors, productSizes) {
+    const colorElements = document.querySelectorAll('.listt_color .type_box');
+
+    colorElements.forEach((colorElement) => {
+        colorElement.addEventListener('click', () => {
+            const selectedColor = colorElement.textContent.trim(); // Get selected color name
+            const filteredProducts = filterProductsByColor(products, productColors, selectedColor); // Filter products by color
+
+            renderProducts(filteredProducts, productImages, productColors, productSizes); // Re-render filtered products
+        });
+    });
+}
+
+function filterProductsByColor(products, productColors, selectedColorName) {
+    // Get products that match the selected color
+    const filteredProductIDs = productColors
+        .filter((color) => color.colorName === selectedColorName)
+        .map((color) => color.productID);
+
+    return products.filter((product) => filteredProductIDs.includes(product.productID));
+}
+
+// 1️⃣ Lớp ProductFilter (cơ bản)
+class ProductFilter {
+    constructor(products) {
+        this.products = products;
+    }
+
+    filter() {
+        return this.products;
+    }
+}
+
+// 2️⃣ Decorator để lọc theo danh mục
+class CategoryFilterDecorator {
+    constructor(productFilter, selectedCategory) {
+        this.productFilter = productFilter;
+        this.selectedCategory = selectedCategory;
+    }
+
+    filter() {
+        return this.productFilter.filter().filter(product =>
+            product.productCategoryName === this.selectedCategory
+        );
+    }
+}
+
+// 3️⃣ Hàm xử lý sự kiện lọc theo danh mục
 function handleCategoryFilter(products, productImages, productColors) {
     const categoryItems = document.querySelectorAll('.type_box');
 
-    // Add event listeners to each category item
     categoryItems.forEach(item => {
         item.addEventListener('click', () => {
             const selectedCategory = item.getAttribute('data-category');
             console.log(`Selected Category: ${selectedCategory}`);
 
-            // Filter the products by the selected category
-            const filteredProducts = products.filter(product => product.productCategoryName === selectedCategory);
+            // Áp dụng Decorator để lọc theo danh mục
+            let productFilter = new ProductFilter(products);
+            productFilter = new CategoryFilterDecorator(productFilter, selectedCategory);
 
-            // Re-render the filtered products
+            // Lấy danh sách sản phẩm đã lọc
+            const filteredProducts = productFilter.filter();
+
+            // Hiển thị sản phẩm đã lọc
             renderProducts(filteredProducts, productImages, productColors);
         });
     });
 }
+
+
+
+
+//tim product theo category
+//function handleCategoryFilter(products, productImages, productColors) {
+//    const categoryItems = document.querySelectorAll('.type_box');
+
+//    // Add event listeners to each category item
+//    categoryItems.forEach(item => {
+//        item.addEventListener('click', () => {
+//            const selectedCategory = item.getAttribute('data-category');
+//            console.log(`Selected Category: ${selectedCategory}`);
+
+//            // Filter the products by the selected category
+//            const filteredProducts = products.filter(product => product.productCategoryName === selectedCategory);
+
+//            // Re-render the filtered products
+//            renderProducts(filteredProducts, productImages, productColors);
+//        });
+//    });
+//}
 
 
 async function fetchProductColors() {
@@ -142,32 +221,6 @@ async function fetchProducts() {
         console.error("Network error:", error);
     }
 }
-
-// Hàm để lấy dữ liệu màu sắc
-
-
-function handleColorFilter(products, productImages, productColors, productSizes) {
-    const colorElements = document.querySelectorAll('.listt_color .type_box');
-
-    colorElements.forEach((colorElement) => {
-        colorElement.addEventListener('click', () => {
-            const selectedColor = colorElement.textContent.trim(); // Get selected color name
-            const filteredProducts = filterProductsByColor(products, productColors, selectedColor); // Filter products by color
-
-            renderProducts(filteredProducts, productImages, productColors, productSizes); // Re-render filtered products
-        });
-    });
-}
-
-function filterProductsByColor(products, productColors, selectedColorName) {
-    // Get products that match the selected color
-    const filteredProductIDs = productColors
-        .filter((color) => color.colorName === selectedColorName)
-        .map((color) => color.productID);
-
-    return products.filter((product) => filteredProductIDs.includes(product.productID));
-}
-
 
 
 function renderProducts(products, productImages, productColors, productSizes) {

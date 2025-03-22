@@ -2,6 +2,42 @@
     fetchProductCategories(); // Tải danh mục sản phẩm khi trang được load
 });
 
+
+document.getElementById("clone-product-form").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Ngăn form submit mặc định
+
+    // Lấy ID sản phẩm cần clone từ input
+    const existingProductId = document.getElementById("product-id-to-clone").value.trim();
+
+    if (!existingProductId || isNaN(existingProductId)) {
+        alert("Vui lòng nhập một ID hợp lệ!");
+        return;
+    }
+
+    try {
+        // Gọi API clone sản phẩm
+        const response = await fetch(`/api/Product/clone/${existingProductId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Sản phẩm đã được clone thành công! ID mới: " + data.productID);
+        } else {
+            alert("Lỗi khi clone sản phẩm: " + data.message);
+        }
+    } catch (error) {
+        console.error("Lỗi khi clone sản phẩm:", error);
+        alert("Đã xảy ra lỗi.");
+    }
+});
+
+
+
 // Xử lý sự kiện submit form
 document.getElementById("add-product-form").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn form submit mặc định
@@ -18,7 +54,7 @@ document.getElementById("add-product-form").addEventListener("submit", async fun
         alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
         return;
     }
-
+        
     const productData = {
         productName,
         productCategoryID: productCategory,

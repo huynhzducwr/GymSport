@@ -35,13 +35,21 @@ namespace GymSport.Controllers
             {
                 var response = await _productCategoryRepository.CreateColor(request);  //goi tham chieu den ham createproductecategory tu repository
                 _logger.LogInformation("CreateColor Response from repository: {@CreateColorResponseDTO}", response);
-                if (response.isCreated)
+                // Sử dụng Clone để tạo bản sao của response
+                var clonedResponse = response.Clone();
+
+                if (clonedResponse.isCreated)
                 {
-                    return new APIResponse<CreateColorResponseDTO>(response, response.Message);
-
+                    return new APIResponse<CreateColorResponseDTO>(clonedResponse, clonedResponse.Message);
                 }
-                return new APIResponse<CreateColorResponseDTO>(HttpStatusCode.BadRequest, response.Message);
 
+                //if (response.isCreated)
+                //{
+                //    return new APIResponse<CreateColorResponseDTO>(response, response.Message);
+
+                //}
+                //return new APIResponse<CreateColorResponseDTO>(HttpStatusCode.BadRequest, response.Message);
+                return new APIResponse<CreateColorResponseDTO>(HttpStatusCode.BadRequest, clonedResponse.Message);
             }
             catch (Exception ex)
             {
