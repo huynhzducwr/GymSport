@@ -1,32 +1,66 @@
-﻿async function fetchProducts() {
+﻿
+class ProductOptionFactory {
+    static createOption(product) {
+        const option = document.createElement('option');
+        option.value = product.productID;
+        option.textContent = product.productName;
+        return option;
+    }
+}
+
+async function fetchProducts() {
     try {
-        const response = await fetch('/api/Product/All'); // Gọi API để lấy danh sách sản phẩm
-        const result = await response.json(); // Dữ liệu trả về từ API
+        const response = await fetch('/api/Product/All');
+        const result = await response.json();
+        const products = result.data;
 
-        const products = result.data; // Dữ liệu sản phẩm
         console.log(products);
-        const productSelect = document.getElementById('product-select');
 
-        // Xóa các sản phẩm cũ trong dropdown
+        const productSelect = document.getElementById('product-select');
         productSelect.innerHTML = '';
 
         // Thêm tùy chọn mặc định
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = 'Chọn sản phẩm';
-        productSelect.appendChild(defaultOption);
+        productSelect.appendChild(ProductOptionFactory.createOption({ productID: '', productName: 'Chọn sản phẩm' }));
 
-        // Thêm các sản phẩm vào dropdown
+        // Thêm sản phẩm từ API
         products.forEach(product => {
-            const option = document.createElement('option');
-            option.value = product.productID; // Sử dụng ProductID
-            option.textContent = product.productName;  // Sử dụng ProductName
-            productSelect.appendChild(option);
+            productSelect.appendChild(ProductOptionFactory.createOption(product));
         });
     } catch (error) {
         console.error('Error fetching products:', error);
     }
 }
+
+ 
+//async function fetchProducts() {
+//    try {
+//        const response = await fetch('/api/Product/All'); // Gọi API để lấy danh sách sản phẩm
+//        const result = await response.json(); // Dữ liệu trả về từ API
+
+//        const products = result.data; // Dữ liệu sản phẩm
+//        console.log(products);
+//        const productSelect = document.getElementById('product-select');
+
+//        // Xóa các sản phẩm cũ trong dropdown
+//        productSelect.innerHTML = '';
+
+//        // Thêm tùy chọn mặc định
+//        const defaultOption = document.createElement('option');
+//        defaultOption.value = '';
+//        defaultOption.textContent = 'Chọn sản phẩm';
+//        productSelect.appendChild(defaultOption);
+
+//        // Thêm các sản phẩm vào dropdown
+//        products.forEach(product => {
+//            const option = document.createElement('option');
+//            option.value = product.productID; // Sử dụng ProductID
+//            option.textContent = product.productName;  // Sử dụng ProductName
+//            productSelect.appendChild(option);
+//        });
+//    } catch (error) {
+//        console.error('Error fetching products:', error);
+//    }
+//}
 
 // Gọi hàm khi trang tải xong
 document.addEventListener('DOMContentLoaded', fetchProducts);

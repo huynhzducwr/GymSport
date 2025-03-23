@@ -859,52 +859,95 @@ addToBagButton.addEventListener('click', async function () {
         .setQuantity(1)
         .build();
 
-    // Tạo phần tử HTML để hiển thị trong giỏ hàng
-    const newItemHTML = `
-    <div class="order_item">
-        <div class="img">
-            <a class="container_img" href="/productdetail/${product.productID}">
-                <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${productName}">
-            </a>
-        </div>
-        <div class="description_product">
-            <p class="boldz" id="bagProductName">${productName}</p>
-            <p id="bagProductCategory">${productCategory}</p>
-            <p id="bagProductSize">Kích thước: ${productSize}</p>
-            <p id="bagProductPrice" class="boldz">$${productPrice.toFixed(2)}</p>
-            <p id="bagProductColor">Màu sắc: ${productColor}</p>
-            <div class="heart_delete">
-                <div class="heartt">
-                    <i class="fa-regular fa-heart"></i>
-                </div>
-                <div class="bin">
-                    <i class="fa-regular fa-trash-can"></i>
-                </div>
-                <div class="qtyy">
-                    <p> Số lượng: 1</p>
-                </div>
-            </div>
-        </div>
-    </div>
-`;
+//    // Tạo phần tử HTML để hiển thị trong giỏ hàng
+//    const newItemHTML = `
+//    <div class="order_item">
+//        <div class="img">
+//            <a class="container_img" href="/productdetail/${product.productID}">
+//                <img class="edt_product" src="${imageData ? imageData.imageURL : '/src/default-image.png'}" alt="${productName}">
+//            </a>
+//        </div>
+//        <div class="description_product">
+//            <p class="boldz" id="bagProductName">${productName}</p>
+//            <p id="bagProductCategory">${productCategory}</p>
+//            <p id="bagProductSize">Kích thước: ${productSize}</p>
+//            <p id="bagProductPrice" class="boldz">$${productPrice.toFixed(2)}</p>
+//            <p id="bagProductColor">Màu sắc: ${productColor}</p>
+//            <div class="heart_delete">
+//                <div class="heartt">
+//                    <i class="fa-regular fa-heart"></i>
+//                </div>
+//                <div class="bin">
+//                    <i class="fa-regular fa-trash-can"></i>
+//                </div>
+//                <div class="qtyy">
+//                    <p> Số lượng: 1</p>
+//                </div>
+//            </div>
+//        </div>
+//    </div>
+//`;
 
-    // Thêm sản phẩm vào giỏ hàng
-    containerProduct.insertAdjacentHTML('beforeend', newItemHTML);
+//    // Thêm sản phẩm vào giỏ hàng
+//    containerProduct.insertAdjacentHTML('beforeend', newItemHTML);
 
-    // Cập nhật số lượng sản phẩm
-    let currentQty = parseInt(bagItemCount.textContent.split(': ')[1]) + 1;
-    bagItemCount.textContent = `Qty: ${currentQty}`;
+//    // Cập nhật số lượng sản phẩm
+//    let currentQty = parseInt(bagItemCount.textContent.split(': ')[1]) + 1;
+//    bagItemCount.textContent = `Qty: ${currentQty}`;
 
-    // Cập nhật tổng giá trị giỏ hàng
-    let currentTotalPrice = parseFloat(document.getElementById('totalPrice').textContent.replace('US$', '')) || 0;
-    let newTotalPrice = currentTotalPrice + parseFloat(bagItem.productPrice);
-    document.getElementById('totalPrice').textContent = `US$${newTotalPrice.toFixed(2)}`;
+//    // Cập nhật tổng giá trị giỏ hàng
+//    let currentTotalPrice = parseFloat(document.getElementById('totalPrice').textContent.replace('US$', '')) || 0;
+//    let newTotalPrice = currentTotalPrice + parseFloat(bagItem.productPrice);
+//    document.getElementById('totalPrice').textContent = `US$${newTotalPrice.toFixed(2)}`;
 
     // Lưu vào localStorage
     saveBagToLocalStorage(bagItem);
+    loadBagItems();
 });
 
 
+function loadBagItems() {
+    const existingItems = JSON.parse(localStorage.getItem('shoppingBag')) || [];
+    const containerProduct = document.querySelector('.bag_itemm');
+
+    existingItems.forEach(item => {
+        const newItemHTML = `
+            <div class="order_item">
+                <div class="img">
+                    <a class="container_img" href="/productdetail/${item.productID}">
+                        <img class="edt_product" src="${item.imageURL}" alt="${item.productName}">
+                    </a>
+                </div>
+                <div class="description_product">
+                    <p class="boldz" id="bagProductName">${item.productName}</p>
+                    <p id="bagProductCategory">${item.productCategory}</p>
+                    <p id="bagProductSize">Size: ${item.productSize}</p>
+                    <p id="bagProductPrice" class="boldz">$${item.productPrice}</p>
+                    <p id="bagProductColor">Color: ${item.productColor}</p>
+                    <div class="heart_delete">
+                        <div class="heartt">
+                           <i class="fa-regular fa-heart"></i>
+                        </div>
+                        <div class="bin">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </div>
+                        <div class="qtyy">
+                            <p> Qty: 1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        containerProduct.insertAdjacentHTML('beforeend', newItemHTML);
+    });
+
+    // Update quantity and total price
+    const totalPrice = existingItems.reduce((acc, item) => acc + parseFloat(item.productPrice), 0);
+    document.getElementById('totalPrice').textContent = `US$${totalPrice.toFixed(2)}`;
+    bagItemCount.textContent = `Qty: ${existingItems.length}`;
+    isBagEmpty = existingItems.length === 0;
+}
 
 
 //addToBagButton.addEventListener('click', async function () {
@@ -1007,52 +1050,53 @@ function saveBagToLocalStorage(item) {
     existingItems.push(item);
     // Save back to local storage
     localStorage.setItem('shoppingBag', JSON.stringify(existingItems));
+
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const existingItems = JSON.parse(localStorage.getItem('shoppingBag')) || [];
-    const containerProduct = document.querySelector('.bag_itemm');
+//document.addEventListener('DOMContentLoaded', () => {
+//    const existingItems = JSON.parse(localStorage.getItem('shoppingBag')) || [];
+//    const containerProduct = document.querySelector('.bag_itemm');
 
-    existingItems.forEach(item => {
-        const newItemHTML = `
-            <div class="order_item">
-                <div class="img">
-                    <a class="container_img" href="/productdetail/${item.productID}">
-                        <img class="edt_product" src="${item.imageURL}" alt="${item.productName}">
-                    </a>
-                </div>
-                <div class="description_product">
-                    <p class="boldz" id="bagProductName">${item.productName}</p>
-                    <p id="bagProductCategory">${item.productCategory}</p>
-                    <p id="bagProductSize">Size: ${item.productSize}</p>
-                    <p id="bagProductPrice" class="boldz">$${item.productPrice}</p>
-                    <p id="bagProductColor">Color: ${item.productColor}</p>
-                    <div class="heart_delete">
-                        <div class="heartt">
-                           <i class="fa-regular fa-heart"></i>
-                        </div>
-                        <div class="bin">
-                            <i class="fa-regular fa-trash-can"></i>
-                        </div>
-                        <div class="qtyy">
-                            <p> Qty: 1</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+//    existingItems.forEach(item => {
+//        const newItemHTML = `
+//            <div class="order_item">
+//                <div class="img">
+//                    <a class="container_img" href="/productdetail/${item.productID}">
+//                        <img class="edt_product" src="${item.imageURL}" alt="${item.productName}">
+//                    </a>
+//                </div>
+//                <div class="description_product">
+//                    <p class="boldz" id="bagProductName">${item.productName}</p>
+//                    <p id="bagProductCategory">${item.productCategory}</p>
+//                    <p id="bagProductSize">Size: ${item.productSize}</p>
+//                    <p id="bagProductPrice" class="boldz">$${item.productPrice}</p>
+//                    <p id="bagProductColor">Color: ${item.productColor}</p>
+//                    <div class="heart_delete">
+//                        <div class="heartt">
+//                           <i class="fa-regular fa-heart"></i>
+//                        </div>
+//                        <div class="bin">
+//                            <i class="fa-regular fa-trash-can"></i>
+//                        </div>
+//                        <div class="qtyy">
+//                            <p> Qty: 1</p>
+//                        </div>
+//                    </div>
+//                </div>
+//            </div>
+//        `;
 
-        containerProduct.insertAdjacentHTML('beforeend', newItemHTML);
-    });
+//        containerProduct.insertAdjacentHTML('beforeend', newItemHTML);
+//    });
 
-    // Update quantity and total price
-    const totalPrice = existingItems.reduce((acc, item) => acc + parseFloat(item.productPrice), 0);
-    document.getElementById('totalPrice').textContent = `US$${totalPrice.toFixed(2)}`;
-    bagItemCount.textContent = `Qty: ${existingItems.length}`;
-    isBagEmpty = existingItems.length === 0;
-});
+//    // Update quantity and total price
+//    const totalPrice = existingItems.reduce((acc, item) => acc + parseFloat(item.productPrice), 0);
+//    document.getElementById('totalPrice').textContent = `US$${totalPrice.toFixed(2)}`;
+//    bagItemCount.textContent = `Qty: ${existingItems.length}`;
+//    isBagEmpty = existingItems.length === 0;
+//});
 
 
-// Function to remove item from local storage and update UI
+
 // Function to remove item from local storage and update UI
 function removeProductFromBag(productID, productSize, productColor) {
     // Get existing items from local storage
